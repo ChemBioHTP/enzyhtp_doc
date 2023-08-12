@@ -1,0 +1,38 @@
+# EnzyHTP Document Repo
+
+
+## How to work on this document
+
+The document is built with Sphinx and published on ReadtheDoc
+
+### 0. Clone this repo to your local machine
+
+```
+clone https://github.com/ChemBioHTP/enzyhtp_doc.git
+```
+You will be making changes locally and push to this repo.
+**make a new branch of your won if you want to make any chance and merge into main with a PR**
+
+### 1. Install Sphinx environment
+```
+conda env create -n sphinx -f env.yml
+conda activate sphinx
+```
+
+### 2. Build webpage
+We build the site locally to preview the changes and debug. Normally we will make a commit to the repo
+after made enough changes of a small unit.
+```
+cd docs
+make html
+```
+This will build webpages as .html files under the build folder.
+You can preveiw those .html files in your local browser.
+
+If you are using VSCode, you can install the `Live Server` extension that allows you to open the 
+html file in a live server and view your changes in real time.
+
+### 3. Build the website
+I. PR your changes to main 
+II. Contact QZ (shaoqz@icloud.com) to publish a new build on our ReadtheDocs website
+
