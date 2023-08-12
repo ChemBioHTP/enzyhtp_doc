@@ -61,12 +61,12 @@ advanced usage of EnzyHTP.
 
    .. image:: ../figures/enzygpt_logo.svg
       :width: 100%
-      :alt: enzygpt_website
+      :alt: enzyhtp_gpt_website
 
    +++
 
    .. link-button:: https://huggingface.co/spaces/zjyang-group/enzyhtp-mutant-gen
-      :text: EnzyGPT demo
+      :text: EnzyHTP-GPT demo
       :classes: btn-block stretched-link
 
    ---
