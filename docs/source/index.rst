@@ -16,7 +16,7 @@ advanced usage of EnzyHTP.
 
 .. note::
 
-   | We are refactoring EnzyHTP these days `refactoring_branch <https://github.com/ChemBioHTP/EnzyHTP/tree/develop_refactor>`_ to make
+   | We are refactoring EnzyHTP these days under the `refactoring_branch <https://github.com/ChemBioHTP/EnzyHTP/tree/develop_refactor>`_ to make
      it more extensible and easier to use. (built around the Structure class)
    | Current tutorials only works on the beta version. 
      The beta version uses an old architecture (built around the PDB class) before the refactoring.
