@@ -26,6 +26,7 @@ advanced usage of EnzyHTP.
    :maxdepth: 3
    :caption: Tutorials
 
+   install
    qkst_general
    qkst_shrapnel
    usage
