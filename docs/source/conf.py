@@ -3,11 +3,11 @@
 # -- Project information
 
 project = 'EnzyHTP'
-copyright = '2023, the Yang Lab@Vanderbilt'
+copyright = '2021-2023, the Yang Lab@Vanderbilt University'
 author = 'Qianzhen Shao'
 
 release = '0.1'
-version = '0.1.0'
+version = '0.1.1'
 
 # -- General configuration
 
