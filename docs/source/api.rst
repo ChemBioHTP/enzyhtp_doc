@@ -1,7 +1,5 @@
-API
-===
+==============================================
+ Python API reference
+==============================================
 
-.. autosummary::
-   :toctree: generated
-
-   lumache
+This page is still under development
