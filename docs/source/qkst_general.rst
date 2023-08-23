@@ -20,4 +20,33 @@ to match customized demand from users.
 
     The code below are sections from `template/template_main.py`
 
+Workflow Configurations
+------------------------
+This part of the code configure the workflow with some settings
+
+.. code::python
+
+    import pickle
+
+    from core.clusters.accre import Accre
+    from Class_PDB import PDB
+    from Class_Conf import Config
+    from helper import write_data
+
+This import EnzyHTP functions/classes to this script. We won't change
+anything here in our quick-start.
+
+.. code::python
+
+    # Configurations
+    ## resource of the main script
+    Config.n_cores = 1
+    Config.max_core = 2000 #MB
+    ## Details of MD
+    Config.Amber.conf_equi['nstlim'] = 500000 # * 2 fs = 1 ns
+    Config.Amber.conf_prod['nstlim'] = 55000000 # * 2 fs = 110 ns
+    Config.Amber.conf_prod['ntwx'] = '50000' # * 2 fs = 0.1 ns
+
+These lines config the resource that this main script would expect and
+settings of MD simulations. 
 
