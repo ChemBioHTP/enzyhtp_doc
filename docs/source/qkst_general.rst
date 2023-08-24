@@ -24,7 +24,7 @@ Workflow Configurations
 ------------------------
 This part of the code configure the workflow with some settings
 
-.. code::python
+.. code:: python
 
     import pickle
 
@@ -36,7 +36,7 @@ This part of the code configure the workflow with some settings
 This import EnzyHTP functions/classes to this script. We won't change
 anything here in our quick-start.
 
-.. code::python
+.. code:: python
 
     # Configurations
     ## resource of the main script
