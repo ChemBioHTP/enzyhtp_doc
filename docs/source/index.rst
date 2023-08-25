@@ -28,6 +28,7 @@ advanced usage of EnzyHTP.
 
    install
    qkst_general
+   qkst_cluster
    qkst_shrapnel
    usage
 

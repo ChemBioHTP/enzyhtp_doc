@@ -244,6 +244,8 @@ This following parts assemble EnzyHTP functions to a workflow and loops through 
                 provide the information of the cluster. The information is wrapped up as a ClusterInterface class.
                 Take a 1-time effort and make one for your local HPC by fullfilling requests from `ClusterInterface <https://github.com/ChemBioHTP/EnzyHTP/blob/47f733b994fd3b96b3aff6f4d0174a9718da6617/core/clusters/_interface.py#L11>`_ 
                 You can use the `Accre <https://github.com/ChemBioHTP/EnzyHTP/blob/master/core/clusters/accre.py>`_ class as reference. (Note that there are some optional methods defined in the Accre class)
+                
+                `Here is a tutorial of steps to support your local cluster. <qkst_cluster.html>`_
 
             ``period``
                 the time period that EnzyHTP will check for the completion of the job.
@@ -259,7 +261,7 @@ This following parts assemble EnzyHTP functions to a workflow and loops through 
 
         **Where to modify? (Examples)**
 
-        - support your local cluster by changing ``cluster = Name_of_your_cluster()`` 
+        - support your local cluster by changing ``cluster = Name_of_your_cluster()`` (`The Tutorial of supporting your local cluster. <qkst_cluster.html>`_)
         - for Accre user, use a real account by changing ``'account':'your_real_account_name'``
 
     ------------------------
@@ -293,7 +295,7 @@ This following parts assemble EnzyHTP functions to a workflow and loops through 
 
         **Where to modify? (Examples)**
 
-        - support your local cluster by changing ``cluster = Name_of_your_cluster()`` 
+        - support your local cluster by changing ``cluster = Name_of_your_cluster()`` (`The Tutorial of supporting your local cluster. <qkst_cluster.html>`_)
         - for Accre user, use a real account by changing ``'account':'your_real_account_name'``
 
     ------------------------
@@ -338,7 +340,7 @@ This following parts assemble EnzyHTP functions to a workflow and loops through 
 
         **Where to modify? (Examples)**
 
-        - support your local cluster by changing ``cluster = Name_of_your_cluster()`` 
+        - support your local cluster by changing ``cluster = Name_of_your_cluster()`` (`The Tutorial of supporting your local cluster. <qkst_cluster.html>`_)
         - for Accre user, use a real account by changing ``'account':'your_real_account_name'``
         - change QM region by changing ``atom_mask = ':123,456,789'`` 
         - change QM level of theory by changing ``g_route = '# b3lyp/def2svp em=gd3bj nosymm'`` Note that ``nosymm`` is always needed.
