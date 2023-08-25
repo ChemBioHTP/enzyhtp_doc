@@ -134,7 +134,13 @@ to change the configuration of the workflow.
 
         - apply your actual research target by changing ``mutants = ['YOUR_MUTANT_1', 'YOUR_MUTANT_2']`` and ``wt_pdb = 'a_different_enzyme.pdb'``
 
-    ------------------------
+
+Workflow Body
+------------------------
+This following parts assemble EnzyHTP functions to a workflow and loops through mutants.
+
+.. panels::
+
     :column: col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2 text-left
 
     .. code:: python                                                  
@@ -146,8 +152,6 @@ to change the configuration of the workflow.
                 pdb_obj.rm_wat()
                 pdb_obj.rm_allH()
                 pdb_obj.get_protonation(if_prt_ligand=0)
-
-    This following parts assemble EnzyHTP functions to a workflow and loops through mutants.
 
     This 1st part prepares the enzyme.
 
