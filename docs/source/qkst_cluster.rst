@@ -1,3 +1,3 @@
 ==============================================
- Quick Start: Support Your Local Cluster
+ Quick Start: 2. Support Your Local Cluster
 ==============================================

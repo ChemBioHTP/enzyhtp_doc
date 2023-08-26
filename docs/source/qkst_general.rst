@@ -1,5 +1,5 @@
 ==============================================
- Quick Start
+ Quick Start: 1. Build Workflow
 ==============================================
 
 EnzyHTP is a python library which means it doesn't have any
@@ -9,13 +9,17 @@ word, user needs to writing a main script calling EnzyHTP functions
 to furnish their automated workflow.
 
 Modify from a Template
-======================
+-----------------------
 
 As a quick-start, we will modify from a main script template
-provided under the ``/template`` folder of EnzyHTP. I will explain
-functions used in the template and talk about how they can be modified
-to match customized demand from users. Commonly changed parts are highlighted
-in the **blue boxes**.
+provided under the ``/template`` folder of EnzyHTP.
+
+- I will explain functions used in the template
+- Talk about how they can be modified to match customized demand from users.
+- Commonly changed parts are highlighted in the **blue boxes**.
+
+**This will result in a main script. 
+Running this main script will perform a HTP workflow addressing your research target.**
 
 .. note::
 
@@ -147,7 +151,7 @@ This following parts assemble EnzyHTP functions to a workflow and loops through 
                                                                     
         def main():
             for mut in mutants:        
-                # Prepare
+            # Prepare
                 pdb_obj = PDB(wt_pdb, wk_dir=f"./mutation_{'_'.join(mut)}")
                 pdb_obj.rm_wat()
                 pdb_obj.rm_allH()
@@ -185,23 +189,23 @@ This following parts assemble EnzyHTP functions to a workflow and loops through 
 
     .. code:: python                                                  
                                                                     
-            # Mutation
-            pdb_obj.Add_MutaFlag(mut)
-            pdb_obj.PDB2PDBwLeap()
-            ## use minimization to relax the crude initial mutant structure
-            pdb_obj.PDB2FF(local_lig=0, ifsavepdb=1)
-            pdb_obj.PDBMin(cycle=20000,
-                           engine='Amber_CPU', 
-                           if_cluster_job=1,
-                           cluster=Accre(),
-                           period=180,
-                           res_setting={'node_cores': '24',
-                                        'mem_per_core' : '3G',
-                                        'account':'xxx'} )
-            pdb_obj.rm_wat()
-            ## protonation perturbed by mutations
-            pdb_obj.rm_allH()
-            pdb_obj.get_protonation(if_prt_ligand=0)
+        # Mutation
+                pdb_obj.Add_MutaFlag(mut)
+                pdb_obj.PDB2PDBwLeap()
+                ## use minimization to relax the crude initial mutant structure
+                pdb_obj.PDB2FF(local_lig=0, ifsavepdb=1)
+                pdb_obj.PDBMin(cycle=20000,
+                            engine='Amber_CPU', 
+                            if_cluster_job=1,
+                            cluster=Accre(),
+                            period=180,
+                            res_setting={'node_cores': '24',
+                                            'mem_per_core' : '3G',
+                                            'account':'xxx'} )
+                pdb_obj.rm_wat()
+                ## protonation perturbed by mutations
+                pdb_obj.rm_allH()
+                pdb_obj.get_protonation(if_prt_ligand=0)
 
     This 2st part mutate the enzyme. (still in the loop)
 
@@ -269,15 +273,15 @@ This following parts assemble EnzyHTP functions to a workflow and loops through 
 
     .. code:: python                                                  
                                                                     
-            # MD sampling
-            pdb_obj.PDB2FF(local_lig=0, ifsavepdb=1)
-            pdb_obj.PDBMD(engine='Amber_GPU', 
-                          if_cluster_job=1,
-                          cluster=Accre(),
-                          period=600,
-                          res_setting={'account':'xxx'} )
-            ## sample from traj (.nc file)
-            pdb_obj.nc2mdcrd(start=101,step=10)
+        # MD sampling
+                pdb_obj.PDB2FF(local_lig=0, ifsavepdb=1)
+                pdb_obj.PDBMD(engine='Amber_GPU', 
+                            if_cluster_job=1,
+                            cluster=Accre(),
+                            period=600,
+                            res_setting={'account':'xxx'} )
+                ## sample from traj (.nc file)
+                pdb_obj.nc2mdcrd(start=101,step=10)
 
     This 3rd part sample a geometrical ensemble for the enzyme. (still in the loop)
 
@@ -303,18 +307,18 @@ This following parts assemble EnzyHTP functions to a workflow and loops through 
 
     .. code:: python                                                  
                                                                     
-            # QM Cluster
-            atom_mask = ':101,254'
-            g_route = '# pbe1pbe/def2SVP nosymm'
-            pdb_obj.PDB2QMCluster(  atom_mask, 
-                                    g_route=g_route,
-                                    ifchk=1,
-                                    if_cluster_job=1, 
-                                    cluster=Accre(), 
-                                    job_array_size=20,
-                                    period=120,
-                                    res_setting={'account':'xxx'} )
-            pdb_obj.get_fchk(keep_chk=0)
+        # QM Cluster
+                atom_mask = ':101,254'
+                g_route = '# pbe1pbe/def2SVP nosymm'
+                pdb_obj.PDB2QMCluster(  atom_mask, 
+                                        g_route=g_route,
+                                        ifchk=1,
+                                        if_cluster_job=1, 
+                                        cluster=Accre(), 
+                                        job_array_size=20,
+                                        period=120,
+                                        res_setting={'account':'xxx'} )
+                pdb_obj.get_fchk(keep_chk=0)
 
     This 4th part calculate wavefunction for active site of the enzyme using QM. (still in the loop)
 
@@ -350,27 +354,27 @@ This following parts assemble EnzyHTP functions to a workflow and loops through 
 
     .. code:: python                                                  
                                                                     
-            # --- Analysis ---
-            pdb_obj.get_stru()
-            # targeting C-I bond
-            a1 = int(pdb_obj.stru.ligands[0].CAE)
-            a2 = int(pdb_obj.stru.ligands[0].H2)
-            a1qm = pdb_obj.qm_cluster_map[str(a1)]
-            a2qm = pdb_obj.qm_cluster_map[str(a2)]
-            # Field Strength (MM)
-            e_atom_mask = ':1-100,102-253'
-            e_list = pdb_obj.get_field_strength(
-                e_atom_mask,
-                a1=a1, a2=a2, bond_p1='center') 
-            # Bond Dipole Moment (QM)
-            dipole_list = PDB.get_bond_dipole(pdb_obj.qm_cluster_fchk, a1qm, a2qm)
+        # --- Analysis ---
+                pdb_obj.get_stru()
+                # targeting C-I bond
+                a1 = int(pdb_obj.stru.ligands[0].CAE)
+                a2 = int(pdb_obj.stru.ligands[0].H2)
+                a1qm = pdb_obj.qm_cluster_map[str(a1)]
+                a2qm = pdb_obj.qm_cluster_map[str(a2)]
+                # Field Strength (MM)
+                e_atom_mask = ':1-100,102-253'
+                e_list = pdb_obj.get_field_strength(
+                    e_atom_mask,
+                    a1=a1, a2=a2, bond_p1='center') 
+                # Bond Dipole Moment (QM)
+                dipole_list = PDB.get_bond_dipole(pdb_obj.qm_cluster_fchk, a1qm, a2qm)
 
-            # SASA ratio
-            mask_sasa = ":9,11,48,50,101,128,201,202,222"
-            mask_pro = ":1-253"
-            mask_sub = ":254"
-            sasa_ratio = PDB.get_sasa_ratio(str(pdb_obj.prmtop_path), str(pdb_obj.mdcrd), 
-                                            mask_pro, mask_sasa, mask_sub)
+                # SASA ratio
+                mask_sasa = ":9,11,48,50,101,128,201,202,222"
+                mask_pro = ":1-253"
+                mask_sub = ":254"
+                sasa_ratio = PDB.get_sasa_ratio(str(pdb_obj.prmtop_path), str(pdb_obj.mdcrd), 
+                                                mask_pro, mask_sasa, mask_sub)
 
     This 5th part calculate all kinds of properties for each mutant. (still in the loop)
 
@@ -412,28 +416,28 @@ This following parts assemble EnzyHTP functions to a workflow and loops through 
 
     .. code:: python                                                  
                                                                     
-            # Output (choose one of the two)
-            # write output (python style)
-            result = {
-                'mutant':pdb_obj.MutaFlags,
-                'field_strength': e_list,
-                'bond_dipole': dipole_list,
-                'sasa_ratio': sasa_ratio,
-                'traj': pdb_obj.mdcrd,
-                }
-            with open(data_output_path_pickle, "ab") as of:
-                pickle.dump(result, of)
+        # Output (choose one of the two)
+                # write output (python style)
+                result = {
+                    'mutant':pdb_obj.MutaFlags,
+                    'field_strength': e_list,
+                    'bond_dipole': dipole_list,
+                    'sasa_ratio': sasa_ratio,
+                    'traj': pdb_obj.mdcrd,
+                    }
+                with open(data_output_path_pickle, "ab") as of:
+                    pickle.dump(result, of)
 
-            # write output (readable style)
-            write_data(
-                pdb_obj.MutaFlags, 
-                {
-                'field_strength': e_list,
-                'bond_dipole': dipole_list,
-                'sasa_ratio': sasa_ratio,
-                'traj': pdb_obj.mdcrd,
-                },
-                data_output_path_dat)
+                # write output (readable style)
+                write_data(
+                    pdb_obj.MutaFlags, 
+                    {
+                    'field_strength': e_list,
+                    'bond_dipole': dipole_list,
+                    'sasa_ratio': sasa_ratio,
+                    'traj': pdb_obj.mdcrd,
+                    },
+                    data_output_path_dat)
 
     This 6th part save our results for each mutant to the output file (still in the loop)
 
@@ -443,4 +447,28 @@ This following parts assemble EnzyHTP functions to a workflow and loops through 
     This will save the data in a file that **you specified at the beginning**. Both are python friendly that
     you can use python to further plot/analyze the data
 
+The Submission Script
+------------------------
+Now we finished customizing the workflow. You need to submit it to a computing node
+
+Running the Workflow
+------------------------
+Now we finished customizing the workflow. It is the time for launching it.
+
+Here is what your working directory should look like before the launching:
+
+.. code:: bash
+
+    .
+    ├── template_main.py
+    ├── template_hpc_submission.sh
+    ├── your_target_wt_enzyme.pdb
+    └── ligands # (optional) add this when you customize ligand parameters
+        ├── ligand_XYZ.frcmod # XYZ is the ligand 3-letter code
+        └── ligand_XYZ.prepin
+
+You may also need to modify the ``template_hpc_submission.sh`` to match with your local cluster. Here are some instructions:
+
+1. Change ``line 1-10`` to match your local cluster's scheduler syntax. (checkout the submission script you normally use)
+2. Change ``line 12-24`` to match your local environmental setting (e.g.: how you normally load Gaussian, AmberTool, and Multiwfn)
 
