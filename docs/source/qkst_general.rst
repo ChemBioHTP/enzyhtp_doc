@@ -265,8 +265,9 @@ This following parts assemble EnzyHTP functions to a workflow and loops through 
 
         **Where to modify? (Examples)**
 
-        - support your local cluster by changing ``cluster = Name_of_your_cluster()`` (`The Tutorial of supporting your local cluster. <qkst_cluster.html>`_)
-        - for Accre user, use a real account by changing ``'account':'your_real_account_name'``
+        - Support your local cluster by changing ``cluster = Name_of_your_cluster()`` (`The Tutorial of supporting your local cluster. <qkst_cluster.html>`_)
+        - For Accre user, use a real account by changing ``'account':'your_real_account_name'``
+        - You can also remove this whole section if you don't want to do mutation.
 
     ------------------------
     :column: col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2 text-left
@@ -348,6 +349,7 @@ This following parts assemble EnzyHTP functions to a workflow and loops through 
         - for Accre user, use a real account by changing ``'account':'your_real_account_name'``
         - change QM region by changing ``atom_mask = ':123,456,789'`` 
         - change QM level of theory by changing ``g_route = '# b3lyp/def2svp em=gd3bj nosymm'`` Note that ``nosymm`` is always needed.
+        - You can also remove this whole section if you don't want to do QM.
 
     ------------------------
     :column: col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2 text-left
@@ -467,8 +469,31 @@ Here is what your working directory should look like before the launching:
         ├── ligand_XYZ.frcmod # XYZ is the ligand 3-letter code
         └── ligand_XYZ.prepin
 
-You may also need to modify the ``template_hpc_submission.sh`` to match with your local cluster. Here are some instructions:
+``template_hpc_submission.sh`` is the job submission script for our workflow main script (``template_main.py``). This main script runs only requires 1 CPU and 6GB memory.
+It will submit computationally intensive jobs in the workflow to other computing nodes. (e.g.: MD and QM) 
+The walltime for the main script should cover the maximum time span of your workflow.
 
-1. Change ``line 1-10`` to match your local cluster's scheduler syntax. (checkout the submission script you normally use)
-2. Change ``line 12-24`` to match your local environmental setting (e.g.: how you normally load Gaussian, AmberTool, and Multiwfn)
+.. dropdown:: :fa:`eye,mr-1` **Do this** if you are NOT in Vanderbilt...
 
+    You may also need to modify the ``template_hpc_submission.sh`` to match with your local cluster. Here are some instructions:
+
+    In ``template_hpc_submission.sh``:
+
+    1. Change ``line 1-10`` (resource settings) to match your local cluster's scheduler syntax. (checkout the submission script you normally use)
+    2. Change ``line 12-24`` (environment settings) to match your local environmental setting (e.g.: how you normally load Gaussian, AmberTool, and Multiwfn)
+
+.. dropdown:: :fa:`eye,mr-1` **Do this** if you are in Vanderbilt...
+
+    In ``template_hpc_submission.sh``:
+
+    1. Change ``xxx`` in ``line 3`` to a valid value. (e.g.: yang_lab)
+    2. Change ``EFdesMD`` in ``line 2`` to a customized name for your workflow
+    3. Change the path of conda ``line 22`` and the path of EnzyHTP ``line 24`` to match your own paths
+
+Now submit the main script under this working directory. Here is an example command for submission on ACCRE @Vanderbilt:
+
+.. code:: bash
+
+    sbatch template_hpc_submission.sh
+
+**Now wait for results and enjoy the power of automation of EnzyHTP!**
