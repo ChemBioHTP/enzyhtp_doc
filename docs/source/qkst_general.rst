@@ -466,6 +466,8 @@ Here is what your working directory should look like before the launching:
         ├── ligand_XYZ.frcmod # XYZ is the ligand 3-letter code
         └── ligand_XYZ.prepin
 
+(``template/template_wk_dir`` give an example of such a working dir before putting the 2 scripts in)
+
 ``template_hpc_submission.sh`` is the job submission script for our workflow main script (``template_main.py``). This main script runs only requires 1 CPU and 6GB memory.
 It will submit computationally intensive jobs in the workflow to other computing nodes. (e.g.: MD and QM) 
 The walltime for the main script should cover the maximum time span of your workflow.
