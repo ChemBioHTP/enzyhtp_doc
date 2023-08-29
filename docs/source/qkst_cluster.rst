@@ -155,6 +155,7 @@ Here I will briefly explain some required methods and the "question" it askes:
             | The general job state ("pend" or "run" or "complete" or "canel" or "error")
             | The original cluster specific state keyword
 
+You also need to define ``G16_ENV`` and ``AMBER_ENV`` if you want to perform QM and MD.
 You also need to define ``kill_job()``, ``hold_job()``, ``release_job()``, and ``NAME`` beside the above mentioned one. But they are very simple and seldomly used.
 
 **With these interface methods/constant Satisfied, EnzyHTP now fully supports your local cluster!**
