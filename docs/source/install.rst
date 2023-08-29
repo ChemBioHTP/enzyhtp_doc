@@ -7,7 +7,7 @@ This guide leads you through step of installing EnzyHTP
 .. contents::
 
 1. Obtain EnzyHTP
-==============
+===================================
 
 EnzyHTP is open-source on GitHub. Currently we recommend clone
 EnzyHTP directly from the repo
@@ -24,7 +24,7 @@ code under where you run this command.
     (try this version if this tutorial fails with the most current version)
 
 2. Install Enviroment for EnzyHTP
-===============================
+===================================
 
 Install Python packages
 ------------------------
@@ -52,7 +52,7 @@ Install Python packages
     you can install EnzyHTP directly from conda with a 1-line command.
 
 3. Install Amber (optional)
-===========================
+===================================
 EnzyHTP use Amber as one of the MD engine (currently the only one). You need to install
 Amber if you want to enable MD/mutation functions in EnzyHTP. AmberTools is free (CPU only) and Amber is
 charged (GPU support). Most universities have Amber purchased
@@ -66,7 +66,7 @@ As an example, here is the command for loading Amber in our local cluster ACCRE.
     source /home/shaoq1/bin/amber_env/amber-accre.sh
 
 4. Install Gaussian16 (optional)
-===========================
+===================================
 EnzyHTP use Gaussian16 as one of the QM engine (currently the only one). You need to install
 Gaussian16 if you want to enable QM-based functions in EnzyHTP. Gaussian16 is charged. Most universities 
 have Gaussian16 purchased and installed in their local clusters. Contact your local cluster if
@@ -79,7 +79,7 @@ As an example, here is the command for loading Gaussian16 in our local cluster A
     module load Gaussian/16.B.01
 
 5. Install Multiwfn (optional)
-===========================
+===================================
 | EnzyHTP use Multiwfn as one of the wavefunction analysis engine.
 | You need if you want to install Multiwfn to enable wavefunction analysis functions in EnzyHTP.
 | Multiwfn is free and very easy to install.

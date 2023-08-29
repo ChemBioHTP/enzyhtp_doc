@@ -30,7 +30,8 @@ Write the Plug-in by Anwsering a Questionnaire
 ========================================================
 
 The overall process of writing the plug-in for supporting your local HPC is like
-anwsering a questionnaire. We may actual make a google form and automated this in the future lol. But
+anwsering a questionnaire. **You can do this as long as you know how to submit a job in
+your local HPC.** We may actual make a google form and automated this in the future lol. But
 for now you need to write them in a python file.
 
 1. Create a new HPC plug-in file in EnzyHTP
@@ -56,42 +57,104 @@ to have in the subclass
 Define all the method/constant stated in ``core/cluster/_interface.py::ClusterInterface``. You can use ``core/cluster/accre.py::Accre``
 as reference.
 
-Here I will briefly explain some required methods:
+Here I will briefly explain some required methods and the "question" it askes:
 
-.. code:: python
+.. panels::
 
-    @classmethod
-    def parser_resource_str(cls, res_dict: dict) -> str:
+    :column: col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2 text-left
 
-.. dropdown:: :fa:`eye,mr-1` Click to see interface explanation
+    .. code:: python
 
-    Input 
-        an enzyhtp-standard-format resource dictionary. like this:
+        @classmethod
+        def parser_resource_str(cls, res_dict: dict) -> str:
 
-        .. code:: python
+    Q: What is the format for requesting resources in the submission script of your local HPC?
 
-            # The default resource dict for CPU-based MD
-            {
-            'core_type' : 'cpu',
-            'nodes':'1',
-            'node_cores' : '16',
-            'job_name' : 'EHTP_MD',
-            'partition' : 'production',
-            'mem_per_core' : '3G',
-            'walltime' : '1-00:00:00',
-            'account' : 'xxx'
-            }
+    .. dropdown:: :fa:`eye,mr-1` Click to see detailed interface explanation
 
-        Functions like PDBMD() will feed a dictionary like this when calling this method. User can change values
-        in this dictionary (e.g.: user may set ``partition`` as ``shared`` for hof2 according to
-        `this <https://www.hoffman2.idre.ucla.edu/Using-H2/Computing/Computing.html#requesting-multiple-cores>`_ )
+        Input:
+            an enzyhtp-standard-format resource dictionary. like this:
 
-    Output: 
-        xxx
+            .. code:: python
 
+                # The default resource dict for CPU-based MD
+                {
+                'core_type' : 'cpu',
+                'nodes':'1',
+                'node_cores' : '16',
+                'job_name' : 'EHTP_MD',
+                'partition' : 'production',
+                'mem_per_core' : '3G',
+                'walltime' : '1-00:00:00',
+                'account' : 'xxx'
+                }
 
+            Functions like PDBMD() will feed a dictionary like this when calling this method. User can change values
+            in this dictionary (e.g.: user may set ``partition`` as ``shared`` for hof2 according to
+            `this <https://www.hoffman2.idre.ucla.edu/Using-H2/Computing/Computing.html#requesting-multiple-cores>`_ )
 
+        Output: 
+            a string of the exact resource section in the submission script of your local HPC
 
+            .. code:: bash
 
+                # Example output for ACCRE
 
+                #!/bin/bash
+                #SBATCH --job-name=EFdesMD
+                #SBATCH --account=xxx
+                #SBATCH --partition=production
+                #SBATCH --nodes=1
+                #SBATCH --ntasks-per-node=1
+                #SBATCH --mem=6G
+                #SBATCH --time=5-00:00:00
+                #SBATCH --no-requeue
+                #SBATCH --export=NONE
 
+    -----------------
+    :column: col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2 text-left
+
+    .. code:: python
+
+        @classmethod
+        def submit_job(cls, sub_dir: str, script_path: str) -> tuple[str, str]:
+
+    | Q: What is the command that submit a job in your local HPC?
+    | Q: How to obtain the job id upon submission?
+
+    .. dropdown:: :fa:`eye,mr-1` Click to see detailed interface explanation
+
+        Input:
+            | The path of the submission script
+            | The directory of the submission (the work dir of the submitted job)
+
+        Action:
+            Submit the job to the job queue
+
+        Output:
+            | The job id
+            | The HPC log file path for this job
+            
+    -----------------
+    :column: col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2 text-left
+
+    .. code:: python
+
+        @classmethod
+        def get_job_state(cls, job_id: str) -> tuple[str, str]:
+    
+    | Q: Given a job id, what is the command that obtains the running state of a job in your local HPC?
+    | Q: What is the output format of the above command?
+
+    .. dropdown:: :fa:`eye,mr-1` Click to see detailed interface explanation
+
+        Input:
+            The job id
+
+        Output:
+            | The general job state ("pend" or "run" or "complete" or "canel" or "error")
+            | The original cluster specific state keyword
+
+You also need to define ``kill_job()``, ``hold_job()``, ``release_job()``, and ``NAME`` beside the above mentioned one. But they are very simple and seldomly used.
+
+**With these interface methods/constant Satisfied, EnzyHTP now fully supports your local cluster!**
