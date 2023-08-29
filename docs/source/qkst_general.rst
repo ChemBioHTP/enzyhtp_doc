@@ -8,8 +8,8 @@ building blocks of any customized workflow from users. In other
 word, user needs to writing a main script calling EnzyHTP functions
 to furnish their automated workflow.
 
-Modify from a Template
------------------------
+1. Modify from a Template
+==============================================
 
 As a quick-start, we will modify from a main script template
 provided under the ``/template`` folder of EnzyHTP.
@@ -25,8 +25,8 @@ Running this main script will perform a HTP workflow addressing your research ta
 
     The code below are sections from ``template/template_main.py``
 
-Workflow Configurations
-------------------------
+1.1 Workflow Configurations
+------------------------------------
 This part of the code configure the workflow with some settings, I will break it
 down into chunks and explain each of them. You can modify this part of the template
 to change the configuration of the workflow.
@@ -139,8 +139,8 @@ to change the configuration of the workflow.
         - apply your actual research target by changing ``mutants = ['YOUR_MUTANT_1', 'YOUR_MUTANT_2']`` and ``wt_pdb = 'a_different_enzyme.pdb'``
 
 
-Workflow Body
-------------------------
+1.2 Workflow Body
+------------------------------------
 This following parts assemble EnzyHTP functions to a workflow and loops through mutants.
 
 .. panels::
@@ -449,12 +449,9 @@ This following parts assemble EnzyHTP functions to a workflow and loops through 
     This will save the data in a file that **you specified at the beginning**. Both are python friendly that
     you can use python to further plot/analyze the data
 
-The Submission Script
-------------------------
-Now we finished customizing the workflow. You need to submit it to a computing node
 
-Running the Workflow
-------------------------
+2. Running the Workflow
+==============================================
 Now we finished customizing the workflow. It is the time for launching it.
 
 Here is what your working directory should look like before the launching:
