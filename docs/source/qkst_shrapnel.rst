@@ -1,3 +1,4 @@
 ==============================================
- Quick Start: 3. Parallelize
+ Quick Start: 3. Parallelize the Workflow
 ==============================================
+
