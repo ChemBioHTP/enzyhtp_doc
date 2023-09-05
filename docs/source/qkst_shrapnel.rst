@@ -21,13 +21,36 @@ that each contains a main workflow script like the one in quick_start_1. Just li
 
 .. note::
     | The code below is from ``template/template_shrapnel_main.py``
+    | The example working directory of this tutorial is ``template/template_wk_dir_shrapnel/``
     | The current shrapnel script is a temporary solution for parallelizing EnzyHTP workflows. We may release a more
       efficient way of doing this in next EnzyHTP version coming next spring.
+
+Create the template Workflow
+===================================
+
+| You need a template for all the children workflows. An example is ``template/template_wk_dir_shrapnel/template_child_main.py``
+| In this file, ``XXX`` in line 24 and ``"YYY"`` in line 25 are place holders. The shrapnel script will replace them to actual values corresponding to each children directory.
+| This template main script will be distributed to the children directories with the replaced values.
+
+You can modify this example file to customize your workflow. Reference `Quick start 1 <qkst_general.rst>`_ about this.
+
+Create the submission script
+===================================
+
+| You need a submission script to submit the workflow in each children directories.
+| An example is ``template/template_wk_dir_shrapnel/template_hpc_submission.sh``.
+| This script will be copied to all the children directories and will be used for the submission.
+
+You can modify this example script to customize your submission. Reference `here <qkst_general.rst>`_ about this.
 
 Use the *shrapnel* script
 ===================================
 
 You may comment/uncomment functions in ``main()`` to change its behavior. Here are directions for using each functions.
+
+Generate children workdirs
+-----------------------------
+
 
 Generate children workdirs
 -----------------------------
