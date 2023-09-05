@@ -32,7 +32,7 @@ Create the template Workflow
 | In this file, ``XXX`` in line 24 and ``"YYY"`` in line 25 are place holders. The shrapnel script will replace them to actual values corresponding to each children directory.
 | This template main script will be distributed to the children directories with the replaced values.
 
-**You can modify this example file to create this main script. Reference `Quick start 1 <qkst_general.rst>`_ about this.**
+**You can modify this example file to create this main script.** Reference `Quick start 1 <qkst_general.rst>`_ about this.
 
 Create the submission script
 ===================================
@@ -41,7 +41,7 @@ Create the submission script
 | An example is ``template/template_wk_dir_shrapnel/template_hpc_submission.sh``.
 | This script will be copied to all the children directories and will be used for the submission.
 
-**You can modify this example script to create this submission script. Reference `here <qkst_general.rst#running-the-workflow>`_ about this.**
+**You can modify this example script to create this submission script.** Reference `here <qkst_general.rst#running-the-workflow>`_ about this.
 
 Use the *shrapnel* script
 ===================================
