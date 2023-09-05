@@ -44,8 +44,18 @@ Install Python packages
     cd pdb2pqr
     pip install .
 
-| This creates a conda environment called `enzy_htp` and install python package EnzyHTP needs in it.
-| You can activate this enviroment anytime when you need to use EnzyHTP by `conda activate enzy_htp`
+| This creates a conda environment called ``enzy_htp`` and install python package EnzyHTP needs in it.
+| You can activate this enviroment anytime when you need to use EnzyHTP by ``conda activate enzy_htp``
+
+Add EnzyHTP to your PYTHONPATH
+-------------------------------
+.. code:: bash
+
+    export PYTHONPATH=$PYTHONPATH:<yourpath_to_EnzyHTP>
+
+| This command tells the system where EnzyHTP is when you need to use it outside of the EnzyHTP directory.
+| You can add this line to your ``.bashrc`` if you need to use it locally.
+| A more common way is adding it in the submission script (see `this section <qkst_general.html#running-the-workflow>`_)
 
 .. note::
     We updated EnzyHTP installation in the unfinished refactoring. After it finishes,
