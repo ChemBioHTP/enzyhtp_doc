@@ -30,6 +30,7 @@ advanced usage of EnzyHTP.
    qkst_general
    qkst_cluster
    qkst_shrapnel
+   modified_aa
    usage
 
 .. toctree::
