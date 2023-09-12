@@ -12,6 +12,7 @@ Deal with PDB2PQR
 
 1. Obtain the protonated pdb file of the modified AA (add H manually or obtain from PDB). If you need to use force field like ff19SB_modAA, make the atom names align with the force field.
 2. Align the structure with the standard backbone in PDB2PQR. Here is a reference PDB file of the backbone
+
     .. code::
 
         HETATM    1  N   PSD P   1       1.201   0.847   0.000  0.00  0.00           N  
@@ -22,7 +23,8 @@ Deal with PDB2PQR
         HETATM    6  N+1 PSD P   1      -1.252   1.877   1.023  0.00  0.00           N  
         HETATM    7  H   PSD P   1       1.201   1.847   0.000  0.00  0.00           H  
 3. Save the pdb file with the CONNECT record.
-4. Use this script to generate XML and DAT file
+4. Use this script to generate XML and DAT file. Paste the connectivity table to cnt_table.
+
     .. code:: python
         
         from enzy_htp import PDBParser, Residue
