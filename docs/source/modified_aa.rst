@@ -100,3 +100,25 @@ find related issue `here <https://github.com/ChemBioHTP/EnzyHTP/issues/124>`_
 
 Deal with Amber
 ------------------
+
+1. Prepare parameter files for modified amino acid following this tutorial ↓
+
+    | `English Version <https://ambermd.org/tutorials/basic/tutorial5/index.php>`_
+    | `Chinese Version <https://www.shaoqz.cn/2020/11/16/Amber-MD%E5%85%B3%E9%94%AE%E5%AD%97/#%E9%9D%9E%E6%A0%87%E5%87%86%E6%AE%8B%E5%9F%BA%E7%9A%84%E5%8F%82%E6%95%B0%E5%8C%96>`_
+
+2. In ``PDB2FF``, add an argument called ``maa_parm_file_path``, it requires a list of prepin and frcmod files for you modified AA. Here is an example:
+
+    .. code:: python
+        
+        pdb_obj.PDB2FF(local_lig=0, ifsavepdb=1,
+                       maa_parm_file_path=[
+                        [
+                            "maa.prepin",
+                            ["maa.frcmod1", "maa.frcmod2"]
+                        ],
+                        ])
+
+
+**Now the workflow is ready to go!**
+
+
