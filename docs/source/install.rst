@@ -37,8 +37,7 @@ Install Python packages
 
     conda create --name enzy_htp python=3.9
     conda activate enzy_htp
-    conda install numpy pandas mdtraj
-    conda install -c conda-forge plum-dispatch pymol-open-source openbabel
+    conda install -c conda-forge plum-dispatch pymol-open-source openbabel numpy pandas mdtraj
     # install pdb2pqr
     git clone https://github.com/Electrostatics/pdb2pqr.git
     cd pdb2pqr
