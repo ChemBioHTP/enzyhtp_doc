@@ -3,34 +3,56 @@
 ==============================================
 
 `EnzyHTP <https://github.com/ChemBioHTP/EnzyHTP>`_ is a Python library that automates the complete life cycle of enzyme modeling.
-EnzyHTP automates modular steps in traditional enzyme modeling workflows, which reply on manual curations. Such automation enable
-high-throughput enzyme modeling for enzyme engineering, understanding, and machine learning. 
+EnzyHTP automates modular steps in traditional enzyme modeling workflows, which rely on manual curations. Such automation enable
+high-throughput (HTP) enzyme modeling for enzyme engineering, understanding, and machine learning. 
 
-This user guide contains tutorials of using EnzyHTP (mainly science APIs), example workflows built by EnzyHTP, and inner-layer Python API reference for
-advanced usage of EnzyHTP. 
+This user guide contains:
+
+- Install
+   | How to install EnzyHTP and configure it for you local HPC (if you are using one).
+
+- Quick Starts
+   | Tutorials for users that are **new to protein modeling**.
+   | With these quick starts, people can quickly perform some HTP modeling modifying from template
+      workflows.
+
+- Tutorials 
+   | Tutorials for users that are **experienced in protein modeling** (knows what steps should be in the workflows)
+   | There will be a master tutorial that guide your through the methodology of assembly a EnzyHTP main 
+      script for your workflow.(e.g.: what to think about, which API to look for.)
+   | There will also a collections of Science API tutorials. Each will provide a details about
+     what does this API do, the dataflow, commonly used arguments and how to determine the value of them, etc.
 
 .. note::
 
    | This document is under active development.
-   | Currently only tutorials of EnzyHTP are provided.
+   | Currently only part of the tutorials of EnzyHTP are provided.
 
 .. note::
 
-   | We are refactoring EnzyHTP these days under the `refactoring_branch <https://github.com/ChemBioHTP/EnzyHTP/tree/develop_refactor>`_ to make
-     it more extensible and easier to use. (built around the Structure class)
-   | Current tutorials only works on the beta version. 
-     The beta version uses an old architecture (built around the PDB class) before the refactoring.
+   | We refactored EnzyHTP (1.0 -> 2.0) on 2024/1/29. Tutorials before this time is deprocated. (they only works on 1.0)
 
+.. toctree::
+   :maxdepth: 3
+   :caption: Install
+
+   install
+
+.. toctree::
+   :maxdepth: 3
+   :caption: Quick Start
+ 
+   qkst_general
+   qkst_cluster
+   qkst_shrapnel
+   modified_aa
 
 .. toctree::
    :maxdepth: 3
    :caption: Tutorials
 
-   install
-   qkst_general
-   qkst_cluster
-   qkst_shrapnel
-   modified_aa
+   sci_api_tutorial/how_to_assemble
+   sci_api_tutorial/single_point
    usage
 
 .. toctree::
