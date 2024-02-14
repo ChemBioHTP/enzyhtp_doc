@@ -52,6 +52,7 @@ This user guide contains:
    :caption: Tutorials
 
    sci_api_tutorial/how_to_assemble
+   sci_api_tutorial/protonation
    sci_api_tutorial/single_point
    usage
 
