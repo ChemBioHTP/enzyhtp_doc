@@ -82,8 +82,9 @@ To use ``preparation.protonate.protonate_stru`` to protonate (i.e. add hydrogen 
     :column: col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2 text-left
 
     We can also customize the arguments passed to this function.
-        How much is your pH value? Customize ``ph``.  
-        Do you want to protonate your ligands? Customize ``protonate_ligand``.
+      How much is your pH value? Customize ``ph``.  
+      
+      Do you want to protonate your ligands? Customize ``protonate_ligand``.
 
     .. code:: python
         
