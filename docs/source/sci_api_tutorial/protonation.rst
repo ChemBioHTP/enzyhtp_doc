@@ -17,9 +17,9 @@ Input/Output
 
     :column: col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2 text-left
 
-    ``input``: A ``Structure`` instance (no matter it's a protein, polypeptite, or ligand).
+    **input**: A ``Structure`` instance (no matter it's a protein, polypeptite, or ligand).
 
-    ``output``: A ``Structure`` instance of protonated structure (in-place modification, not as return value).
+    **output**: A ``Structure`` instance of protonated structure (in-place modification, not as return value).
 
 Arguments
 ==============================================
@@ -42,7 +42,7 @@ Arguments
 Examples
 ==============================================
 
-Load Structure
+Before Execution: Load Structure
 ----------------------------------------------
 
 .. panels::
@@ -83,7 +83,7 @@ To use ``preparation.protonate.protonate_stru`` to protonate (i.e. add hydrogen 
 
     We can also customize the arguments passed to this function.
       How much is your pH value? Customize ``ph``.  
-      
+
       Do you want to protonate your ligands? Customize ``protonate_ligand``.
 
     .. code:: python
@@ -96,7 +96,7 @@ To use ``preparation.protonate.protonate_stru`` to protonate (i.e. add hydrogen 
     
     Thus, if you write ``stru = protonate.protonate_stru(stru=stru)``, your ``stru`` will very unfortunately be assigned the value ``None``.
 
-Check Output
+After Execution: Check Output
 ----------------------------------------------
 
 Let's try executing the API here and check if there's any changes taking place.
