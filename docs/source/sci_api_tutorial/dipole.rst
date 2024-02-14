@@ -9,12 +9,12 @@ Calculate dipole with EnzyHTP analysis module
 
 The target for this tutorial is calculating the molecular dipole in an KE-H5J enzyme-substrate complex. The main function provided is bond_dipole(), which calculates the dipole moment for a specified bond within two atoms. (Either enzyme or other pair of atoms) 
 
-1. Clarify dipole calculation target 
+1. Identify dipole calculation target 
 ==============================================
 
 The following input file / chemistry knowledge need to provide, 
     
-    | *File 1: The structure pdb file of the target enzyme and electron structure parameters in fhck format (Example: EnzyHTP/test/analysis/data/)*
+    | *Files: The structure pdb file of the target enzyme and electron structure from Gaussian16 in fhck format (Example: EnzyHTP/test/analysis/data/)*
     | *Pre-knowledge: Identify the region/bond which conduct the dipole calculation. Also Identify the charge and spin. The default value for the charge and spin are 0, 1*
     | *Tips: Select the region for eletron structure analysis with capping atom for the incomplete amino acide (example of the script using the "H" as the capping atoms)*
 
@@ -45,33 +45,33 @@ The following input file / chemistry knowledge need to provide,
 
 **Input**: The ``ele_stru``, ``atom_1``, ``atom_2`` and  are required input
 
-    - ``ele_stru`` section
+    - ``ele_stru``:
         Electronic structure of the QM (Quantum Mechanics) region containing the target bond.
 
-    - ``atom_1`` and ``atom_2`` section
+    - ``atom_1`` and ``atom_2``:
         Atoms defining the target bond within the region.
 
-    - ``method`` section
+    - ``method``:
 
         Keyword specifying the algorithm & software for dipole calculation (default method is "LMO-Multiwfn"). Check the Multiwfn manual for the alternative methods. Utilizes the Lu-Chen method for dipole calculation, where 2-center LMO dipole is defined by the deviation of the electronic mass center relative to the bond center.
 
-    - ``work_dir`` section
+    - ``work_dir``:
 
         Working directory containing all the files in the calculation process.
 
-    - ``keep_in_file`` section
+    - ``keep_in_file``:
 
         Whether to keep the input file of the calculation.
 
-    - ``cluster_job_config`` section 
+    - ``cluster_job_config``:
 
         Configuration for cluster job execution (default is None for local execution).
 
-    - ``cluster_job_config`` section 
+    - ``cluster_job_config``:
 
         Time cycle for updating job state changes (default is 30 seconds).
 
-**output**: A tuple contain the dipole sign and the dipole vector
+**Output**: A tuple contains the dipole sign and the dipole vector
 The expected returns of the bond_dipole calcuation are the signed norm of the dipole and dipole vector. Dipole positive direction goes from negative to positive, and the result direction is from ``atom_1`` to ``atom_2``.
 
 4. Let's try to construct the actual scripts step by step
