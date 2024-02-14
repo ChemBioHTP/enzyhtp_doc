@@ -125,5 +125,5 @@ Let's try executing the API here and check if there's any changes taking place.
         protonate.protonate_stru(stru=stru, ph=7.4, protonate_ligand=True)
         print(stru.num_atoms)   # 4751.
     
-    We may notice that, after executing the API, the number of atoms (``num_atoms``) in the structure increased,
-    representing that the hydrogen atoms have been added to the structure.
+We may notice that, after executing the API, the number of atoms (``num_atoms``) in the structure increased,
+representing that the hydrogen atoms have been added to the structure.
