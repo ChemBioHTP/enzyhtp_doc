@@ -6,8 +6,8 @@ Briefs
 ==============================================
 
 This science API, named ``enzy_htp.preparation.protonate.protonate_stru``,
-solves the protein protonation problem that add missing H atoms to the
-``enzy_htp.structure.Structure`` class instance (here in after called ``Structure`` instance).
+solves the protein protonation problem that add missing H atoms to the supplied
+``enzy_htp.structure.Structure`` class instance (hereafter referred to as ``Structure`` instance).
 Protonation states are determined for residues with multiple ones.
 
 Input/Output
@@ -27,17 +27,17 @@ Arguments
 
     :column: col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2 text-left
 
-    ``stru``: the input structure
+    **stru**: The input ``Structure`` instance.
 
-    ``ph``: the pH value for determining the protonation state
+    **ph** *(optional, default 7.0)*: The pH value for determining the protonation state.
     
-    ``protonate_ligand``: if also protonate ligand
+    **protonate_ligand** *(optional, default True)*: If also protonate ligand.
     
-    ``engine``: engine for determining the pKa and adding hydrogens to the protein peptide part (current available values: ``pdb2pqr``)
+    **engine** *(optional, default "pdb2pqr")*: Engine for determining the pKa and adding hydrogens to the protein peptide part (current available values: ``pdb2pqr``).
     
-    ``ligand_engine``: engine for adding hydrogens to ligands (current available values: ``pybel``)
+    **ligand_engine** *(optional, default "pybel")*: Engine for adding hydrogens to ligands (current available values: ``pybel``)
     
-    ``**kwarg``: setting/option related to specific engine.
+    **\*\*kwarg** *(optional, default None)*: Setting(s)/Option(s) related to specific engine.
 
 Examples
 ==============================================
@@ -49,12 +49,11 @@ Before Execution: Load Structure
 
     :column: col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2 text-left
 
-    In order to make use of the ``protonation`` module, we should have structure loaded.
+    In order to make use of the API, we should have structure loaded.
 
     .. code:: python    
 
         import enzy_htp.structure as struct
-        from enzy_htp.preparation import protonate
                                     
         sp = struct.PDBParser()
 
@@ -64,18 +63,29 @@ Before Execution: Load Structure
 Execute API
 ----------------------------------------------
 
-To use ``preparation.protonate.protonate_stru`` to protonate (i.e. add hydrogen atoms to) your structure.
+Use ``preparation.protonate.protonate_stru`` to protonate (i.e. add hydrogen atoms to) your structure.
 
 .. panels::
 
     :column: col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2 text-left
 
-    The simpliest use of ``protonation`` is as follows.
+    The simpliest use of ``protonate_stru`` is as follows.
         Where the ``ph`` is set to ``7.0``, and ``protonate_ligand`` is set to ``True`` by default.
 
     .. code:: python
         
+        from enzy_htp.preparation import protonate
+
         protonate.protonate_stru(stru=stru)
+    
+    We can also directly import ``protonate_stru`` from ``enzy_htp.preparation`` since it has been cited in
+    the ``__init__.py`` file of ``preparation`` module.
+
+    .. code:: python
+        
+        from enzy_htp.preparation import protonate_stru
+        
+        protonate_stru(stru=stru)
 
 .. panels::
 
