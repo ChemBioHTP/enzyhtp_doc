@@ -16,22 +16,30 @@ Input/Output
 
     :column: col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2 text-left
 
-    **input**: A ``Structure`` instance (no matter it's a protein, polypeptite, or ligand).
+    .. image:: ../../figures/preparation_remove_hydrogens_dfd.svg
+        :width: 100%
+        :alt: preparation_remove_solvent
 
-    **output**: A ``Structure`` instance with hydrogen atoms removed (in-place modification or a copy,
-    but both provides a return value).
+    .. **input**: A ``Structure`` instance (no matter it's a protein, polypeptite, or ligand).
+
+    .. **output**: A ``Structure`` instance with hydrogen atoms removed (in-place modification or a copy,
+    .. but both provides a return value).
 
 Arguments
 ==============================================
-.. panels::
 
-    :column: col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2 text-left
+``stru``
+    The input ``Structure`` instance (no matter it's a protein, polypeptite, or ligand).
 
-    **stru**: The ``Structure`` instance.
+``polypeptide_only``
+    whether only remove hydrogen atoms from polypeptide.
 
-    **polypeptide_only** *(optional, default True)*: whether only remove hydrogen atoms from polypeptide.
+    (optional, default True) 
 
-    **in_place** *(optional, default True)*: Apply the change in place (to the supplied instance) or in a copy (create a new instance).
+``in_place``
+    Apply the change in place (to the supplied instance) or in a copy (create a new instance).
+    
+    (optional, default True)
 
 Examples
 ==============================================

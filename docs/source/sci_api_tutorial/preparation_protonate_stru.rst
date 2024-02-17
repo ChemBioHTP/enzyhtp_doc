@@ -17,27 +17,61 @@ Input/Output
 
     :column: col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2 text-left
 
-    **input**: A ``Structure`` instance (no matter it's a protein, polypeptite, or ligand).
+    .. image:: ../../figures/preparation_protonate_stru_dfd.svg
+        :width: 100%
+        :alt: preparation_remove_solvent
 
-    **output**: A ``Structure`` instance of protonated structure (in-place modification, not as return value).
+    .. **input**: A ``Structure`` instance (no matter it's a protein, polypeptite, or ligand).
+
+    .. **output**: A ``Structure`` instance of protonated structure (in-place modification, not as return value).
 
 Arguments
 ==============================================
-.. panels::
 
-    :column: col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2 text-left
+``stru``
+    The input ``Structure`` instance (no matter it's a protein, polypeptite, or ligand).
 
-    **stru**: The input ``Structure`` instance.
+``ph``
+    The pH value for determining the protonation state.
+    (optional, default ``7.0``)
 
-    **ph** *(optional, default 7.0)*: The pH value for determining the protonation state.
+    .. dropdown:: :fa:`eye,mr-1` Click to learn more about ``ph``
+
+        The choice of pH value depends on the physiological environment of the protein you are simulating.
+
+        For example, if you are simulating a protein in human blood, then the pH value is best set in the range [7.35, 7.45].
+
+``protonate_ligand``
+    If also protonate ligand.
     
-    **protonate_ligand** *(optional, default True)*: If also protonate ligand.
+    (optional, default ``True``)
+
+``engine``
+    Engine for determining the pKa and adding hydrogens to the protein peptide part.
+
+    (optional, default ``pdb2pqr``) 
     
-    **engine** *(optional, default "pdb2pqr")*: Engine for determining the pKa and adding hydrogens to the protein peptide part (current available values: ``pdb2pqr``).
+    .. dropdown:: :fa:`eye,mr-1` Click to learn more about ``engine``
+
+        The ``engine`` option determines which third-party tool you use to add hydrogen atoms to your protein (polypeptide).
+
+        Currently only ``pdb2pqr`` is available. More ``engine`` options will be available in future versions.
+
+``ligand_engine``
+    Engine for adding hydrogens to ligands (current available values: ``pybel``)
+
+    (optional, default ``pybel``)
     
-    **ligand_engine** *(optional, default "pybel")*: Engine for adding hydrogens to ligands (current available values: ``pybel``)
-    
-    **\*\*kwarg** *(optional, default None)*: Setting(s)/Option(s) related to specific engine.
+    .. dropdown:: :fa:`eye,mr-1` Click to learn more about ``engine``
+
+        The ``ligand_engine`` option determines which third-party tool you use to add hydrogen atoms to your ligand.
+
+        Currently only ``pybel`` is available. More ``ligand_engine`` options will be available in future versions.
+
+``**kwarg``
+    Setting(s)/Option(s) related to specific engine.
+
+    (optional, default ``None``)
 
 Examples
 ==============================================

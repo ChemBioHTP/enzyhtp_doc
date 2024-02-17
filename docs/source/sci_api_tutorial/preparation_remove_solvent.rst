@@ -19,20 +19,24 @@ Input/Output
 
     :column: col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2 text-left
 
-    **input**: A ``Structure`` instance (no matter it's a protein, polypeptite, or ligand).
+    .. image:: ../../figures/preparation_remove_solvent_dfd.svg
+        :width: 100%
+        :alt: preparation_remove_solvent
 
-    **output**: A ``Structure`` instance with solvent removed (in-place modification,
-    but still provides a return value).
+    .. **input**: A ``Structure`` instance (no matter it's a protein, polypeptite, or ligand).
+
+    .. **output**: A ``Structure`` instance with solvent removed (in-place modification,
+    .. but still provides a return value).
+
 
 Arguments
 ==============================================
-.. panels::
 
-    :column: col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2 text-left
+``stru``
+    The input ``Structure`` instance (no matter it's a protein, polypeptite, or ligand).
 
-    **stru**: The input ``Structure`` instance.
-
-    .. **protect**: *(optional)* Protect some solvent from removal and change its rtype to Ligand. Use selection grammer.
+.. ``protect``
+.. (optional) Protect some solvent from removal and change its rtype to Ligand. Use selection grammer.
 
 Examples
 ==============================================
