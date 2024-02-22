@@ -53,7 +53,8 @@ This user guide contains:
 
    sci_api_tutorial/how_to_assemble
    sci_api_tutorial/single_point
-   sci_api_tutorial/mutation
+   sci_api_tutorial/assign_mutant
+   sci_api_tutorial/mutate_stru
    usage
 
 .. toctree::
