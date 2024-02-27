@@ -1,31 +1,11 @@
 ==============================================
-Calculate dipole with EnzyHTP analysis module 
+Bond Dipole
 ==============================================
 
 .. note::
 
-    | **This tutorial requires you to have 4 CPUs**
-    | **This tutorial requires Multiwfn installed**
-
-The target for this tutorial is calculating the molecular dipole in an KE-H5J enzyme-substrate complex. The main function provided is bond_dipole(), which calculates the dipole moment for a specified bond within two atoms. (Either enzyme or other pair of atoms) 
-
-1. Identify dipole calculation target 
-==============================================
-
-The following input file / chemistry knowledge need to provide, 
-    
-    | *Files: The structure pdb file of the target enzyme and electron structure from Gaussian16 in fhck format (Example: EnzyHTP/test/analysis/data/)*
-    | *Pre-knowledge: Identify the region/bond which conduct the dipole calculation. Also Identify the charge and spin. The default value for the charge and spin are 0, 1*
-    | *Tips: Select the region for eletron structure analysis with capping atom for the incomplete amino acide (example of the script using the "H" as the capping atoms)*
-
-| In order to setup the dipole calculation workflow, you will need the pre-requirement APIs (get_structure, assign_ncaa_chargespin, create_region_from_selection_pattern, ElectronicStructure) to get the dipole calucation region. 
-
-| (Note that the dipole calcuation for the enzyme system normally involves amino acides some pre-caution need to setup during the , e.g.: The amino acide which truncated during the region selection neeed to be capped. The create_region_from_selection_pattern function provide variable (nterm_cap and cterm_cap) to help you cap the expose amino acides)
-
-**Below we note the step by step method to use the bond_dipole science API for dipole calcuation at section 4. Before we start, let's breifly go through the bond_dipole function details**
-
-2. Find the bond_dipole calculation API
-===================================================================================
+    | **This bond_dipole calculation requires you to have 4 CPUs**
+    | **This bond_dipole calculation requires Multiwfn installed**
 
 .. note::
 
@@ -34,9 +14,19 @@ The following input file / chemistry knowledge need to provide,
 
 **You will find a detailed tutorial of how to use this Science API.**
 
-3. Read the bond_dipole API to set the input params and understand the output tuples
+Input/Output
 =========================================================================================
 
+.. panels::
+
+    :column: col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2 text-left
+
+    .. image:: ../../figures/dipole_bond.svg
+        :width: 100%
+        :alt: dipole_bond
+
+Input
+-----------------------------------------------------------------------------------------
 .. panels::
 
     :column: col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2 text-left
@@ -47,34 +37,63 @@ The following input file / chemistry knowledge need to provide,
 
     - ``ele_stru``:
         Electronic structure of the QM (Quantum Mechanics) region containing the target bond.
+        .. admonition:: How to obtain
+            
+            | A ElectronicStrutcure() object can be obtained by these `APIs <obtaining_ele_stru.html>`_.
 
     - ``atom_1`` and ``atom_2``:
         Atoms defining the target bond within the region.
+        .. admonition:: How to obtain
+            
+            | A atom_1 and atom_2 `Atom()` object can be obtained by these `APIs <obtaining_Atom.html>`_ with `create_region_from_selection_pattern()`. 
 
     - ``method``:
-
         Keyword specifying the algorithm & software for dipole calculation (default method is "LMO-Multiwfn"). Check the Multiwfn manual for the alternative methods. Utilizes the Lu-Chen method for dipole calculation, where 2-center LMO dipole is defined by the deviation of the electronic mass center relative to the bond center.
+        .. admonition:: What's the option
+            
+            | The current option is "LMO-Multiwfn"
 
     - ``work_dir``:
-
         Working directory containing all the files in the calculation process.
 
     - ``keep_in_file``:
-
         Whether to keep the input file of the calculation.
 
     - ``cluster_job_config``:
+        Configuration for cluster job execution (default is None for local execution). (See `ARMer Config <armer.html#api-config-dict>`_ section)
 
-        Configuration for cluster job execution (default is None for local execution).
-
-    - ``cluster_job_config``:
-
+    - ``job_check_period``:
         Time cycle for updating job state changes (default is 30 seconds).
 
-**Output**: A tuple contains the dipole sign and the dipole vector
+Output
+-----------------------------------------------------------------------------------------
+**Output**: A `Tuple[float, np.array]` contains the dipole sign and the dipole vector
 The expected returns of the bond_dipole calcuation are the signed norm of the dipole and dipole vector. Dipole positive direction goes from negative to positive, and the result direction is from ``atom_1`` to ``atom_2``.
 
-4. Let's try to construct the actual scripts step by step
+Argument code
+=========================================================================================
+
+``ele_stru``:
+    Electronic structure of the QM (Quantum Mechanics) region containing the target bond.
+
+``atom_1`` and ``atom_2``:
+    Atoms defining the target bond within the region.
+
+
+``work_dir``:
+    Working directory containing all the files in the calculation process.
+
+``keep_in_file``:
+    Whether to keep the input file of the calculation.
+
+``cluster_job_config``:
+    Configuration for cluster job execution (default is None for local execution). (See `ARMer Config <armer.html#api-config-dict>`_ section)
+
+``job_check_period``:
+    Time cycle for updating job state changes (default is 30 seconds).
+
+
+Example code
 =========================================================================================
 .. panels::
 
@@ -128,9 +147,8 @@ The expected returns of the bond_dipole calcuation are the signed norm of the di
         ke_ele_stru = ElectronicStructure(energy_0 = 0.0, geometry = test_region, mo = f"{DATA_DIR}KE_mutant_101_254_frame_0.fchk", mo_parser = None,source ="gaussian16") 
         result = bond_dipole(test_ele_stru, target_bond[0], target_bond[1],work_dir=WORK_DIR)
 
-5. Done! and Run the python scripts
+Done!
 =========================================================================================
-Now you finished the bond dipole calculation for your workflow! It is the time for launching it.
 
 
 
