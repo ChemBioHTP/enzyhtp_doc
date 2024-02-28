@@ -20,17 +20,24 @@ Input/Output
         :width: 100%
         :alt: single_point_api_io                  
 
+    |
+
+    .. note::
+        
+        Data representation format in the diagram -- (data_name : data_type)
+
 Input
 ------------------------------------------------
 
-``stru``
+``stru`` or ``stru_esm``
     the target molecule of the calculation as a Structure() object.
 
     .. admonition:: How to obtain
 
         | A Strutcure() object can be obtained by these `APIs <obtaining_stru.html>`_.
 
-``stru_esm``
+    OR
+
     the target molecules of the calculation as a StructureEnsemble() object.
 
     .. admonition:: How to obtain
@@ -167,16 +174,36 @@ Arguments
 Example Code
 ==============================================
 
-Calculate single point energy for a small molecule
+1. Calculate single point energy for a small molecule
 ---------------------------------------------------------
 
 In this example, we perform single point energy calculation on 
-the whole Structure which represents a small molecule. (PDB code: H5J)
-The ``stru`` is obtained by reading from a PDB file.
+the whole Structure which represents a small molecule. (PDB code: `H5J <https://www.rcsb.org/ligand/H5J>`_)
+
+.. admonition:: How input is prepared
+
+    ``stru``
+        obtained by reading from a PDB file using ``PDBParser().get_structure()``
+        Note that we also assigned the charge and spin using ``.assign_ncaa_chargespin()`` method.
+        (See `Details <#input-output>`_)
+    
+    ``engine``
+        we choose "gaussian"
+
+    ``method``
+        defined using ``QMLevelOfTheory()``
+
+    ``cluster_job_config``
+        defined based on our local HPC and account.
 
 .. code:: python
+    
+    from enzy_htp.quantum import single_point
+    from enzy_htp import PDBParser
+    from enzy_htp.chemical.level_of_theory import QMLevelOfTheory
+    from enzy_htp.core.clusters.accre import Accre
 
-    test_stru = sp.get_structure(f"{DATA_DIR}H5J.pdb")
+    test_stru = PDBParser().get_structure(f"{DATA_DIR}H5J.pdb")
     test_stru.assign_ncaa_chargespin({"H5J" : (0,1)})
     test_method = QMLevelOfTheory(
         basis_set="3-21G",
@@ -199,23 +226,46 @@ The ``stru`` is obtained by reading from a PDB file.
         method=test_method,
         cluster_job_config=cluster_job_config,
         job_check_period=10,
-        work_dir=f"{WORK_DIR}/QM_SPE/"
+        work_dir=f"./QM_SPE/"
     )
     qm_result = qm_result[0]
 
     # >>> qm_result.energy_0
     # >>> -597.293275805
 
-Calculate single point energy for a QM region
+2. Calculate single point energy for a QM region
 ---------------------------------------------------------
 
 In this example, we perform single point energy calculation on 
 a QM region that is 2 Ang from the substrate in Kemp Eliminase.
-The ``stru`` is obtained by reading from a PDB file.
+
+.. admonition:: How input is prepared
+
+    ``stru``
+        obtained by reading from a PDB file using ``PDBParser().get_structure()``
+        (See `Details <#input-output>`_)
+    
+    ``engine``
+        we choose "gaussian"
+
+    ``method``
+        defined using ``QMLevelOfTheory()``
+
+    ``regions``
+        defined using a PyMol selection syntax.
+        (See `Details <structure_selection.html>`_)
+
+    ``cluster_job_config``
+        defined based on our local HPC and account.
 
 .. code:: python
 
-    test_stru = sp.get_structure(f"{STRU_DATA_DIR}KE_07_R7_2_S.pdb")
+    from enzy_htp.quantum import single_point
+    from enzy_htp import PDBParser
+    from enzy_htp.chemical.level_of_theory import QMLevelOfTheory
+    from enzy_htp.core.clusters.accre import Accre
+    
+    test_stru = PDBParser().get_structure(f"{STRU_DATA_DIR}KE_07_R7_2_S.pdb")
     test_stru.assign_ncaa_chargespin({"H5J" : (0,1)})
     test_method = QMLevelOfTheory(
         basis_set="3-21G",
@@ -237,20 +287,39 @@ The ``stru`` is obtained by reading from a PDB file.
         regions=["br. (resi 254 around 2)"],
         cluster_job_config=cluster_job_config,
         job_check_period=10,
-        work_dir=f"{WORK_DIR}/QM_SPE/",
+        work_dir=f"./QM_SPE/",
         )[0]
 
     # >>> qm_result.energy_0
     # >>> -2169.29406633
 
-Calculate single point energy for a QM cluster
+3. Calculate single point energy for a QM cluster
 ---------------------------------------------------------
 
-| In this example, we perform single point energy calculation for 
+In this example, we perform single point energy calculation for 
 a QM region and for each snapshot from an ensemble of substrates
 of Kemp Eliminase.
-| The ``stru`` is a ``StructureEnsemble()`` obtained from a MD trajectory from ``equi_md_sampling()``
-| (note that this is a snippt of a workflow)
+
+(note that this is a snippt of a workflow instead of a full script)
+
+.. admonition:: How input is prepared
+
+    ``stru``
+        The ``stru`` is a ``StructureEnsemble()`` obtained from a MD trajectory from ``equi_md_sampling()``
+        (See `Details <#input-output>`_)
+    
+    ``engine``
+        we choose "gaussian"
+
+    ``method``
+        defined using ``QMLevelOfTheory()``
+
+    ``regions``
+        defined using a PyMol selection syntax.
+        (See `Details <structure_selection.html>`_)
+
+    ``cluster_job_config``
+        defined based on our local HPC and account.
 
 .. code:: python
 
@@ -289,3 +358,4 @@ of Kemp Eliminase.
         job_array_size=20,
         work_dir=f"{mutant_dir}/QM_SPE/",
     )
+    ...
