@@ -11,7 +11,7 @@ The document is built with Sphinx and published on ReadtheDoc
 clone https://github.com/ChemBioHTP/enzyhtp_doc.git
 ```
 You will be making changes locally and push to this repo.  
-**make a new branch of your won if you want to make any chance and merge into main with a PR**
+**make a new branch of your own if you want to make any chance and merge into main with a PR**
 
 ### 1. Install Sphinx environment
 ```
