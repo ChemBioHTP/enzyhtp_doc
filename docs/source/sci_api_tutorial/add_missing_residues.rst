@@ -2,6 +2,16 @@
 Adding Missing Residues
 ============================================
 
+
+
+Briefs
+============================================
+
+Proteins are often missing residues from flexible loop regions. This is a problem for various types
+of calculations including molecular dynamics (MD) and quantum mechanics (QM) simulations. This function
+aids in HTP workflow design by adding missing ``Residue()`` objects into a ``Structure()``. Missing residues
+can be defined by the user or by pulling from the Protein DataBank (PDB) when possible.
+
 .. note:: 
     
     **Using this functionality requires the modeller python package to be installed.**
@@ -99,8 +109,30 @@ Example Code
 
         sp = PDBParser()
 
-        stru = sp.get_structure("./2a2c_raw.pdb")
+        stru = sp.get_structure("./3r3v_.pdb")
+        
+        print(stru)
+        
+        fill_missing_residues(stru, identify_missing_residues("3R3V"))
 
-        fill_missing_residues(stru, identify_missing_residues("2A2C"))
+        print(stru)
 
 
+    The output from the above code is listed below:
+
+    .. code::
+
+
+        <Structure object at 0x7f8576baa370>
+        Structure(
+        chains: (sorted, original ['A', 'B'])
+            A(polypeptide): residue: 4-254,256-300 atom_count: 2339
+            B(polypeptide): residue: 4-252,259-300 atom_count: 2310
+        )
+        
+        <Structure object at 0x7f8576baa370>
+        Structure(
+        chains: (sorted, original ['A', 'B'])
+            A(polypeptide): residue: -1-304 atom_count: 2408
+            B(polypeptide): residue: -1-304 atom_count: 2408
+        )
