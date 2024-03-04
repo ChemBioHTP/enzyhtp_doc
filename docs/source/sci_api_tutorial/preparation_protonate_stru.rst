@@ -13,6 +13,21 @@ Protonation states are determined for residues with multiple ones.
 Input/Output
 ==============================================
 
+**input**: A ``Structure`` instance (no matter it's a protein, polypeptite, or ligand).
+
+.. dropdown:: :fa:`eye,mr-1` How to obtain ``Structure`` instance?
+
+    Structure can be obtained by 
+    
+    1. parsing from a file using one of the StructureParser:
+
+    - `PDBParser <xxx>`_
+    - `PrmtopParser <xxx>`_
+
+    2. OR using the output of `Remove Solvent <preparation_remove_solvent.html>`_ or `Remove Hydrogens <preparation_remove_solvent.html>`_. (Commonly used here)
+
+**output**: A ``Structure`` instance of protonated structure (in-place modification, not as return value).
+
 .. panels::
 
     :column: col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2 text-left
@@ -20,10 +35,6 @@ Input/Output
     .. image:: ../../figures/preparation_protonate_stru_dfd.svg
         :width: 100%
         :alt: preparation_remove_solvent
-
-    .. **input**: A ``Structure`` instance (no matter it's a protein, polypeptite, or ligand).
-
-    .. **output**: A ``Structure`` instance of protonated structure (in-place modification, not as return value).
 
 Arguments
 ==============================================
@@ -33,7 +44,7 @@ Arguments
 
 ``ph``
     The pH value for determining the protonation state.
-    (optional, default ``7.0``)
+    (Float, optional, default ``7.0``)
 
     .. dropdown:: :fa:`eye,mr-1` Click to learn more about ``ph``
 
@@ -44,12 +55,12 @@ Arguments
 ``protonate_ligand``
     If also protonate ligand.
     
-    (optional, default ``True``)
+    (Boolean, optional, default ``True``)
 
 ``engine``
     Engine for determining the pKa and adding hydrogens to the protein peptide part.
 
-    (optional, default ``pdb2pqr``) 
+    (String, optional, default ``pdb2pqr``) 
     
     .. dropdown:: :fa:`eye,mr-1` Click to learn more about ``engine``
 
@@ -60,7 +71,7 @@ Arguments
 ``ligand_engine``
     Engine for adding hydrogens to ligands (current available values: ``pybel``)
 
-    (optional, default ``pybel``)
+    (String, optional, default ``pybel``)
     
     .. dropdown:: :fa:`eye,mr-1` Click to learn more about ``engine``
 
@@ -76,7 +87,7 @@ Arguments
 Examples
 ==============================================
 
-Before Execution: Load Structure
+Prepare the Input: Load Structure
 ----------------------------------------------
 
 .. panels::
@@ -140,7 +151,7 @@ Use ``preparation.protonate.protonate_stru`` to protonate (i.e. add hydrogen ato
     
     Thus, if you write ``stru = protonate.protonate_stru(stru=stru)``, your ``stru`` will very unfortunately be assigned the value ``None``.
 
-After Execution: Check Output
+Check the Output
 ----------------------------------------------
 
 Let's try executing the API here and check if there's any changes taking place.

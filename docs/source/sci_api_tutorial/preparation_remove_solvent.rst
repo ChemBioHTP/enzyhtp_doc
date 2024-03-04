@@ -15,6 +15,17 @@ All ``enzy_htp.structure.Solvent`` class instances (hereafter referred to as
 Input/Output
 ==============================================
 
+**input**: A ``Structure`` instance (no matter it's a protein, polypeptite, or ligand).
+
+.. dropdown:: :fa:`eye,mr-1` How to obtain ``Structure`` instance?
+
+    Structure can be obtained by parsing from a file using one of the StructureParser:
+
+    - `PDBParser <xxx>`_ (Commonly used here)
+    - `PrmtopParser <xxx>`_
+
+**output**: A ``Structure`` instance of protonated structure (in-place modification, not as return value).
+
 .. panels::
 
     :column: col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2 text-left
@@ -22,11 +33,6 @@ Input/Output
     .. image:: ../../figures/preparation_remove_solvent_dfd.svg
         :width: 100%
         :alt: preparation_remove_solvent
-
-    .. **input**: A ``Structure`` instance (no matter it's a protein, polypeptite, or ligand).
-
-    .. **output**: A ``Structure`` instance with solvent removed (in-place modification,
-    .. but still provides a return value).
 
 
 Arguments
@@ -41,7 +47,7 @@ Arguments
 Examples
 ==============================================
 
-Before Execution: Load Structure
+Prepare the Input: Load Structure
 ----------------------------------------------
 
 .. panels::
@@ -72,15 +78,6 @@ Use ``preparation.clean.remove_solvent`` to remove solvent from your structure.
 
     .. code:: python
 
-        from enzy_htp.preparation.clean import remove_solvent
-        
-        stru = remove_solvent(stru=stru)
-
-    We can also directly import ``remove_solvent`` from ``enzy_htp.preparation`` since it has been cited in
-    the ``__init__.py`` file of ``preparation`` module.
-
-    .. code:: python
-
         from enzy_htp.preparation import remove_solvent
         
         stru = remove_solvent(stru=stru)
@@ -92,7 +89,7 @@ Use ``preparation.clean.remove_solvent`` to remove solvent from your structure.
     Thus, even if you write ``remove_solvent(stru=stru)`` (you don't use any variables to receive the return value),
     the structure referred by ``stru`` will still be changed.
 
-After Execution: Check Output
+Check the Output
 ----------------------------------------------
 
 Let's try executing the API here and check if there's any changes taking place.

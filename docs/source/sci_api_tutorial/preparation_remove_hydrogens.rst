@@ -12,6 +12,21 @@ removes hydrogen atoms from the supplied ``enzy_htp.structure.Structure`` class 
 Input/Output
 ==============================================
 
+**input**: A ``Structure`` instance (no matter it's a protein, polypeptite, or ligand).
+
+.. dropdown:: :fa:`eye,mr-1` How to obtain ``Structure`` instance?
+
+    Structure can be obtained by 
+    
+    1. parsing from a file using one of the StructureParser:
+
+    - `PDBParser <xxx>`_
+    - `PrmtopParser <xxx>`_
+
+    2. OR using the output of `Remove Solvent <preparation_remove_solvent.html>`_. (Commonly used here)
+
+**output**: A ``Structure`` instance of protonated structure (in-place modification, not as return value).
+
 .. panels::
 
     :column: col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2 text-left
@@ -19,11 +34,6 @@ Input/Output
     .. image:: ../../figures/preparation_remove_hydrogens_dfd.svg
         :width: 100%
         :alt: preparation_remove_solvent
-
-    .. **input**: A ``Structure`` instance (no matter it's a protein, polypeptite, or ligand).
-
-    .. **output**: A ``Structure`` instance with hydrogen atoms removed (in-place modification or a copy,
-    .. but both provides a return value).
 
 Arguments
 ==============================================
@@ -34,17 +44,17 @@ Arguments
 ``polypeptide_only``
     whether only remove hydrogen atoms from polypeptide.
 
-    (optional, default True) 
+    (Boolean, optional, default True) 
 
 ``in_place``
     Apply the change in place (to the supplied instance) or in a copy (create a new instance).
     
-    (optional, default True)
+    (Boolean, optional, default True)
 
 Examples
 ==============================================
 
-Before Execution: Load Structure
+Prepare the Input: Load Structure
 ----------------------------------------------
 
 .. panels::
@@ -76,15 +86,6 @@ Use ``preparation.clean.remove_hydrogens`` to remove hydrogen atoms from your st
 
     .. code:: python
 
-        from enzy_htp.preparation.clean import remove_hydrogens
-        
-        protonate.remove_hydrogens(stru=stru)
-
-    We can also directly import ``remove_hydrogens`` from ``enzy_htp.preparation`` since it has been cited in
-    the ``__init__.py`` file of ``preparation`` module.
-
-    .. code:: python
-
         from enzy_htp.preparation import remove_hydrogens
         
         stru = remove_hydrogens(stru=stru)
@@ -112,7 +113,7 @@ Use ``preparation.clean.remove_hydrogens`` to remove hydrogen atoms from your st
     Thus, if you set ``in_place=False`` so as to have two ``Structure`` instances (one with hydrogens,
     and the other without hydrogens), you'd better define a new variable to receive the response.
 
-After Execution: Check Output
+Check the Output
 ----------------------------------------------
 
 Let's try executing the API here and check if there's any changes taking place.
