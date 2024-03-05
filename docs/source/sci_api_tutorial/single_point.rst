@@ -105,71 +105,73 @@ Output
 Arguments
 ==============================================
 
-``stru``
-    the target molecule of the calculation represented as Structure()
-    It can also be an ensemble of structures as StructureEnsemble()
-    and in this case, each geometry in this ensemble will be calculated.
-    (See `Input/Output <#input-output>`_ section)
+.. dropdown:: :fa:`eye,mr-1` Click to see full argument explanations
 
-``engine``
-    the QM or QM/MM engine as a keyword. (See `Input/Output <#input-output>`_ section)
+    ``stru``
+        the target molecule of the calculation represented as Structure()
+        It can also be an ensemble of structures as StructureEnsemble()
+        and in this case, each geometry in this ensemble will be calculated.
+        (See `Input/Output <#input-output>`_ section)
 
-``method``
-    the level of theory of this calculation as a LevelOfTheory().
-    This is used when there is only 1 region specified. (See `Input/Output <#input-output>`_ section)
+    ``engine``
+        the QM or QM/MM engine as a keyword. (See `Input/Output <#input-output>`_ section)
 
-``regions``
-    This option allows you to define different region and apply different
-    level of theory to each region.
-    e.g.: defining 2 regions and perform QM/MM.
-    the regions are defined by a list of `selection patterns <structure_selection.html>`_.
-    the selection is applied to the 1st frame and the same region
-    is used for every frames.
-    (See `Input/Output <#input-output>`_ section)
+    ``method``
+        the level of theory of this calculation as a LevelOfTheory().
+        This is used when there is only 1 region specified. (See `Input/Output <#input-output>`_ section)
 
-``region_methods``
-    The level of theory of each region.
-    This is used when more than 1 region is specified.
-    The region and the method is align based on the order.
-    (See `Input/Output <#input-output>`_ section)
+    ``regions``
+        This option allows you to define different region and apply different
+        level of theory to each region.
+        e.g.: defining 2 regions and perform QM/MM.
+        the regions are defined by a list of `selection patterns <structure_selection.html>`_.
+        the selection is applied to the 1st frame and the same region
+        is used for every frames.
+        (See `Input/Output <#input-output>`_ section)
 
-``capping_method``
-    | the free valence capping method. (See `Capping Methods <capping.html>`_)
-    | default: ``"res_ter_cap"``
+    ``region_methods``
+        The level of theory of each region.
+        This is used when more than 1 region is specified.
+        The region and the method is align based on the order.
+        (See `Input/Output <#input-output>`_ section)
 
-``embedding_method``
-    | The embedding method of multiscale simulation.
-      This is used when more than 1 region is specified.
-      Supported keywords: ["mechanical"]
-    | default: ``"mechanical"``
+    ``capping_method``
+        | the free valence capping method. (See `Capping Methods <capping.html>`_)
+        | default: ``"res_ter_cap"``
 
-``parallel_method``
-    | the method to parallelize the multiple runs when more
-      than 1 geometry is in the input StructureEnsemble
-      The execution will serial and locally if None is given.
-    | default: ``"cluster_job"``
+    ``embedding_method``
+        | The embedding method of multiscale simulation.
+        This is used when more than 1 region is specified.
+        Supported keywords: ["mechanical"]
+        | default: ``"mechanical"``
 
-``cluster_job_config`` 
-    the config for cluster_job if it is used as the parallel method.
-    (See `ARMer Config <armer.html#api-config-dict>`_ section)
+    ``parallel_method``
+        | the method to parallelize the multiple runs when more
+        than 1 geometry is in the input StructureEnsemble
+        The execution will serial and locally if None is given.
+        | default: ``"cluster_job"``
 
-``job_check_period``
-    the time cycle for update job state change if cluster_job is used. (Unit: s)
-    | default: ``210``
+    ``cluster_job_config`` 
+        the config for cluster_job if it is used as the parallel method.
+        (See `ARMer Config <armer.html#api-config-dict>`_ section)
 
-``job_array_size``
-    how many jobs are allowed to submit simultaneously. (0 means all -> len(inp))
-    (e.g. 5 for 100 jobs means run 20 groups. All groups will be submitted and
-    in each group, submit the next job only after the previous one finishes.)
-    | default: ``20``
+    ``job_check_period``
+        the time cycle for update job state change if cluster_job is used. (Unit: s)
+        | default: ``210``
 
-``work_dir``
-    the working dir that contains all the files in the SPE process
-    | default: ``"./QM_SPE"``
+    ``job_array_size``
+        how many jobs are allowed to submit simultaneously. (0 means all -> len(inp))
+        (e.g. 5 for 100 jobs means run 20 groups. All groups will be submitted and
+        in each group, submit the next job only after the previous one finishes.)
+        | default: ``20``
 
-``keep_in_file``
-    whether keep the input file of the calculation
-    | default: ``False``
+    ``work_dir``
+        the working dir that contains all the files in the SPE process
+        | default: ``"./QM_SPE"``
+
+    ``keep_in_file``
+        whether keep the input file of the calculation
+        | default: ``False``
 
 Example Code
 ==============================================
