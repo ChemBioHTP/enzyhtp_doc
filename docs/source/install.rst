@@ -71,7 +71,7 @@ III. Install External Dependencies
 ===================================
 
 1. Install Amber (optional)
-------------------------
+---------------------------------
 EnzyHTP use Amber as one of the MD engine (currently the only one). You need to install
 Amber if you want to enable MD/mutation functions in EnzyHTP. AmberTools is free (CPU only) and Amber is
 charged (GPU support). Most universities have Amber purchased
@@ -85,7 +85,7 @@ As an example, here is the command for loading Amber in our local cluster ACCRE.
     source /home/shaoq1/bin/amber_env/amber-accre.sh
 
 2. Install Gaussian16 (optional)
-------------------------
+---------------------------------
 EnzyHTP use Gaussian16 as one of the QM engine (currently the only one). You need to install
 Gaussian16 if you want to enable QM-based functions in EnzyHTP. Gaussian16 is charged. Most universities 
 have Gaussian16 purchased and installed in their local clusters. Contact your local cluster if
@@ -98,7 +98,7 @@ As an example, here is the command for loading Gaussian16 in our local cluster A
     module load Gaussian/16.B.01
 
 3. Install Multiwfn (optional)
-------------------------
+---------------------------------
 | EnzyHTP use Multiwfn as one of the wavefunction analysis engine.
 | You need to install Multiwfn if you want to enable wavefunction analysis functions in EnzyHTP.
 | Multiwfn is free and very easy to install.
@@ -116,7 +116,7 @@ As an example, here is the command for loading Gaussian16 in our local cluster A
         module load GCC/6.4.0-2.28  OpenMPI/2.1.1
 
 4. Install Rosetta (optional)
-------------------------
+---------------------------------
 | EnzyHTP use Rosetta as one of the post-analysis & docking engine.
 | You need to install Rosetta if you want to enable docking & analysis (e.g.: thermostability assessment) functions in EnzyHTP.
 | Rosetta is free and easy to install.

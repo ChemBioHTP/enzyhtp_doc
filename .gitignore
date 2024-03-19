@@ -5,6 +5,10 @@
 # vscode
 .vscode/*
 
+#macos
+./docs/.DS_Store
+./docs/figures/.DS_Store
+
 ### JupyterNotebooks ###
 # gitignore template for Jupyter Notebooks
 # website: http://jupyter.org/
