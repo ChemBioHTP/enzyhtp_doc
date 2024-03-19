@@ -123,3 +123,5 @@ As an example, here is the command for loading Gaussian16 in our local cluster A
 
 | Follow this page for the install:
 | https://new.rosettacommons.org/demos/latest/tutorials/install_build/install_build
+
+Author: QZ Shao <shaoqz@icloud.com>

@@ -14,3 +14,4 @@ Structure can be obtained by parsing from a file using one of the StructureParse
 - `PDBParser <xxx>`_
 - `PrmtopParser <xxx>`_
 
+Author: QZ Shao <shaoqz@icloud.com>
