@@ -540,3 +540,8 @@ In this example, we perform assign mutations on a four-chainr protein structure,
                                                   chain_sync_list=[("A", "B"), ("C","D")], 
                                                   chain_index_mapper={"A": 0, "B": 0, "C": 0, "D": 0})
     print(mutation_pattern_A_B_C_D)
+
+
+=========================================================================================
+
+Author: Xingyu Ouyang <ouyangxingyu913@gmail.com>

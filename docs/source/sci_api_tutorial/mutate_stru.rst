@@ -192,3 +192,8 @@ In this example, we perform assign mutations on a protein structure.
     PDBParser.save_structure("mut2.pdb",mutant_stru_A_2)
     mutant_stru_A_3 = mapi.mutate_stru(test_A_stru, mutants_A[2], "pymol") #mutate group3
     PDBParser.save_structure("mut3.pdb",mutant_stru_A_3)
+
+
+=========================================================================================
+
+Author: Xingyu Ouyang <ouyangxingyu913@gmail.com>
