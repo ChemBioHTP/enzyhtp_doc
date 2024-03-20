@@ -49,6 +49,71 @@ Input
     .. admonition:: How to obtain
 
         | Choose from supported engine: ``tleap_min``, ``pymol``, ``rosetta``
+    
+    .. dropdown:: :fa:`eye,mr-1` Click to see *Avaible strageties* 
+
+        - *Avaible strageties:*
+            Substitution:
+        
+            Direct replacement of the side-chain:
+        
+            - tleap_min (https://pubs.acs.org/doi/full/10.1021/acs.jcim.1c01424)
+                The most simple way to get a mutant structure. It 1. place the new side-chain using a constant conformation (relative to backbone)     and     2. relax the crude mutant structure using MM minimization.
+        
+                Consider limited change of other side chains in MM minimization
+                Not consider backbone change
+        
+                * This method particularly has problem when mutating a small residue to a larger one. In this case, collision may appears in     the     mutated structure and the MM minimization is responsible for resolving it. But in extreme cases, there are unresolvable     collision such     as the carbon chain is trapped in a phenyl ring. And currently we don't have a method to detect such trapping.     The method is only used     as a place holder for 1st version EnzyHTP. We have encounter any problem brought by the accuracy of the     mutation when using this method     in workflows but users should be cautious with it and consider it a potential source of absured     results.
+                
+            Side-chain rotamer library:
+            (most used in the field)
+                
+            - SCWRL4 (http://dunbrack.fccc.edu/lab/scwrl)
+                    
+                | Not consider other side-chain change
+                | Not consider backbone change
+        
+            - PyMol (https://github.com/schrodinger/pymol-open-source)
+                    
+                | Not consider other side-chain change
+                | Not consider backbone change
+                    
+            - Phyre2
+                    
+                | Consider other side-chain change
+                | Not consider backbone change
+        
+                * seems having a derived pipeline Missense3D addressing the challenge (https://www.sciencedirect.com/science/article/pii/        S0022283619302037?via%3Dihub#s0050)
+        
+                * related discussion in its website (http://www.sbg.bio.ic.ac.uk/phyre2/html/help.cgi?id=help/faq)
+        
+            Machine learning methods:
+        
+            - Packpred (http://cospi.iiserpune.ac.in/packpred/, https://www.frontiersin.org/articles/10.3389/fmolb.2021.646288/full, https://github.    com/    kuanpern/PackPred)
+        
+                * find a summary of the missence mutation in the intro of the paper
+                    Unknown
+        
+            MCMC search globally in side-chains:
+        
+            - Modeller
+        
+                | Fully consider other side-chain change
+                | Not consider backbone change
+        
+            - SWISSMODEL
+          
+                | Fully consider other side-chain change
+                | Not consider backbone change
+        
+        
+        - *Insertion/Deletion:*
+        
+            - Phyre4
+          
+                see http://www.sbg.bio.ic.ac.uk/phyre2/html/help.cgi?id=help/faq
+                works mainly <5 AA change
+    
 
 Output
 ------------------------------------------------
@@ -68,9 +133,9 @@ Arguments
     the engine (method) used for determine the mutated structure.
 
     | current available keywords:
-    | tleap_min
-    | pymol
-    | rosetta
+    | ``tleap_min``
+    | ``pymol``
+    | ``rosetta``
 
 ``in_place``:   
     if change the structure in-place and return the reference. False means return a changed structure_obj and keep the original objecintact (default is False since wild-type structure is expected to also available in many applications)
@@ -84,67 +149,6 @@ Arguments
     | {'checker_name':{'keyword':value, ...}, ...}
     | (by default apply all checker)
 
-- *Avaible strageties:*
-    Substitution:
-
-    Direct replacement of the side-chain:
-
-    - tleap_min (https://pubs.acs.org/doi/full/10.1021/acs.jcim.1c01424)
-        The most simple way to get a mutant structure. It 1. place the new side-chain using a constant conformation (relative to backbone) and 2. relax the crude mutant structure using MM minimization.
-
-        Consider limited change of other side chains in MM minimization
-        Not consider backbone change
-
-        * This method particularly has problem when mutating a small residue to a larger one. In this case, collision may appears in the mutated structure and the MM minimization is responsible for resolving it. But in extreme cases, there are unresolvable collision such as the carbon chain is trapped in a phenyl ring. And currently we don't have a method to detect such trapping. The method is only used as a place holder for 1st version EnzyHTP. We have encounter any problem brought by the accuracy of the mutation when using this method in workflows but users should be cautious with it and consider it a potential source of absured results.
-        
-    Side-chain rotamer library:
-    (most used in the field)
-        
-    - SCWRL4 (http://dunbrack.fccc.edu/lab/scwrl)
-            
-        | Not consider other side-chain change
-        | Not consider backbone change
-
-    - PyMol (https://github.com/schrodinger/pymol-open-source)
-            
-        | Not consider other side-chain change
-        | Not consider backbone change
-            
-    - Phyre2
-            
-        | Consider other side-chain change
-        | Not consider backbone change
-
-        * seems having a derived pipeline Missense3D addressing the challenge (https://www.sciencedirect.com/science/article/pii/S0022283619302037?via%3Dihub#s0050)
-
-        * related discussion in its website (http://www.sbg.bio.ic.ac.uk/phyre2/html/help.cgi?id=help/faq)
-
-    Machine learning methods:
-
-    - Packpred (http://cospi.iiserpune.ac.in/packpred/, https://www.frontiersin.org/articles/10.3389/fmolb.2021.646288/full, https://github.com/kuanpern/PackPred)
-
-        * find a summary of the missence mutation in the intro of the paper
-            Unknown
-
-    MCMC search globally in side-chains:
-
-    - Modeller
-
-        | Fully consider other side-chain change
-        | Not consider backbone change
-
-    - SWISSMODEL
-  
-        | Fully consider other side-chain change
-        | Not consider backbone change
-
-
-- *Insertion/Deletion:*
-
-    - Phyre4
-  
-        see http://www.sbg.bio.ic.ac.uk/phyre2/html/help.cgi?id=help/faq
-        works mainly <5 AA change
 
 
 Example Code
@@ -183,5 +187,8 @@ In this example, we perform assign mutations on a protein structure.
     # [('ALA','TRP','A',288), ('VAL','ARG','A',273)], 
     # [('HIS','LYS','A',290), ('PHE','TYR','A',179)]]
     mutant_stru_A_1 = mapi.mutate_stru(test_A_stru, mutants_A[0], "pymol") #mutate group1
+    PDBParser.save_structure("mut1.pdb",mutant_stru_A_1)
     mutant_stru_A_2 = mapi.mutate_stru(test_A_stru, mutants_A[1], "pymol") #mutate group2
+    PDBParser.save_structure("mut2.pdb",mutant_stru_A_2)
     mutant_stru_A_3 = mapi.mutate_stru(test_A_stru, mutants_A[2], "pymol") #mutate group3
+    PDBParser.save_structure("mut3.pdb",mutant_stru_A_3)

@@ -63,93 +63,280 @@ Output
 Mutant Pattern
 ==============================================
 
-"From simple to complex" examples
+Basic usage example
+----------------------------------------------
+    
+* Generate a mutant with a single-point mutation: R378E
+    
+    .. code:: python
+        
+        test_A = "test_A.pdb"
+        test_A_stru = PDBParser.get_structure(test_A)
+        test_mutation_pattern_A = "R378E"
+        mutants_A = mapi.assign_mutant(test_A_stru, test_mutation_pattern_A)
+        print(mutants_A)
+        #[[('ARG','GLU','A',378)]]
+
+Chemistry-inspired example
 ----------------------------------------------
 
-* Keep it as a wild type structure
-    
+* Mutate residues using the protein with the LIG substrate near the binding pocket, defined as residues within 5 Å of LIG, to increase pocket volume. Not all residues need to be force mutated.
+
     .. code:: python
 
         test_A = "test_A.pdb"
         test_A_stru = PDBParser.get_structure(test_A)
-        test_mutation_pattern_A = ""
+        test_mutation_pattern_A = "a:[byres resn LIG around 5:smaller]"
         mutants_A = mapi.assign_mutant(test_A_stru, test_mutation_pattern_A)
         print(mutants_A)
-        #[[(None,'WT',None,None)]]
 
-* Select one specific signle-point mutation site in a monomer protein, e.g. mutate P329 to G392
-    
-    .. code:: python
-        
-        test_A = "test_A.pdb"
-        test_A_stru = PDBParser.get_structure(test_A)
-        test_mutation_pattern_A = "F392G"
-        mutants_A = mapi.assign_mutant(test_A_stru, test_mutation_pattern_A)
-        print(mutants_A)
-        #[[('PHE','GLY','A',392)]]
+.. dropdown:: :fa:`eye,mr-1` Click to see more **monomer protein** examples
 
-* Select three seperate signle-point mutation sites in a monomer protein, e.g. mutate P329 to G392, R378 to E378, D211 to T211.
-    
-    .. code:: python
-        
-        test_A = "test_A.pdb"
-        test_A_stru = PDBParser.get_structure(test_A)
-        test_mutation_pattern_A = "F392G,R378E,D211T"
-        mutants_A = mapi.assign_mutant(test_A_stru, test_mutation_pattern_A)
-        print(mutants_A)
-        #[[('PHE','GLY','A',392)], [('ARG','GLU','A',378)], [('ASP','THR','A',211)]]
+    * Work with the wild-type
 
-* Select a three-point mutation in a monomer protein, e.g. mutate P329 to G392, R378 to E378, D211 to T211 simultaneously.
-    
-    .. code:: python
-        
-        test_A = "test_A.pdb"
-        test_A_stru = PDBParser.get_structure(test_A)
-        test_mutation_pattern_A = "{F392G,R378E,D211T}"
-        mutants_A = mapi.assign_mutant(test_A_stru, test_mutation_pattern_A)
-        print(mutants_A)
-        #[[('PHE','GLY','A',392), ('ARG','GLU','A',378), ('ASP','THR','A',211)]]
+        .. code:: python
 
-* Generate two mutant spaces, one is three-point mutation and another is two-point mutaion in a monomer protein, e.g. mutate P329 to G392, R378 to E378, D211 to T211 in one mutant; N363 to E363 and M71 to L71 in another mutant.
-    
-    .. code:: python
-        
-        test_A = "test_A.pdb"
-        test_A_stru = PDBParser.get_structure(test_A)
-        test_mutation_pattern_A = "{F392G,R378E,D211T}","{N363E,M71L}"
-        mutants_A = mapi.assign_mutant(test_A_stru, test_mutation_pattern_A)
-        print(mutants_A)
-        #[[('ASP','THR','A',211), ('PHE','GLY','A',392), ('ARG','GLU','A',378)], 
-        # [('ASN','GLU','A',363), ('MET','LEU','A',71)]]
+            test_A = "test_A.pdb"
+            test_A_stru = PDBParser.get_structure(test_A)
+            test_mutation_pattern_A = "WT" 
+            mutants_A = mapi.assign_mutant(test_A_stru, test_mutation_pattern_A)
+            print(mutants_A)
+            #[[(None,'WT',None,None)]]
 
-* Select three two signle-point mutation sites in a homologous two-chain protein, and the two mutation locates on different chains, e.g. mutate L383 to H383 on chain A, N363 to E363 on chain B.
-    
-    .. code:: python
-        
-        test_A_B = "test_A_B.pdb"
-        test_A_B_stru = PDBParser.get_structure(test_A_B)
-        test_mutation_pattern_A_B = "LA383H,NB363E"
-        mutation_pattern_A_B = mapi.assign_mutant(test_A_B_stru, 
-                                                  test_mutation_pattern_A_B, 
-                                                  chain_sync_list=[("A", "B")], 
-                                                  chain_index_mapper={"A": 0, "B": 0})
-        print(mutation_pattern_A_B)
-        #[[('LEU','HIS','A',383), ('LEU','HIS','B',383)], [('ASN','GLU','B',363), ('ASN','GLU','A',363)]]
 
-* Select one specific mutation site (e.g. M71 to L71), combined with randomly generate 5 two-point mutations around residue 289 within a 4 Å radius, excluding residue 36, to larger amino acids.
+    * Generate a mutant with a single-point mutation: R378E
+
+        .. code:: python
+
+            test_A = "test_A.pdb"
+            test_A_stru = PDBParser.get_structure(test_A)
+            test_mutation_pattern_A = "R378E"
+            mutants_A = mapi.assign_mutant(test_A_stru, test_mutation_pattern_A)
+            print(mutants_A)
+            #[[('ARG','GLU','A',378)]]
+
+    * Generate a mutant with double-point mutation: L383H and N363E.
+
+        .. code:: python
+
+            test_A = "test_A.pdb"
+            test_A_stru = PDBParser.get_structure(test_A)
+            test_mutation_pattern_A = "LA383H,NB363E"
+            mutants_A = mapi.assign_mutant(test_A_stru, test_mutation_pattern_A)
+            print(mutants_A)
+            #[[('LEU','HIS','A',383)], [('ASN','GLU','A',363)]]
+
+    * Generate two mutants with triple-point mutation from the same wild-type. The first mutant: L383H/N363E/I161L. The second mutant: D158I/W365T/ V79L.
+
+        .. code:: python
+
+            test_A = "test_A.pdb"
+            test_A_stru = PDBParser.get_structure(test_A)
+            test_mutation_pattern_A = "{L383H,N363E,I161L},{D158I,W365T,V79L}"
+            mutants_A = mapi.assign_mutant(test_A_stru, test_mutation_pattern_A)
+            print(mutants_A)
+            #[[('ILE','LEU','A',161), ('ASN','GLU','A',363), ('LEU','HIS','A',383)], 
+            #[('ASP','ILE','A',158), ('TRP','THR','A',365), ('VAL','LEU','A',79)]]
+
+    * Generate 20 mutants with single-point mutation of the target protein, resulting in 20 different single mutants.
+
+        .. code:: python
+
+            test_A = "test_A.pdb"
+            test_A_stru = PDBParser.get_structure(test_A)
+            test_mutation_pattern_A = "r:1[all:all not self]*20"
+            mutants_A = mapi.assign_mutant(test_A_stru, test_mutation_pattern_A)
+            print(mutants_A)
+            #[[('MET','ASP','A',85)], [('THR','SER','A',388)], [('VAL','ASN','A',132)], [('GLY','ASN','A',214)], [('ASP','SER','A',364)], [('THR',  'TYR','A',295)], [('ILE','THR','A',245)], [('TRP','LYS','A',365)], [('GLY','TRP','A',321)], [('ALA','ASP','A',26)], [('ILE','PHE','A',    161)], [('ASP','PRO','A',158)], [('LYS','CYS','A',250)], [('SER','ASP','A',81)], [('LYS','TYR','A',25)], [('PHE','SER','A',180)],   [('LEU','GLY','A',175)], [('ASN','TRP','A',256)], [('VAL','ILE','A',79)], [('SER','PRO','A',224)]]
+
+    *  Generate 10 mutants with triple-point mutation of the target protein, resulting in 10 different triple mutants.
+
+        .. code:: python
+
+            test_A = "test_A.pdb"
+            test_A_stru = PDBParser.get_structure(test_A)
+            test_mutation_pattern_A = "r:3[all:all not self]*10"
+            mutants_A = mapi.assign_mutant(test_A_stru, test_mutation_pattern_A)
+            print(mutants_A)
+            #[[('ASP','THR','A',377), ('ASP','CYS','A',64), ('LEU','ASN','A',121)], [('PRO','TYR','A',43), ('ASN','SER','A',315), ('GLY','ASN','A', 148)], [('GLN','TRP','A',356), ('ASP','THR','A',328), ('GLN','MET','A',316)], [('PRO','PHE','A',139), ('ARG','PHE','A',244), ('LEU', 'ASN','A',225)], [('PHE','TYR','A',392), ('ASP','GLN','A',333), ('GLY','ASP','A',60)], [('ARG','SER','A',281), ('GLN','HIS','A',271),    ('LEU','TRP','A',341)], [('ARG','LEU','A',58), ('PRO','TRP','A',131), ('TRP','PRO','A',159)], [('GLU','VAL','A',260), ('PRO','GLY','A',    54), ('ARG','GLY','A',380)], [('VAL','TRP','A',291), ('GLY','ASN','A',280), ('ASN','PRO','A',167)], [('GLY','CYS','A',148), ('PHE', 'TYR','A',195), ('ALA','SER','A',120)]]
+
+    *  Perform 20 random double-point mutations on amino acids within 5 Å of the LIG substrate binding pocket, resulting in 20 different double mutants.
+
+        .. code:: python
+
+            test_A = "test_A.pdb"
+            test_A_stru = PDBParser.get_structure(test_A)
+            test_mutation_pattern_A = "r:2[byres resn LIG around 5:all not self]*20"
+            mutants_A = mapi.assign_mutant(test_A_stru, test_mutation_pattern_A)
+            print(mutants_A)
+            #[[('PHE','ASP','A',75), ('ARG','THR','A',72)], [('GLY','ASN','A',296), ('TYR','LEU','A',188)], [('GLY','ASN','A',296), ('SER','PRO',   'A',215)], [('ASN','THR','A',293), ('SER','TYR','A',215)], [('HIS','MET','A',49), ('ASN','LEU','A',293)], [('GLY','ASN','A',297),  ('VAL','CYS','A',228)], [('VAL','PHE','A',47), ('GLY','CYS','A',297)], [('PHE','TYR','A',75), ...
+
+    * Mutate residues using the protein with the LIG substrate near the binding pocket, defined as residues within 3 Å of LIG, to introduce more positive charges to the pocket. Not all residues need to be force mutated.
+
+        .. code:: python
+
+            test_A = "test_A.pdb"
+            test_A_stru = PDBParser.get_structure(test_A)
+            test_mutation_pattern_A = "a:[byres resn LIG around 3:charge+]"
+            mutants_A = mapi.assign_mutant(test_A_stru, test_mutation_pattern_A)
+            print(mutants_A)
+            #[[('PRO','ARG','A',294), ('VAL','ARG','A',216), ('THR','ARG','A',295), ('PHE','ARG','A',75), ('GLY','ARG','A',296), ('MET','ARG','A',  207), ('TYR','ARG','A',354), ('THR','ARG','A',229), ('TYR','ARG','A',188)]...
+
+    * Mutate residues using the protein with the LIG substrate near the binding pocket, defined as residues within 5 Å of LIG, to increase pocket volume. Not all residues need to be force mutated.
+
+        .. code:: python
+
+            test_A = "test_A.pdb"
+            test_A_stru = PDBParser.get_structure(test_A)
+            test_mutation_pattern_A = "a:[byres resn LIG around 5:smaller]"
+            mutants_A = mapi.assign_mutant(test_A_stru, test_mutation_pattern_A)
+            print(mutants_A)
+            #(too many mutants)...
+
+    * Generate 5 random mutants with single-point mutation using the protein with the LIG substrate to introduce more negative charges to distal residues, defined as over 30 Å away from the substrate.
     
-    .. code:: python
+        .. code:: python
+
+            test_A = "test_A.pdb"
+            test_A_stru = PDBParser.get_structure(test_A)
+            test_mutation_pattern_A = "r:1[byres all and not (byres resn LIG around 30 or resn LIG):charge-]*5"
+            mutants_A = mapi.assign_mutant(test_A_stru, test_mutation_pattern_A)
+            print(mutants_A)
+            #[[('GLY','ASP','A',152), ('SER','ALA','A',141), ('SER','GLU','A',150)], [('GLN','ASP','A',5), ('ARG','TYR','A',6), ('SER','ALA','A',   141)], [('SER','ALA','A',141), ('PRO','GLU','A',139), ('VAL','ASP','A',317)]]
+
+    * Using the protein with the LIG substrate, randomly generate 3 double mutants in the distal region to introduce more negative charges to   distal residues, which is defined as residues over 30 Å away from the substrate. Additionally, mutate S141 to alanine in each mutant.
+    
+        .. code:: python
+
+            test_A = "test_A.pdb"
+            test_A_stru = PDBParser.get_structure(test_A)
+            test_mutation_pattern_A = "{S141A, r:2[byres all and not (byres resn LIG around 30 or resn LIG):charge-]*3}"
+            mutants_A = mapi.assign_mutant(test_A_stru, test_mutation_pattern_A)
+            print(mutants_A)
+            #[[('GLY','ASP','A',152), ('SER','ALA','A',141), ('SER','GLU','A',150)], [('GLN','ASP','A',5), ('ARG','TYR','A',6), ('SER','ALA','A',   141)], [('SER','ALA','A',141), ('PRO','GLU','A',139), ('VAL','ASP','A',317)]]
+
+.. dropdown:: :fa:`eye,mr-1` Click to see more **homodimeric protein** examples
+
+    * Generate two mutants for a homologous dimeric protein: L383H and N363E.
+
+
+        .. code:: python
+
+            test_A_B = "test_A_B.pdb"
+            test_A_B_stru = PDBParser.get_structure(test_A_B)
+            test_mutation_pattern_A_B = "LA383H,NB363E"
+            mutation_pattern_A_B = mapi.assign_mutant(test_A_B_stru, 
+                                                      test_mutation_pattern_A_B, 
+                                                      chain_sync_list=[("A", "B")], 
+                                                      chain_index_mapper={"A": 0, "B": 0})
+            print(mutation_pattern_A_B)
+            #[[('LEU','HIS','B',383), ('LEU','HIS','A',383)], [('ASN','GLU','B',363), ('ASN','GLU','A',363)]]
+
+    * Randomly generate 3 double mutants by mutating residues at the dimer interface to smaller amino acids for a homologous dimericprotein.
         
-        test_A = "test_A.pdb"
-        test_A_stru = PDBParser.get_structure(test_A)
-        test_mutation_pattern_A = "{M71L, r:2[resi 289 around 4 and not resi 36:larger]*5}"
-        mutants_A = mapi.assign_mutant(test_A_stru, test_mutation_pattern_A)
-        print(mutants_A)
-        #[[('MET','ARG','A',277), ('THR','MET','A',274), ('MET','LEU','A',71)], 
-        # [('HIS','LEU','A',290), ('MET','LEU','A',71), ('ASP','ARG','A',287)], 
-        # [('PHE','TRP','A',179), ('ILE','PHE','A',285), ('MET','LEU','A',71)], 
-        # [('PHE','TYR','A',179), ('MET','LEU','A',71), ('VAL','TRP','A',273)], 
-        # [('HIS','LYS','A',290), ('MET','LEU','A',71), ('VAL','TYR','A',273)]]
+        .. code:: python
+            
+            test_A_B = "test_A_B.pdb"
+            test_A_B_stru = PDBParser.get_structure(test_A_B)
+            test_mutation_pattern_A_B = "r:2[byres chain A around 5.0 and chain B:smaller]*3"
+            mutation_pattern_A_B = mapi.assign_mutant(test_A_B_stru, 
+                                                      test_mutation_pattern_A_B, 
+                                                      chain_sync_list=[("A", "B")], 
+                                                      chain_index_mapper={"A": 0, "B": 0})
+            print(mutation_pattern_A_B)
+            #[[('PHE','GLY','B',179), ('ALA','GLY','A',332), ('PHE','GLY','A',179), ('ALA','GLY','B',332)], [('ARG','THR','A',272), ('ASP''ALA',       'B',275), ('ARG','THR','B',272), ('ASP','ALA','A',275)], [('ASN','CYS','A',178), ('GLU','ASP','B',340), ('GLU''ASP','A',340), ('ASN',  'CYS','B',178)]]
+    
+    * Randomly generate 4 triple mutants by mutating residues at the dimer interface to neutral amino acids for a homologous dimeric protein.
+
+        .. code:: python
+
+            test_A_B = "test_A_B.pdb"
+            test_A_B_stru = PDBParser.get_structure(test_A_B)
+            test_mutation_pattern_A_B = "r:3[byres chain A around 5.0 and chain B:neutral]*4"
+            mutation_pattern_A_B = mapi.assign_mutant(test_A_B_stru, 
+                                                      test_mutation_pattern_A_B, 
+                                                      chain_sync_list=[("A", "B")], 
+                                                      chain_index_mapper={"A": 0, "B": 0})
+            print(mutation_pattern_A_B)
+            #[[('PRO','MET','A',344), ('GLY','PHE','B',181), ('ASP','ALA','A',211), ('PRO','MET','B',344), ('ASP','ALA','B',211), ('GLY''PHE','A',     181)], [('ARG','CYS','A',276), ('ARG','VAL','B',351), ('ASP','CYS','A',364), ('ARG','VAL','A',351), ('ASP','CYS''B',364), ('ARG','CYS',    'B',276)], [('ARG','CYS','B',336), ('ARG','CYS','A',336), ('LYS','GLY','A',357), ('PRO','ALA','A'358), ('LYS','GLY','B',357), ('PRO',     'ALA','B',358)], [('ILE','TYR','A',182), ('ASP','THR','A',211), ('ALA','TRP','B',332),('ASP','THR','B',211), ('ILE','TYR','B',182),      ('ALA','TRP','A',332)]]
+
+.. dropdown:: :fa:`eye,mr-1` Click to see more **heterodimeric protein** examples
+
+    * Generate the following mutations on a heterodimeric protein with chains A and D: P151F on chain A and T76D on chain D. 
+
+        .. code:: python
+
+            test_A_D = "4nb9_A_D.pdb"
+            test_A_D_stru = PDBParser.get_structure(test_A_B)
+            test_mutation_pattern_A_D = "{PA151F,TD76D}"
+            mutation_pattern_A_D = mapi.assign_mutant(test_A_B_stru, 
+                                                      test_mutation_pattern_A_B, 
+                                                      chain_sync_list=[("A"), ("D")], 
+                                                      chain_index_mapper={"A": 0, "D": 0})
+            print(mutation_pattern_A_D)
+            #[[('THR','ASP','D',76), ('PRO','PHE','A',151)]]
+
+    * Generate two separate mutants with a heterodimeric protein containing chains A and D: P151F on chain A, and T76D on chain D
+
+        .. code:: python
+
+            test_A_D = "4nb9_A_D.pdb"
+            test_A_D_stru = PDBParser.get_structure(test_A_B)
+            test_mutation_pattern_A_D = "{PA151F,TD76D}"
+            mutation_pattern_A_D = mapi.assign_mutant(test_A_B_stru, 
+                                                      test_mutation_pattern_A_B, 
+                                                      chain_sync_list=[("A"), ("D")], 
+                                                      chain_index_mapper={"A": 0, "D": 0})
+            print(mutation_pattern_A_D)
+            #[[('PRO','PHE','A',151)], [('THR','ASP','D',76)]]
+
+    * Use a heterodimeric protein comprised of A and D chains, where chain A contains the cofactor FE2 and chain D contains the cofactor FES.   Generate 3 single mutants to add a negative charge within 3 Å of the FE2 cofactor in chain A. Simultaneously, mutate residues within 4 Å of the   FES cofactor in chain D to smaller residues to create 2 double mutations, for each mutation in chain A. The result should be 6 mutants, each  with a single point mutation in chain A and a double point mutation in chain D. 
+
+        .. code:: python
+
+            test_A_D = "4nb9_A_D.pdb"
+            test_A_D_stru = PDBParser.get_structure(test_A_B)
+            test_mutation_pattern_A_D = "{r:1[byres resn FE2 around 3 and chain A:charge+1]*3, r:2[byres resn FES around 4 and chain D:smaller]*2}"
+            mutation_pattern_A_D = mapi.assign_mutant(test_A_B_stru, 
+                                                      test_mutation_pattern_A_B, 
+                                                      chain_sync_list=[("A"), ("D")], 
+                                                      chain_index_mapper={"A": 0, "D": 0})
+            print(mutation_pattern_A_D)
+            #[[('HIS','ASP','D',48), ('ASP','PHE','A',333), ('CYS','GLY','D',84)], 
+            #[('ASP','PHE','A',333), ('PHE','THR','D',67), ('CYS','GLY','D',84)], 
+            #[('ASP','SER','A',333), ('HIS','ASP','D',48), ('CYS','GLY','D',84)], 
+            #[('ASP','SER','A',333), ('PHE','THR','D',67), ('CYS','GLY','D',84)], 
+            #[('HIS','ASP','D',48), ('HIS','ARG','A',183), ('CYS','GLY','D',84)], 
+            #[('PHE','THR','D',67), ('HIS','ARG','A',183), ('CYS','GLY','D',84)]]
+
+.. dropdown:: :fa:`eye,mr-1` Click to see more **heterotetrameric protein** examples
+
+    * Use a tetrameric protein where chains A and B, as well and chains D and E, are homologous subunits. Mutate W321 in chains A and B was mutated     to A321, and Y101 in chains D and E to R101.
+
+        .. code:: python
+
+            test_A_B_C_D = "4nb9_AB_DE.pdb"
+            test_A_B_C_D_stru = PDBParser.get_structure(test_A_B_C_D)
+            test_mutation_pattern_A_B_C_D = "{WA321A, YD101R}"
+            mutation_pattern = mapi.assign_mutant(test_A_B_C_D_stru, 
+                                                      pattern, 
+                                                      chain_sync_list=[("A", "B"), ("D","E")],
+                                                      chain_index_mapper={"A": 0, "B": 0, "C": 0, "D": 0})
+            print(mutation_pattern_A_B_C_D)
+            #[[('TYR','ARG','E',101), ('TRP','ALA','B',321), ('TYR','ARG','D',101), ('TRP','ALA','A',321)]]
+
+    * Use a tetrameric protein where chains A and B, as well as chains D and E, are homologous subunits. Mutate W321 to A321 in chains A and B to   generate one mutant. Mutate Y101 to R101 in chains D and E to generate another mutant.
+        .. code:: python
+
+            test_A_B_C_D = "4nb9_AB_DE.pdb"
+            test_A_B_C_D_stru = PDBParser.get_structure(test_A_B_C_D)
+            test_mutation_pattern_A_B_C_D = "WA321A, YD101R"
+            mutation_pattern = mapi.assign_mutant(test_A_B_C_D_stru, 
+                                                      pattern, 
+                                                      chain_sync_list=[("A", "B"), ("D","E")],
+                                                      chain_index_mapper={"A": 0, "B": 0, "C": 0, "D": 0})
+            print(mutation_pattern_A_B_C_D)
+            #[[('TRP','ALA','B',321), ('TRP','ALA','A',321)], [('TYR','ARG','D',101), ('TYR','ARG','E',101)]]
 
 .. dropdown:: :fa:`eye,mr-1` Click to see overall *pattern* layers diagram
 
