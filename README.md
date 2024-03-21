@@ -39,3 +39,19 @@ html file in a live server and view your changes in real time.
 ### 4. Build the website
 I. PR your changes to and get reviewed and merged to main   
 II. Contact QZ (shaoqz@icloud.com) to publish a new build on our ReadtheDocs website
+
+## How to write tutorial
+
+### The design of the API tutorial
+
+https://enzyhtp-doc.readthedocs.io/en/latest/sci_api_tutorial/how_to_assemble.html#read-the-tutorial-and-find-out-the-prerequisite-science-apis
+
+### The design of the dataflow diagram
+
+https://drive.google.com/drive/folders/14w8FR7LnNNHxRBCrfSlfURXtTENUDc5V?usp=sharing
+
+### How to learn the API for your tutorial
+
+1. read the docstring of the API
+2. try the unit test for this API (under `test/`)
+3. recycle the docstring as much as possible into your tutorial
