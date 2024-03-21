@@ -3,7 +3,7 @@
 # -- Project information
 
 project = 'EnzyHTP'
-copyright = '2021-2024, the Yang Lab@Vanderbilt University'
+copyright = '2021-2024, the Yang Lab @ Vanderbilt University'
 author = 'Qianzhen Shao'
 
 release = '2.0'
