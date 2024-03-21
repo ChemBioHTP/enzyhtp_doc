@@ -122,15 +122,6 @@ Use ``preparation.protonate.protonate_stru`` to protonate (i.e. add hydrogen ato
         from enzy_htp.preparation import protonate
 
         protonate.protonate_stru(stru=stru)
-    
-    We can also directly import ``protonate_stru`` from ``enzy_htp.preparation`` since it has been cited in
-    the ``__init__.py`` file of ``preparation`` module.
-
-    .. code:: python
-        
-        from enzy_htp.preparation import protonate_stru
-        
-        protonate_stru(stru=stru)
 
 .. panels::
 
@@ -183,3 +174,5 @@ Let's try executing the API here and check if there's any changes taking place.
     
 We may notice that, after executing the API, the number of atoms (``num_atoms``) in the structure increased,
 representing that the hydrogen atoms have been added to the structure.
+
+Author: Zhong, Yinjie <yinjie.zhong@vanderbilt.edu>

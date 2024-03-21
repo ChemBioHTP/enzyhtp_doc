@@ -24,7 +24,7 @@ Input/Output
     - `PDBParser <xxx>`_ (Commonly used here)
     - `PrmtopParser <xxx>`_
 
-**output**: A ``Structure`` instance of protonated structure (in-place modification, not as return value).
+**output**: A ``Structure`` instance with solvents removed (in-place modification, not as return value).
 
 .. panels::
 
@@ -120,3 +120,5 @@ Let's try executing the API here and check if there's any changes taking place.
     
 We may notice that, after executing the API, the number of atoms (``num_atoms``) in the structure decreased,
 representing that the solvent have been removed from the structure.
+
+Author: Zhong, Yinjie <yinjie.zhong@vanderbilt.edu>

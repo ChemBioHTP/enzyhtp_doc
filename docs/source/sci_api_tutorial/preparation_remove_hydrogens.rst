@@ -25,7 +25,7 @@ Input/Output
 
     2. OR using the output of `Remove Solvent <preparation_remove_solvent.html>`_. (Commonly used here)
 
-**output**: A ``Structure`` instance of protonated structure (in-place modification, not as return value).
+**output**: A ``Structure`` instance with hydrogen atoms removed (in-place modification, not as return value).
 
 .. panels::
 
@@ -148,3 +148,5 @@ Let's try executing the API here and check if there's any changes taking place.
     
 We may notice that, after executing the API ``remove_hydrogens``, the number of atoms (``num_atoms``)
 in the structure decreased, indicating that the hydrogen atoms have been removed from the structure.
+
+Author: Zhong, Yinjie <yinjie.zhong@vanderbilt.edu>
