@@ -5,7 +5,7 @@
 Briefs
 ==============================================
 
-This science API, named ``enzy_htp.preparation.clean.remove_solvent``,
+This science API, named ``enzy_htp.preparation.remove_solvent``,
 removes solvent from the supplied ``enzy_htp.structure.Structure`` class instance 
 (hereafter referred to as ``Structure`` instance).
 

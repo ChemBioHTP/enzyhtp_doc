@@ -5,10 +5,23 @@
 Briefs
 ==============================================
 
-This science API, named ``enzy_htp.preparation.protonate.protonate_stru``,
+This science API, named ``enzy_htp.preparation.protonate_stru``,
 solves the protein protonation problem that add missing H atoms to the supplied
 ``enzy_htp.structure.Structure`` class instance (hereafter referred to as ``Structure`` instance).
 Protonation states are determined for residues with multiple ones.
+
+.. dropdown:: :fa:`eye,mr-1` Click to learn more about protein protonation
+
+    Approximately 88% of the structures in the protein data bank (PDB) are determined 
+    by X-ray crystallography, which can not, in general, resolve positions of most hydrogen
+    atoms. The same problem appear in structures obtained from structure prediction tools
+    too, AlphaFold2 also cannot give accurate position for hydrogens. (https://github.com/deepmind/alphafold/issues/598)
+
+    Thus accuately determine protonation state is a vital part of structural preparation 
+    in EnzyHTP to ensure the accuracy of the modeling result.
+
+    In short, the challenge is to predicting the protonation states of titratable groups such
+    as the side chains of ASP, GLU, ARG, LYS, TYR, HIS, CYS, and ligands.
 
 Input/Output
 ==============================================
@@ -17,7 +30,7 @@ Input/Output
 
 .. dropdown:: :fa:`eye,mr-1` How to obtain ``Structure`` instance?
 
-    Structure can be obtained by 
+    Structure can be obtained by: 
     
     1. parsing from a file using one of the StructureParser:
 
@@ -25,6 +38,8 @@ Input/Output
     - `PrmtopParser <xxx>`_
 
     2. OR using the output of `Remove Solvent <preparation_remove_solvent.html>`_ or `Remove Hydrogens <preparation_remove_solvent.html>`_. (Commonly used here)
+
+    Structure(s) with missing loops are not acceptable.
 
 **output**: A ``Structure`` instance of protonated structure (in-place modification, not as return value).
 
@@ -53,7 +68,9 @@ Arguments
         For example, if you are simulating a protein in human blood, then the pH value is best set in the range [7.35, 7.45].
 
 ``protonate_ligand``
-    If also protonate ligand.
+    If also protonate ligand, i.e., add hydrogen atoms to ligand compounds.
+
+    Set this parameter to ``False`` if you only want to add hydrogen atoms to the polypeptide and not to the ligand (small molecules).
     
     (Boolean, optional, default ``True``)
 
@@ -73,16 +90,61 @@ Arguments
 
     (String, optional, default ``pybel``)
     
-    .. dropdown:: :fa:`eye,mr-1` Click to learn more about ``engine``
+    .. dropdown:: :fa:`eye,mr-1` Click to learn more about ``ligand_engine``
 
         The ``ligand_engine`` option determines which third-party tool you use to add hydrogen atoms to your ligand.
 
         Currently only ``pybel`` is available. More ``ligand_engine`` options will be available in future versions.
 
-``**kwarg``
-    Setting(s)/Option(s) related to specific engine.
+.. ``**kwarg``
+..     Setting(s)/Option(s) related to specific engine.
 
-    (optional, default ``None``)
+..     (optional, default ``None``)
+
+..     .. dropdown:: :fa:`eye,mr-1` Click to learn more about ``**kwarg``
+
+..         Valid ``kwarg`` argument key-value pairs depend on your choice of ``engine`` and ``ligand_engine``, 
+..         and these ``kwarg`` parameters are passed inside the methods that call ``engine`` and ``ligand_engine``, 
+..         and what the specific role ``kwarg`` arguments play also depends on the internal behavior of the methods.
+
+``int_pdb_path`` (Works when ``engine="pdb2pqr"``.)
+    
+    Path for intermediate pdb file.
+
+    (String, optional, default ``None``)
+
+    .. dropdown:: :fa:`eye,mr-1` Click to learn more about ``int_pdb_path``
+
+        You can set it to a file path or leave it blank. 
+
+        If you leave it blank or ``None``, a temporary folder will be employed to store intermediate files.
+
+``int_pqr_path`` (Works when ``engine="pdb2pqr"``.)
+    
+    Path for intermediate pqr file (not this will be changed to pdb extension)
+
+    (String, optional, default ``None``)
+
+    .. dropdown:: :fa:`eye,mr-1` Click to learn more about ``int_pqr_path``
+
+        You can set it to a file path or leave it blank. 
+
+        If you leave it blank or ``None``, a temporary folder will be employed to store intermediate files.
+
+``metal_fix_method`` (Works when ``engine="pdb2pqr"``.)
+    
+    Method for determining the protonation state of donor residues
+
+    (String, optional, default ``deprotonate_all``)
+
+    Current available keywords:
+
+    - ``deprotonate_all``: Deprotonate all donor residues of the metal center on the donor atom
+
+    .. dropdown:: :fa:`eye,mr-1` Click to learn more about ``metal_fix_method``
+
+        Currently there is only one available value for this parameter, 
+        so you don't need to set it in the current version. (2024-03-31)
 
 Examples
 ==============================================
@@ -140,7 +202,7 @@ Use ``preparation.protonate.protonate_stru`` to protonate (i.e. add hydrogen ato
 
     This API modifies the ``Structure`` instance (what we passed as argument ``stru``) itself and does not return any value, i.e. return ``None``.
     
-    Thus, if you write ``stru = protonate.protonate_stru(stru=stru)``, your ``stru`` will very unfortunately be assigned the value ``None``.
+    Thus, if you write ``stru = protonate.protonate_stru(stru=stru)``, your ``stru`` will very unfortunately be assigned the value ``None``, so Please Don't Do This!
 
 Check the Output
 ----------------------------------------------

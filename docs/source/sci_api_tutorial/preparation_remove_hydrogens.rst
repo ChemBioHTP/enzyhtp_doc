@@ -5,7 +5,7 @@
 Briefs
 ==============================================
 
-This science API, named ``enzy_htp.preparation.clean.remove_hydrogens``,
+This science API, named ``enzy_htp.preparation.remove_hydrogens``,
 removes hydrogen atoms from the supplied ``enzy_htp.structure.Structure`` class instance 
 (hereafter referred to as ``Structure`` instance).
 
@@ -23,7 +23,7 @@ Input/Output
     - `PDBParser <xxx>`_
     - `PrmtopParser <xxx>`_
 
-    2. OR using the output of `Remove Solvent <preparation_remove_solvent.html>`_. (Commonly used here)
+    2. OR using the output of `Remove Solvent <preparation_remove_solvent.html>`_. (Recommended, otherwise the water molecules will be left with a bunch of oxygen atoms after the hydrogen atoms are removed.)
 
 **output**: A ``Structure`` instance with hydrogen atoms removed (in-place modification, not as return value).
 
@@ -44,12 +44,12 @@ Arguments
 ``polypeptide_only``
     whether only remove hydrogen atoms from polypeptide.
 
-    (Boolean, optional, default True) 
+    (Boolean, optional, default ``True``) 
 
 ``in_place``
     Apply the change in place (to the supplied instance) or in a copy (create a new instance).
     
-    (Boolean, optional, default True)
+    (Boolean, optional, default ``True``)
 
 Examples
 ==============================================
