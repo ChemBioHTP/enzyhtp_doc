@@ -61,6 +61,7 @@ This user guide contains:
    sci_api_tutorial/structure_selection
    sci_api_tutorial/capping
    sci_api_tutorial/armer
+   sci_api_tutorial/PDBParser
    usage
 
 .. toctree::
