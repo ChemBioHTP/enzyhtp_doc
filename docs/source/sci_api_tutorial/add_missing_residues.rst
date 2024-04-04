@@ -44,7 +44,7 @@ Input
 -----------------------------------------------------------------------------------------
 
 
-**Input**: The ``stru``, ``missing_residues``, ``method`` arguments and required inputs
+The ``stru``, ``missing_residues``, ``method`` arguments and required inputs
 
     - ``stru``:
         A ``Structure()`` object that is missing residues. 
@@ -78,11 +78,8 @@ Input
 
 Output
 -----------------------------------------------------------------------------------------
-.. panels::
 
-    :column: col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2 text-left
-
-    **Output**: A ``Union[None, Structure]`` that is either nothing or a copied ``Structure`` with the added missing residues.
+A ``Union[None, Structure]`` that is either nothing or a copied ``Structure`` with the added missing residues.
 
 
 
