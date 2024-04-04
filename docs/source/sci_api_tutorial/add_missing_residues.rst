@@ -42,12 +42,6 @@ Input/Output
 
 Input
 -----------------------------------------------------------------------------------------
-.. panels::
-
-    :column: col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2 text-left
-
-    The parameters of the ``add_missing_residues`` API contain the following options
-
 
 
 **Input**: The ``stru``, ``missing_residues``, ``method`` arguments and required inputs
@@ -57,7 +51,8 @@ Input
 
         .. admonition:: Getting a ``Structure``
 
-            | A ``Structure()`` object can be obtained by using various parsers including the ``PDBParser()`` from ``structure_io`` submodule.
+            | A ``Structure()`` object can be obtained using these `APIs <obtaining_stru.html>`_
+
 
     - ``missing_residues``:
         A ``List[SeqRes]`` objects which describe the chain/index location and identity of each missing residue.
@@ -136,3 +131,6 @@ Example Code
             A(polypeptide): residue: -1-304 atom_count: 2408
             B(polypeptide): residue: -1-304 atom_count: 2408
         )
+
+
+Author: Chris Jurich <chris.jurich@vanderbilt.edu>
