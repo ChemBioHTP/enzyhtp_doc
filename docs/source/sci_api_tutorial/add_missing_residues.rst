@@ -59,7 +59,7 @@ The ``stru``, ``missing_residues``, ``method`` arguments and required inputs
 
         .. admonition:: Getting the missing residues
 
-            | A ``List[SeqRes]`` objects can be created by giving the four letter PDB code of a structure using the ``identify_missing_residues()`` function from the ``preparation`` module.
+            | A ``List[SeqRes]`` objects can be created by giving the four letter PDB code of a structure using the ``identify_missing_residues()`` function from the ``preparation`` module. (See tutorial `here <identify_missing_residue.html>`_)
 
     - ``method``:
         A ``str`` specifying the method to use for filling missing residues.
