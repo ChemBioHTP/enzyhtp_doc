@@ -11,6 +11,6 @@ Using a StructureParser
 
 Structure can be obtained by parsing from a file using one of the StructureParser:
 
-- `PDBParser <xxx>`_
+- `PDBParser <PDBParser.html>`_
 - `PrmtopParser <xxx>`_
 
