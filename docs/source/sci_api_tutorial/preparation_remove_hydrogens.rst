@@ -14,16 +14,11 @@ Input/Output
 
 **input**: A ``Structure`` instance (no matter it's a protein, polypeptite, or ligand).
 
-.. dropdown:: :fa:`eye,mr-1` How to obtain ``Structure`` instance?
+.. admonition:: How to obtain
 
-    Structure can be obtained by 
-    
-    1. parsing from a file using one of the StructureParser:
+    A ``Structure`` instance can be obtained by these `APIs <obtaining_stru.html>`_.
 
-    - `PDBParser <xxx>`_
-    - `PrmtopParser <xxx>`_
-
-    2. OR using the output of `Remove Solvent <preparation_remove_solvent.html>`_. (Recommended, otherwise the water molecules will be left with a bunch of oxygen atoms after the hydrogen atoms are removed.)
+    OR using the output of `Remove Solvent <preparation_remove_solvent.html>`_. (Recommended, otherwise the water molecules will be left with a bunch of oxygen atoms after the hydrogen atoms are removed.)
 
 **output**: A ``Structure`` instance with hydrogen atoms removed (in-place modification, not as return value).
 
@@ -39,7 +34,9 @@ Arguments
 ==============================================
 
 ``stru``
-    The input ``Structure`` instance (no matter it's a protein, polypeptite, or ligand).
+    The input ``Structure`` instance (no matter it's a protein, polypeptite, or ligand). 
+
+    (See `Input/Output <#input-output>`_ section)
 
 ``polypeptide_only``
     whether only remove hydrogen atoms from polypeptide.
@@ -57,52 +54,40 @@ Examples
 Prepare the Input: Load Structure
 ----------------------------------------------
 
-.. panels::
+In order to make use of the API, we should have structure loaded.
 
-    :column: col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2 text-left
+.. code:: python    
 
-    In order to make use of the API, we should have structure loaded.
+    import enzy_htp.structure as struct
+                                
+    sp = struct.PDBParser()
 
-    .. code:: python    
-
-        import enzy_htp.structure as struct
-                                    
-        sp = struct.PDBParser()
-
-        pdb_filepath = "/path/to/your/structure.pdb"
-        stru = sp.get_structure(pdb_filepath)
+    pdb_filepath = "/path/to/your/structure.pdb"
+    stru = sp.get_structure(pdb_filepath)
 
 Execute API
 ----------------------------------------------
 
-Use ``preparation.clean.remove_hydrogens`` to remove hydrogen atoms from your structure.
+Use ``preparation.remove_hydrogens`` to remove hydrogen atoms from your structure.
 
-.. panels::
+The simpliest use of ``remove_hydrogens`` is as follows.
+    Where the ``polypeptide_only`` and ``in_place`` are both set to ``True``.
 
-    :column: col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2 text-left
+.. code:: python
 
-    The simpliest use of ``remove_hydrogens`` is as follows.
-        Where the ``polypeptide_only`` and ``in_place`` are both set to ``True``.
+    from enzy_htp.preparation import remove_hydrogens
+    
+    stru = remove_hydrogens(stru=stru)
 
-    .. code:: python
+We can also customize the arguments passed to this function.
+    Do you want to remove hydrogens from both polypeptide(s) and ligand(s)? Customize ``polypeptide_only``.  
 
-        from enzy_htp.preparation import remove_hydrogens
-        
-        stru = remove_hydrogens(stru=stru)
+    Do you want to create a new ``Structure`` instance while keeping the supplied instance still?
+    Customize ``in_place``.
 
-.. panels::
-
-    :column: col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2 text-left
-
-    We can also customize the arguments passed to this function.
-      Do you want to remove hydrogens from both polypeptide(s) and ligand(s)? Customize ``polypeptide_only``.  
-
-      Do you want to create a new ``Structure`` instance while keeping the supplied instance still?
-      Customize ``in_place``.
-
-    .. code:: python
-        
-        stru_no_hydrogen = remove_hydrogens(stru=stru, polypeptide_only=False, in_place=False)
+.. code:: python
+    
+    stru_no_hydrogen = remove_hydrogens(stru=stru, polypeptide_only=False, in_place=False)
 
 .. note::
 

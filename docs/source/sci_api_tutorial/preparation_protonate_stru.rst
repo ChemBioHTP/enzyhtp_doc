@@ -28,18 +28,11 @@ Input/Output
 
 **input**: A ``Structure`` instance (no matter it's a protein, polypeptite, or ligand).
 
-.. dropdown:: :fa:`eye,mr-1` How to obtain ``Structure`` instance?
+.. admonition:: How to obtain
 
-    Structure can be obtained by: 
-    
-    1. parsing from a file using one of the StructureParser:
+    A ``Structure`` instance can be obtained by these `APIs <obtaining_stru.html>`_.
 
-    - `PDBParser <xxx>`_
-    - `PrmtopParser <xxx>`_
-
-    2. OR using the output of `Remove Solvent <preparation_remove_solvent.html>`_ or `Remove Hydrogens <preparation_remove_solvent.html>`_. (Commonly used here)
-
-    Structure(s) with missing loops are not acceptable.
+    Note: Structure(s) with missing loops are not acceptable.
 
 **output**: A ``Structure`` instance of protonated structure (in-place modification, not as return value).
 
@@ -56,6 +49,9 @@ Arguments
 
 ``stru``
     The input ``Structure`` instance (no matter it's a protein, polypeptite, or ligand).
+
+    (See `Input/Output <#input-output>`_ section)
+
 
 ``ph``
     The pH value for determining the protonation state.
@@ -152,51 +148,39 @@ Examples
 Prepare the Input: Load Structure
 ----------------------------------------------
 
-.. panels::
+In order to make use of the API, we should have structure loaded.
 
-    :column: col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2 text-left
+.. code:: python    
 
-    In order to make use of the API, we should have structure loaded.
+    import enzy_htp.structure as struct
+                                
+    sp = struct.PDBParser()
 
-    .. code:: python    
-
-        import enzy_htp.structure as struct
-                                    
-        sp = struct.PDBParser()
-
-        pdb_filepath = "/path/to/your/structure.pdb"
-        stru = sp.get_structure(pdb_filepath)
+    pdb_filepath = "/path/to/your/structure.pdb"
+    stru = sp.get_structure(pdb_filepath)
 
 Execute API
 ----------------------------------------------
 
-Use ``preparation.protonate.protonate_stru`` to protonate (i.e. add hydrogen atoms to) your structure.
+Use ``preparation.protonate_stru`` to protonate (i.e. add hydrogen atoms to) your structure.
 
-.. panels::
+The simpliest use of ``protonate_stru`` is as follows.
+    Where the ``ph`` is set to ``7.0``, and ``protonate_ligand`` is set to ``True`` by default.
 
-    :column: col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2 text-left
+.. code:: python
+    
+    from enzy_htp.preparation import protonate_stru
 
-    The simpliest use of ``protonate_stru`` is as follows.
-        Where the ``ph`` is set to ``7.0``, and ``protonate_ligand`` is set to ``True`` by default.
+    protonate_stru(stru=stru)
 
-    .. code:: python
-        
-        from enzy_htp.preparation import protonate
+We can also customize the arguments passed to this function.
+    How much is your pH value? Customize ``ph``.  
 
-        protonate.protonate_stru(stru=stru)
+    Do you want to protonate your ligands? Customize ``protonate_ligand``.
 
-.. panels::
-
-    :column: col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2 text-left
-
-    We can also customize the arguments passed to this function.
-      How much is your pH value? Customize ``ph``.  
-
-      Do you want to protonate your ligands? Customize ``protonate_ligand``.
-
-    .. code:: python
-        
-        protonate.protonate_stru(stru=stru, ph=6.5, protonate_ligand=False)
+.. code:: python
+    
+    protonate.protonate_stru(stru=stru, ph=6.5, protonate_ligand=False)
 
 .. note::
 

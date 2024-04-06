@@ -17,12 +17,9 @@ Input/Output
 
 **input**: A ``Structure`` instance (no matter it's a protein, polypeptite, or ligand).
 
-.. dropdown:: :fa:`eye,mr-1` How to obtain ``Structure`` instance?
+.. admonition:: Getting a Structure
 
-    Structure can be obtained by parsing from a file using one of the StructureParser:
-
-    - `PDBParser <xxx>`_ (Commonly used here)
-    - `PrmtopParser <xxx>`_
+    A ``Structure`` instance can be obtained using these `APIs <obtaining_stru.html>`_
 
 **output**: A ``Structure`` instance with solvents removed (in-place modification, not as return value).
 
@@ -41,6 +38,8 @@ Arguments
 ``stru``
     The input ``Structure`` instance (no matter it's a protein, polypeptite, or ligand).
 
+    (See `Input/Output <#input-output>`_ section)
+
 .. ``protect``
 .. (optional) Protect some solvent from removal and change its rtype to Ligand. Use selection grammer.
 
@@ -50,37 +49,29 @@ Examples
 Prepare the Input: Load Structure
 ----------------------------------------------
 
-.. panels::
+In order to make use of the API, we should have structure loaded.
 
-    :column: col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2 text-left
+.. code:: python    
 
-    In order to make use of the API, we should have structure loaded.
+    import enzy_htp.structure as struct
+                                
+    sp = struct.PDBParser()
 
-    .. code:: python    
-
-        import enzy_htp.structure as struct
-                                    
-        sp = struct.PDBParser()
-
-        pdb_filepath = "/path/to/your/structure.pdb"
-        stru = sp.get_structure(pdb_filepath)
+    pdb_filepath = "/path/to/your/structure.pdb"
+    stru = sp.get_structure(pdb_filepath)
 
 Execute API
 ----------------------------------------------
 
-Use ``preparation.clean.remove_solvent`` to remove solvent from your structure.
+Use ``preparation.remove_solvent`` to remove solvent from your structure.
 
-.. panels::
+The way to use ``remove_solvent`` is pretty simple.
 
-    :column: col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2 text-left
+.. code:: python
 
-    The way to use ``remove_solvent`` is pretty simple.
-
-    .. code:: python
-
-        from enzy_htp.preparation import remove_solvent
-        
-        stru = remove_solvent(stru=stru)
+    from enzy_htp.preparation import remove_solvent
+    
+    stru = remove_solvent(stru=stru)
 
 .. note::
 
