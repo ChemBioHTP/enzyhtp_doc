@@ -52,6 +52,9 @@ This user guide contains:
    :caption: Tutorials
 
    sci_api_tutorial/how_to_assemble
+   sci_api_tutorial/preparation_remove_solvent
+   sci_api_tutorial/preparation_remove_hydrogens
+   sci_api_tutorial/preparation_protonate_stru
    sci_api_tutorial/single_point
    sci_api_tutorial/add_missing_residues
    sci_api_tutorial/assign_mutant
