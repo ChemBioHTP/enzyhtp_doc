@@ -438,6 +438,9 @@ and calculate their properties
 ==============================================
 Now we finished customizing the workflow. It is the time for launching it.
 
+2.1 Configure the working dir
+------------------------------------
+
 Here is what your working directory should look like before the launching:
 
 .. code:: bash
@@ -448,32 +451,56 @@ Here is what your working directory should look like before the launching:
     ├── your_target_wt_enzyme.pdb
     └── ncaa_lib # (optional) add this when you customize ligand parameters
         ├── XYZ_AM1BCC-GAFF2.frcmod # XYZ is the ligand 3-letter code
-        └── XYZ_AM1BCC-GAFF2.prepin
+        └── XYZ_AM1BCC-GAFF2.prepin # the "AM1BCC-GAFF2" is used to identify the method (upper case)
 
 (``template/template_wk_dir`` give an example pdb file)
 
-``template_hpc_submission.sh`` is the job submission script for our workflow main script (``template_main.py``). This main script runs only requires 1 CPU and 6GB memory.
-It will submit computationally intensive jobs in the workflow to other computing nodes. (e.g.: MD and QM) 
-The walltime for the main script should cover the maximum time span of your workflow.
 
-.. dropdown:: :fa:`eye,mr-1` **Do this** if you are NOT in Vanderbilt...
+``template_hpc_submission.sh`` 
+    is the job submission script for our workflow main script (``template_main.py``). This main script runs only requires 1 CPU and 6GB memory.
+    It will submit computationally intensive jobs during the runtime to other computing nodes. (e.g.: MD and QM) 
+    The walltime for the main script should cover the maximum time span of your workflow.
 
-    You may also need to modify the ``template_hpc_submission.sh`` to match with your local cluster. Here are some instructions:
+    .. dropdown:: :fa:`eye,mr-1` **Do this** if you are NOT in Vanderbilt...
 
-    In ``template_hpc_submission.sh``:
+        You may also need to modify the ``template_hpc_submission.sh`` to match with your local cluster. Here are some instructions:
 
-    1. Change ``line 1-10`` (resource settings) to match your local cluster's scheduler syntax. (checkout the submission script you normally use)
-    2. Change ``line 12-24`` (environment settings) to match your local environmental setting (e.g.: how you normally load Gaussian, AmberTool, and Multiwfn)
+        In ``template_hpc_submission.sh``:
 
-.. dropdown:: :fa:`eye,mr-1` **Do this** if you are in Vanderbilt...
+        1. Change ``line 1-10`` (resource settings) to match your local cluster's scheduler syntax. (checkout the submission script you normally use)
+        2. Change ``line 12-22`` (environment settings) to match your local environmental setting (e.g.: how you normally load Gaussian, AmberTool, and Multiwfn)
 
-    In ``template_hpc_submission.sh``:
+    .. dropdown:: :fa:`eye,mr-1` **Do this** if you are in Vanderbilt...
 
-    1. Change ``xxx`` in ``line 3`` to a valid value. (e.g.: yang_lab)
-    2. Change ``EFdesMD`` in ``line 2`` to a customized name for your workflow
-    3. Change the path of conda ``line 22`` and the path of EnzyHTP ``line 24`` to match your own paths
+        In ``template_hpc_submission.sh``:
 
-Now submit the main script under this working directory. Here is an example command for submission on ACCRE @Vanderbilt:
+        1. Change ``xxx`` in ``line 3`` to a valid value. (e.g.: yang_lab)
+        2. Change ``EFdesMD`` in ``line 2`` to a customized name for your workflow
+        3. Change the path of conda in ``line 22`` to match your own paths
+
+``ncaa_lab``
+    This is the folder defined in ``interface.amber.build_md_parameterizer`` above. It is designed to
+    reuse parameter files for the same ligand to be reused to save time during the workflow. It also
+    **allows user to supply custom parameter files** for ligands. 
+
+    .. dropdown:: :fa:`eye,mr-1` Click to see how to supply custom parameter files for ligands
+
+        You can do it by place files following this name scheme:
+
+        .. code::
+            
+            XYZ_AAA-BBB.frcmod
+
+        - XYZ is the 3-letter name of the ligand/modified AA
+        - AAA is the name of the atomic charge model in uppercase
+        - BBB is the name of the force field in uppercase
+
+        allowed AAA-BBB combinations can be found in ``enzy_htp/_interface/ncaa_library.py::PARM_METHOD_LIST``
+
+2.2 Submit!
+------------------------------------
+
+Submit the main script under this working directory. Here is an example command for submission on ACCRE @Vanderbilt:
 
 .. code:: bash
 
