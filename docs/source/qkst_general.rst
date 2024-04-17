@@ -507,3 +507,5 @@ Submit the main script under this working directory. Here is an example command 
     sbatch template_hpc_submission.sh
 
 **Now wait for results and enjoy the power of automation of EnzyHTP!**
+
+Author: QZ Shao <shaoqz@icloud.com>
