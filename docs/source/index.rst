@@ -54,6 +54,7 @@ This user guide contains:
    sci_api_tutorial/how_to_assemble
    sci_api_tutorial/single_point
    sci_api_tutorial/dipole
+   sci_api_tutorial/electric_field
    sci_api_tutorial/obtaining_stru
    sci_api_tutorial/obtaining_stru_esm
    sci_api_tutorial/structure_selection
