@@ -35,7 +35,7 @@ a. Install from conda
 
     .. code:: bash
 
-        conda install enzy_htp -c yang_lab
+        conda install enzy_htp -c yang_lab -c conda-forge
 
 
 b. Install from source
