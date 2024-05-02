@@ -8,16 +8,19 @@ Briefs
 This module, named ``enzy_htp._interface.handle_types.mol_dyn_parameterizer``, defines the interface of 
 ``MolDynParameterizer`` and ``MolDynParameter`` as abstract classes for Molecular Dynamics Simulation (hereinafter called **MD Simulation**).
 
-We should use concrete class of ``MolDynParameterizer`` and ``MolDynParameter`` for specific MD Simulation engines.
+In order to implement MD simulation, we need to apply the force fields to the complex, define to solvent box, etc.,
+which is the so-called "parameterization". However, different MD engines have different parameterization requirements. 
+
+Thus, we use concrete class of ``MolDynParameterizer`` and ``MolDynParameter`` for specific MD Simulation engines.
 
 .. dropdown:: :fa:`eye,mr-1` Click to learn more about **MD Simulation engines**
 
     Currently, the only available engine for MD simulation is Amber. 
     
-    Thus, the only concrete class of ``MolDynParameterizer`` is ``AmberParameterizer``.
+    Thus, the only concrete class of ``MolDynParameterizer`` at present is ``AmberParameterizer``.
 
-Concrete Classes
-==============================================
+Concrete Implementations of ``MolDynParameterizer``
+=======================================================
 
 AmberParameterizer
 ----------------------------------------------

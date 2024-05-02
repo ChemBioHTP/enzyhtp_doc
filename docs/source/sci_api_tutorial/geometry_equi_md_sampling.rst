@@ -6,33 +6,17 @@ Briefs
 ==============================================
 
 This science API, named ``enzy_htp.geometry.equi_md_sampling``,
-performs a production run of molecular dynamics simulation with the system equilibrated 
-by several short md simulations from the starting ``enzy_htp.structure.Structure`` class instance 
+performs a production run of Molecular Dynamics Simulation (hereinafter called **MD Simulation**) 
+with the system equilibrated by several short md simulations from the starting ``enzy_htp.structure.Structure`` class instance 
 (hereafter referred to as ``Structure`` instance).
 
 .. dropdown:: :fa:`eye,mr-1` Click to learn more about **Equilibrium Molecular Dynamics Sampling**
 
     (Basically md_simulation() with preset steps)
-    min (micro) -> heat (NVT) -> equi (NPT) -> prod (NPT)
+    Minimalization (micro) -> Heating (NVT) -> Equilibrium (NPT) -> Production (NPT)
 
 Input/Output
 ==============================================
-
-**input**: A ``Structure`` instance (no matter it's a protein, polypeptite, or ligand) and a ``MolDynParameterizer`` instance.
-
-.. admonition:: How to obtain ``Structure`` instance
-
-    A ``Structure`` instance can be obtained by these `APIs <obtaining_stru.html>`_.
-
-    Note: Structure(s) with missing loops are not acceptable.
-
-.. admonition:: How to compose ``MolDynParameterizer`` instance
-
-    The ``MolDynParameterizer`` class is a parameterizer for Molecular Dynamics simulation.
-
-    For detailed instructions, see `Molecular Dynamics Parameterizer <geometry_mol_dyn_param.html>`_.
-
-**output**: A list of ``StructureEnsemble`` instances, i.e. a list trajectories for each replica in StructureEnsemble format.
 
 .. panels::
 
@@ -41,6 +25,24 @@ Input/Output
     .. image:: ../../figures/geometry_equi_md_sampling.svg
         :width: 100%
         :alt: preparation_remove_solvent
+
+**input**: A well-preparaed ``Structure`` instance (no matter it's a protein, polypeptite, or ligand) and a ``MolDynParameterizer`` instance.
+
+.. admonition:: How to obtain well-preparaed ``Structure`` instance
+
+    A ``Structure`` instance can be obtained by these `APIs <obtaining_stru.html>`_.
+
+    Note: Structure(s) with missing loops are not acceptable.
+
+    To prepare structure, please refer to these `APIs <preparation.html>`_.
+
+.. admonition:: How to compose ``MolDynParameterizer`` instance
+
+    The ``MolDynParameterizer`` class is a parameterizer for Molecular Dynamics simulation.
+
+    For detailed instructions, see `Molecular Dynamics Parameterizer <geometry_mol_dyn_param.html>`_.
+
+**output**: A list of ``StructureEnsemble`` instances, i.e. a list trajectories for each replica in StructureEnsemble format.
 
 Arguments
 ==============================================
@@ -152,10 +154,7 @@ In order to make use of the API, we should have structure loaded.
 Execute API
 ----------------------------------------------
 
-Use ``preparation.protonate_stru`` to protonate (i.e. add hydrogen atoms to) your structure.
-
-The simpliest use of ``protonate_stru`` is as follows.
-    Where the ``ph`` is set to ``7.0``, and ``protonate_ligand`` is set to ``True`` by default.
+Use ``geometry.equi_md_sampling`` to implement Equilibrium MD Simulation.
 
 .. code:: python    
 
@@ -174,9 +173,13 @@ The simpliest use of ``protonate_stru`` is as follows.
 
     param_method = amber_interface.build_md_parameterizer()
     cluster_job_config = {
-        "cluster" : Accre(),    # 
-        "res_keywords" : {"account" : "csb_gpu_acc",
-                         "partition" : "turing"}
+        "cluster" : Accre(),    # This is the interface for operating Vanderbilt University's Advanced Computational Cluster for Research and Education.
+                                # You can customize a new class in `enzy_htp.core_cluster` folder so as 
+                                # to have it compatible to the computational cluster resources in your own institution(s).
+        "res_keywords" : {
+            "account" : "csb_gpu_acc",
+            "partition" : "turing"
+        }
     }
     md_result = equi_md_sampling(
         stru = stru,
@@ -236,8 +239,8 @@ Let's try executing the API here and check if there's any changes taking place.
             prod_time=0.5,
             record_period=0.05)
 
-        len(md_result) # 11.
+        len(md_result) # 3.
     
-We may notice that the MD simulation has generated 11 snapshots and stored in ``md_result``.
+We may notice that the MD simulation has generated 3 snapshots and stored in ``md_result``.
 
 Author: Zhong, Yinjie <yinjie.zhong@vanderbilt.edu>
