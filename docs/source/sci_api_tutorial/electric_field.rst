@@ -22,37 +22,26 @@ Input/Output
 
 Input
 -----------------------------------------------------------------------------------------
-.. panels::
 
-    :column: col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2 text-left
-
-
-**Input**: The ``stru``, ``p1``, ``p2``, ``d1``, and ``region_pattern``  are required input
+**Params**: The ``stru``, ``p1``, ``p2``, ``d1``, and ``region_pattern``  are required input
 
     - ``stru``:
         Structure which represent the structure of the target enzyme need to obtain from . MUST have charges initialized.
         
         .. admonition:: How to obtain
             
-            | A protein strutcuture object can be obtained by this `APIs <PDBParser.html>`_.
+            | A protein strutcuture object can be obtained by this `APIs <structure_class.html>`_.
 
     - ``p1``, ``p2`` and ``d1``:
-        Specify either the direction or the point for measuring the electric field, with combinations like (p1, p2) or (p1, d1), where p1 and p2 represent an Atom() or a Cartesian point. d1 the vector that defines the direction of field strength projection
-        
+        Specify either the reference point or the direction for measuring the electric field, using combinations like (p1, p2) or (p1, d1), where p1 and p2 denote Atom() or Cartesian points. The direction goes from p1 to p2. Either p1 with d1 or p2 with d1 must be provided. Both p1 and p2 are Cartesian coordinates. For example, select a carbon coordinate from an aromatic ring and set p2 as the ring's center of mass. d1 defines the direction of the field strength projection.
+
         .. admonition:: How to obtain
             
-            | A p1 and p2 might be `Atom()` object which can be obtained by these `APIs <obtaining_Atom.html>`_. The p1 and p2 can also be the coordinates (x, y, z). 
-
-    - ``region_pattern``: 
-        the region in the structure that is considered as field source charges. Please use pymol region selection syntax.
-
-        .. admonition:: What's the syntax like
-
-            | An example of the selection pattern can be "chain A and (not resi 101)"
+            | A p1 and p2 might be `Atom()` object which can be obtained by these `APIs <structure_class.html>`_. The p1 and p2 can be specified either through Atom() objects or keyword str of Structure().get() combining with a Structure() (e.g.: A.100.CA)
 
 Output
 -----------------------------------------------------------------------------------------
-**Output**: A specified field strength in {unit}. The direction is from ``p2`` to ``p1`` or along the ``d1`` direction
+**Output**: A specified field strength in default unit kcal/(mol*e*Ang). The direction is from ``p1`` to ``p2`` or along the ``d1`` direction
 
 Argument code
 =========================================================================================
@@ -64,14 +53,14 @@ Argument code
     To calculate the electric field within an enzyme, input a location and either a direction (d1) or two points (p1, p2), ensuring enzyme charges are included; d1 defines the field strength projection direction.
 
 ``location``:
-    When specifying two points, the location of the measurement is determined; if the format is (p1, d1), then p1 represents the position, with supported keywords including "center", "p1", and "p2".
+     the location of the measurement when 2 points are specified. When it is (p1, d1), the p1 will be the position supported keywords: [center, p1, p2]
 
     .. admonition:: Where to look
 
         REF: EnzyHTP: A High-Throughput Computational Platform for Enzyme Modeling (https://pubs.acs.org/doi/full/10.1021/acs.jcim.1c01424)
 
 ``region_pattern``:
-    The area within the structure designated as the source of field charges, employing PyMOL selection syntax.
+    The specified region within the structure serves as the origin of field charges, utilizing PyMOL selection syntax. Users should exclude the solvent or substrate from the selection region if they intend to measure a bond within the same molecule. The instruction can be founded as `APIs <structure_selection.html>`_.
 
 ``unit``:
     The unit of the result (default: kcal/(mol*e*Ang))
@@ -79,15 +68,10 @@ Argument code
 
 Example code
 =========================================================================================
-.. panels::
 
-    :column: col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2 text-left
-
-    We will use the script to calculate the electric field between the atoms ``CAE``, ``H2`` with KE 07 mutant(101, 254)
+We will use the script to calculate the electric field between the atoms ``CAE``, ``H2`` with KE 07 mutant(101, 254)
         
-    .. code:: python
 
-        efield = ele_field_strength_at_along(stru_obj, (p1, p2), region_pattern="chain A and (not resi 101)",)
 
 **Let's put them together as a python script.**
         
