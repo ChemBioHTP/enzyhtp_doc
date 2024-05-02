@@ -35,7 +35,7 @@ a. Install from conda
 
     .. code:: bash
 
-        conda install enzy_htp -c yang_lab
+        conda install enzy_htp -c yang_lab -c conda-forge
 
 
 b. Install from source
@@ -123,3 +123,5 @@ As an example, here is the command for loading Gaussian16 in our local cluster A
 
 | Follow this page for the install:
 | https://new.rosettacommons.org/demos/latest/tutorials/install_build/install_build
+
+Author: QZ Shao <shaoqz@icloud.com>
