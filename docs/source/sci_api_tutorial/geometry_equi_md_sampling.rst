@@ -1,6 +1,6 @@
-==============================================
- Geometry: Equilibrium Molecular Dynamics Sampling
-==============================================
+=======================================================
+Geometry: Equilibrium Molecular Dynamics Sampling
+=======================================================
 
 Briefs
 ==============================================
@@ -10,24 +10,27 @@ performs a production run of molecular dynamics simulation with the system equil
 by several short md simulations from the starting ``enzy_htp.structure.Structure`` class instance 
 (hereafter referred to as ``Structure`` instance).
 
-(Basically md_simulation() with preset steps)
-min (micro) -> heat (NVT) -> equi (NPT) -> prod (NPT)
+.. dropdown:: :fa:`eye,mr-1` Click to learn more about **Equilibrium Molecular Dynamics Sampling**
 
-
-.. dropdown:: :fa:`eye,mr-1` Click to learn more about protein protonation
-
-    Some supplementary information concerning MD simulation.
+    (Basically md_simulation() with preset steps)
+    min (micro) -> heat (NVT) -> equi (NPT) -> prod (NPT)
 
 Input/Output
 ==============================================
 
-**input**: A ``Structure`` instance (no matter it's a protein, polypeptite, or ligand).
+**input**: A ``Structure`` instance (no matter it's a protein, polypeptite, or ligand) and a ``MolDynParameterizer`` instance.
 
-.. admonition:: How to obtain
+.. admonition:: How to obtain ``Structure`` instance
 
     A ``Structure`` instance can be obtained by these `APIs <obtaining_stru.html>`_.
 
     Note: Structure(s) with missing loops are not acceptable.
+
+.. admonition:: How to compose ``MolDynParameterizer`` instance
+
+    The ``MolDynParameterizer`` class is a parameterizer for Molecular Dynamics simulation.
+
+    For detailed instructions, see `Molecular Dynamics Parameterizer <geometry_mol_dyn_param.html>`_.
 
 **output**: A list of ``StructureEnsemble`` instances, i.e. a list trajectories for each replica in StructureEnsemble format.
 
@@ -35,7 +38,7 @@ Input/Output
 
     :column: col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2 text-left
 
-    .. image:: ../../figures/preparation_protonate_stru_dfd.svg
+    .. image:: ../../figures/geometry_equi_md_sampling.svg
         :width: 100%
         :alt: preparation_remove_solvent
 
@@ -50,9 +53,7 @@ Arguments
 ``param_method`` 
     The ``MolDynParameterizer`` instance for parameterization, constructed by ``Parameterizer()``, which determines the engine.
 
-    .. dropdown:: :fa:`eye,mr-1` Click to learn more about ``ph``
-
-        XXX
+    (See `Input/Output <#input-output>`_ section)
 
 ``parallel_runs``
     The number of desired parallel runs of the steps.
@@ -82,10 +83,19 @@ Arguments
 ``prod_constrain``
     The constrain applied in the production step.
 
-    (``List[stru_cons.StructureConstraint]``, optional, default ``None``)
+    (``List[structure_constraint.StructureConstraint]``, optional, default ``None``)
+
+    .. dropdown:: :fa:`eye,mr-1` Click to learn more about ``StructureConstraint``
+
+        ``StructureConstraint`` is a class from ``enzy_htp.structure.structure_constraint`` module, defining the API for a constraint.
+        
+        Each primitive StructureConstraint defines exactly one type of interaction. 
+        
+        StructureConstraints are meant to define flexible, non-package specific relationships that can be translated 
+        in between different software packages.
 
 ``record_period``
-    The simulation time period for recording the geom. (unit: ns)
+    The simulation time period for recording the geometry. (unit: ns)
 
     (Float, optional, default ``0.5``)
 
@@ -94,25 +104,25 @@ Arguments
 
     (Dictionary, optional, default ``None``)
 
-    .. dropdown:: :fa:`eye,mr-1` Click to learn more about ``ph``
+    .. dropdown:: :fa:`eye,mr-1` Click to learn more about ``cluster_job_config``
 
-        XXX
+        The value of this argument depends on the settings of the supercomputer/cluster you use.
 
 ``cpu_equi_step``
     Whether to use CPUs for equilibrium step.
 
-    (Boolean, optional, default ``None``)
+    (Boolean, optional, default ``False``)
 
-    .. dropdown:: :fa:`eye,mr-1` Click to learn more about ``ph``
+    .. dropdown:: :fa:`eye,mr-1` Click to learn more about ``cpu_equi_step``
 
         XXX
 
 ``cpu_equi_job_config``
-    The job config for the CPU equilibrium step if specified.
+    The job config for the CPU equilibrium step if specified, functions when ``cpu_equi_step=False``.
 
     (Dictionary, optional, default ``None``)
 
-    .. dropdown:: :fa:`eye,mr-1` Click to learn more about ``ph``
+    .. dropdown:: :fa:`eye,mr-1` Click to learn more about ``cpu_equi_job_config``
 
         XXX
 
@@ -147,26 +157,40 @@ Use ``preparation.protonate_stru`` to protonate (i.e. add hydrogen atoms to) you
 The simpliest use of ``protonate_stru`` is as follows.
     Where the ``ph`` is set to ``7.0``, and ``protonate_ligand`` is set to ``True`` by default.
 
-.. code:: python
-    
-    from enzy_htp.preparation import protonate_stru
+.. code:: python    
 
-    protonate_stru(stru=stru)
+    import enzy_htp.structure as struct
+                                
+    sp = struct.PDBParser()
 
-We can also customize the arguments passed to this function.
-    How much is your pH value? Customize ``ph``.  
+    pdb_filepath = "/path/to/your/structure.pdb"
+    stru = sp.get_structure(pdb_filepath)
 
-    Do you want to protonate your ligands? Customize ``protonate_ligand``.
+    from enzy_htp.core.clusters.accre import Accre
+    from enzy_htp.geometry import md_simulation, equi_md_sampling
+    from enzy_htp import interface
 
-.. code:: python
-    
-    protonate.protonate_stru(stru=stru, ph=6.5, protonate_ligand=False)
+    amber_interface = interface.amber
+
+    param_method = amber_interface.build_md_parameterizer()
+    cluster_job_config = {
+        "cluster" : Accre(),    # 
+        "res_keywords" : {"account" : "csb_gpu_acc",
+                         "partition" : "turing"}
+    }
+    md_result = equi_md_sampling(
+        stru = stru,
+        param_method=param_method,
+        cluster_job_config=cluster_job_config,
+        job_check_period=10,
+        prod_time=0.5,
+        record_period=0.05)
 
 .. note::
 
-    This API modifies the ``Structure`` instance (what we passed as argument ``stru``) itself and does not return any value, i.e. return ``None``.
-    
-    Thus, if you write ``stru = protonate.protonate_stru(stru=stru)``, your ``stru`` will very unfortunately be assigned the value ``None``, so Please Don't Do This!
+    Here, we execute MD simulation with a very short ``prod_time`` for example use.
+
+    In real cases, the ``prod_time`` will usually be 30 ns ~ 110 ns.
 
 Check the Output
 ----------------------------------------------
@@ -177,28 +201,43 @@ Let's try executing the API here and check if there's any changes taking place.
 
     :column: col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2 text-left
 
-    We choose the structure of a complex containing SARS-Cov-2 Main Protease 
-    and Nirmatrelvir for example, whose solvent has been removed manually.
-
-    Set ``ph=7.4`` (which is the pH value of human blood) and ``protonate_ligand=True`` (to protonate Nirmatrelvir).
-
-    Now, we can go through the procedure.
+    Here, we use a well-preparaed complex containing SARS-Cov-2 Main Protease and Nirmatrelvir for example.
 
     .. code:: python
-        
+
         import enzy_htp.structure as struct
-        from enzy_htp.preparation import protonate
                                     
         sp = struct.PDBParser()
 
-        pdb_filepath = "7si9_rm_water.pdb"  # The structure of a complex containing SARS-Cov-2 Main Protease and Nirmatrelvir.
+        pdb_filepath = "7si9_rm_water_aH.pdb"
         stru = sp.get_structure(pdb_filepath)
 
-        print(stru.num_atoms)   # 2402.
-        protonate.protonate_stru(stru=stru, ph=7.4, protonate_ligand=True)
-        print(stru.num_atoms)   # 4751.
+        from enzy_htp.core.clusters.accre import Accre
+        from enzy_htp.geometry import md_simulation, equi_md_sampling
+        from enzy_htp import interface
+
+        amber_interface = interface.amber
+
+        param_method = amber_interface.build_md_parameterizer()
+        cluster_job_config = {
+            "cluster" : Accre(),    # This is the interface for operating Vanderbilt University's Advanced Computational Cluster for Research and Education.
+                                    # You can customize a new class in `enzy_htp.core_cluster` folder so as 
+                                    # to have it compatible to the computational cluster resources in your own institution(s).
+            "res_keywords" : {
+                "account" : "csb_gpu_acc",
+                "partition" : "a6000x4"
+            }
+        }
+        md_result = equi_md_sampling(
+            stru = stru,
+            param_method=param_method,
+            cluster_job_config=cluster_job_config,
+            job_check_period=10,
+            prod_time=0.5,
+            record_period=0.05)
+
+        len(md_result) # 11.
     
-We may notice that, after executing the API, the number of atoms (``num_atoms``) in the structure increased,
-representing that the hydrogen atoms have been added to the structure.
+We may notice that the MD simulation has generated 11 snapshots and stored in ``md_result``.
 
 Author: Zhong, Yinjie <yinjie.zhong@vanderbilt.edu>

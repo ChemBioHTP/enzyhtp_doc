@@ -108,16 +108,16 @@ Arguments
 .. dropdown:: :fa:`eye,mr-1` Click to see full argument explanations
 
     ``stru``
-        the target molecule of the calculation represented as Structure()
+        The target molecule of the calculation represented as Structure()
         It can also be an ensemble of structures as StructureEnsemble()
         and in this case, each geometry in this ensemble will be calculated.
         (See `Input/Output <#input-output>`_ section)
 
     ``engine``
-        the QM or QM/MM engine as a keyword. (See `Input/Output <#input-output>`_ section)
+        The QM or QM/MM engine as a keyword. (See `Input/Output <#input-output>`_ section)
 
     ``method``
-        the level of theory of this calculation as a LevelOfTheory().
+        The level of theory of this calculation as a LevelOfTheory().
         This is used when there is only 1 region specified. (See `Input/Output <#input-output>`_ section)
 
     ``regions``
@@ -136,20 +136,20 @@ Arguments
         (See `Input/Output <#input-output>`_ section)
 
     ``capping_method``
-        | the free valence capping method. (See `Capping Methods <capping.html>`_)
-        | default: ``"res_ter_cap"``
+        The free valence capping method. (See `Capping Methods <capping.html>`_)
+        default: ``"res_ter_cap"``
 
     ``embedding_method``
-        | The embedding method of multiscale simulation.
+        The embedding method of multiscale simulation.
         This is used when more than 1 region is specified.
         Supported keywords: ["mechanical"]
-        | default: ``"mechanical"``
+            default: ``"mechanical"``
 
     ``parallel_method``
-        | the method to parallelize the multiple runs when more
+        The method to parallelize the multiple runs when more
         than 1 geometry is in the input StructureEnsemble
         The execution will serial and locally if None is given.
-        | default: ``"cluster_job"``
+            default: ``"cluster_job"``
 
     ``cluster_job_config`` 
         the config for cluster_job if it is used as the parallel method.
