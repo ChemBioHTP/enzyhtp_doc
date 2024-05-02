@@ -1,6 +1,6 @@
 .. warning::
 
-    This page is outdated
+    this page is outdated
 
 ==============================================
  Quick Start: 2. Support Your Local Cluster
