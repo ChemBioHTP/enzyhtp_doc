@@ -1,6 +1,6 @@
 .. warning::
 
-    This page is outdated
+    this page is outdated
 
 ==============================================
 Working with Modified AA

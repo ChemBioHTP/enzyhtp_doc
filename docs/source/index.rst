@@ -52,13 +52,21 @@ This user guide contains:
    :caption: Tutorials
 
    sci_api_tutorial/how_to_assemble
+   sci_api_tutorial/preparation_remove_solvent
+   sci_api_tutorial/preparation_remove_hydrogens
+   sci_api_tutorial/preparation_protonate_stru
    sci_api_tutorial/single_point
+   sci_api_tutorial/add_missing_residues
+   sci_api_tutorial/assign_mutant
+   sci_api_tutorial/mutate_stru
    sci_api_tutorial/dipole
+   sci_api_tutorial/electric_field
    sci_api_tutorial/obtaining_stru
    sci_api_tutorial/obtaining_stru_esm
    sci_api_tutorial/structure_selection
    sci_api_tutorial/capping
    sci_api_tutorial/armer
+   sci_api_tutorial/PDBParser
    usage
 
 .. toctree::
