@@ -4,150 +4,260 @@
 
 Briefs
 ==============================================
+In this API named ``Adaptive Resource Manager (ARMer)``, the primary objective is to enhance efficiency by ensuring that resources like CPUs (Central Processing Units) and GPUs (Graphics Processing Units) are used optimally, minimizing idle time and unnecessary resource reservation.
+In the context of enzyme modeling using EnzyHTP, ARMer is integrated into the workflow, which includes sub-tasks like mutant generation, molecular dynamics simulations, quantum mechanical calculations, and data analysis. 
+Using commands implemented in the ARMer Python library, the workflow script configures, submits, and monitors new jobs in HPC clusters that pertain to the actual need of computing resources in a subtask of the workflow. 
+This is in sharp contrast to the fixed resource allocation scheme where maximal computing resources are requested.
 
-ARMer is a software tool designed to manage and allocate computational resources dynamically, according to the specific needs of various sub-tasks within a computational workflow. Its primary objective is to enhance efficiency by ensuring that resources like CPUs (Central Processing Units) and GPUs (Graphics Processing Units) are used optimally, minimizing idle time and unnecessary resource reservation.
-ARMer adjusts the allocation of resources based on the demands of specific sub-tasks in a workflow. For example, certain tasks might require more GPU power due to their graphic-intensive nature, while others might rely more heavily on the CPU for processing. ARMer assesses and allocates these resources in real-time to match these requirements.
-In the context of enzyme modeling using EnzyHTP, ARMer is integrated into the workflow, which includes sub-tasks like mutant generation, molecular dynamics simulations, quantum mechanical calculations, and data analysis. Each of these stages has different computing needs, which ARMer manages effectively.
+.. dropdown:: :fa:`eye,mr-1` Click to learn more about ARMer's architechture
 
-Overview of ARMer's Main Functions
-==============================================
-This section provides an overview of the ``ARMer`` module, which is designed to manage job queues for running jobs on a cluster and interface with different Linux resource managers like Slurm. The general workflow of ARMer involves taking job commands, compiling the submission script, submitting and monitoring the job, and recording the completion of the job. From a data flow perspective, ARMer should function similarly to ``subprocess.run()``. One of the key features of ARMer is that it allows users to add support for their own clusters by creating new ClusterInterface classes.
+    The ARMer Python library consists of two classes: the job class and the HPC class. 
+    
+    The job class (called ClusterJob in the code) defines properties and functions that are associated with job configuration, submission, and dynamic monitoring of job completion. 
+    
+    The HPC class (subclasses of ClusterInterface in the code) supports the job class with properties and functions to mediate shell input/output in the user’s local HPC where ARMer is deployed. The HPC class files are stored in a folder named “cluster”. In the folder, _interface.py defines an abstract HPC class as the code interface and accre.py defines an example concrete HPC class we made for our local HPC at Vanderbilt. Users can create new files under this folder defining new concrete HPC classes to easily modify ARMer Python library to be compatible with their local HPC cluster. The instances of the HPC class are used as input for generating the Job instance. The methods of the HPC class are used by the Job instance through the HPC instance to interface with the corresponding local HPC cluster. The new HPC class user defines is required to fulfill the code interfaced defined by the abstract HPC class in _interface.py to make sure they are compatible with the Job class. It is enforced by requiring (by the Job class) all HPC classes to inherit the abstract HPC class so that the new HPC class has to define some required methods (otherwise python will raise an error). 
+    
+    Then, the ARMer library enables the “workflow script” to run shell commands on other computational nodes these commands are wrapped in the job scripts in the HPC clusters.
 
-#### 1. **Config Job (Submission Script Generation)**
-The `config_job` function serves as the constructor for creating a `ClusterJob` instance. It's responsible for setting up the submission script, which dictates how the job will be run on the HPC cluster. Here’s what it does:
-
-- **Commands and Environment Setup**: It takes a set of commands (specific tasks to be performed), environmental settings (required software or libraries), and resource keywords (CPU/GPU requirements) as inputs.
-- **Script Generation**: Combines these elements into a script which includes directives to the scheduler (like SLURM or PBS) on how to allocate resources and execute the computational tasks.
-
-#### 2. **Submit**
-Once the submission script is ready, the `submit` function is used to actually queue the job in the HPC system:
-
-- **Script Deployment**: The submission script is placed in the appropriate directory, ready for execution.
-- **Job Submission**: The script is submitted to the cluster's job queue. This function handles any necessary configurations such as setting the directory for execution or adjusting the script path if needed.
-- **Monitoring Setup**: It also sets up initial parameters for job monitoring, storing the job ID and other relevant information for later reference.
-
-#### 3. **Monitor (Wait to End)**
-Monitoring is crucial for managing jobs on an HPC cluster:
-
-- **Check Job Status**: This function continuously checks the state of the job (running, pending, completed, cancelled, or error).
-- **Completion Detection**: It waits for the job to end, either successfully or due to an error or cancellation, and can take appropriate actions based on the job's outcome, like logging or triggering dependent processes.
-
-Imports
+The workflow of ARMer
 ==============================================
 
-In order to make use of the API, we should have the API loaded.
+.. panels::
 
-.. code:: python    
-    from subprocess import run
-    import re
-    import pytest
+    :column: col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2 text-left
 
+    .. image:: ../../figures/armer_architect.png
+        :width: 100%
+        :alt: single_point_api_io                  
+    |
+
+For most of the users, even though the flowchart contains 3 parts, the attention should only be focused on the `Job configuration`, which will be elaborated in the next section.
+
+.. dropdown:: :fa:`eye,mr-1` Click to learn more about `Job Submission`
+    
+    With the job object instantiated, a job script for the required task can be generated and then submitted by the submit() method. Notably, the format of the job script, the submission commands, and other HPCdependent information are obtained from the HPC class object that is instantiated and passed to the `cluster` argument.
+
+
+.. dropdown:: :fa:`eye,mr-1` Click to learn more about `Dynamic monitoring`
+    
+    Once the job has been submitted, a job ID is added to the object by the function. By tracing the job ID, the “workflow script” can monitor the status of a job object in the queue, and mediate the status by killing, holding, or releasing the job. Notably, the capability of dynamically monitoring the job completion status is vital to high-throughput modeling workflow. 
+    This is because the workflow involves multiple different types of simulation subtasks that must be sequentially operated.
+    
+    Two methods have been implemented to achieve dynamic monitoring, they are: wait_to_end() and wait_to_array_end() methods. The wait_to_end() method checks the status of a job in the job queue within a certain period of time (i.e., every 30 s) and exits upon the detection of messages that indicate job completion, error, or cancellation. The wait_to_array_end() method takes multiple job objects and submits them in one job array. Similarly, this method also monitors the status of all jobs in the array regularly and dynamically appends new jobs to the array up to the maximal capacity (i.e., array size).
+
+Implementation of ARMer in EnzyHTP enables an if_cluster_job option for all computationally insensitive functions (like MD, QM, and free energy calculation). With this option turned on, the subsections that requires a lot of computing power can achieve adaptive resource allocation.
+
+Input/Output
+==============================================
+As described in the previous section, only the `Job configuration` requires specific input from different users.
+These inputs will be parsed and the output will be passed down to submission and monitoring.
+To correctly prepare for the input and output, the user needs to identify the local HPC first. 
+
+Input
+------------------------------------------------
+
+``res_keywords``
+    configures computing resources for the job. 
+
+    .. admonition:: How to obtain
+
+        This should refer to the guidelines for each institution's HPC submission syntax. If you need to support your local HPC cluster, please refer to the `Quick Start: 2. Support Your Local Cluster` page from the menu bar on the left.
+
+        .. dropdown:: :fa:`eye,mr-1` Click here to learn more about ACCRE if you are a Vanderbilt User
+
+            `core_type`: This specifies that the job should be run on GPU/CPU cores. 
+
+            `nodes`: How many nodes needed to request for the job.
+
+            `node_cores`: How many cores needed for each node. If GPU is used, usually only one core per node will be requested.
+
+            `job_name`: This sets the name of the job to "job_name". You can change this to a more descriptive name for your job.
+
+            `partition`: This specifies that the job should be submitted to a specific partition, which is likely a partition dedicated to GPU resources.
+            
+            `mem_per_core`: This requests a number of gigabytes of memory per core.
+            
+            `walltime`: This sets the maximum walltime (execution time) for the job. '24:00:00' means 24 hours.
+            
+            `account``: This specifies the account to be charged for the job's resource usage. 
+
+``commands`` 
+    Commands refers to the target shell commands for running external software for a specific enzyme modeling sub-task.
+    
+    .. admonition:: How to obtain
+
+        The ARMer tool is integrated with other `APIs <single_point.html>`_ that requires the ARMer Config. No changes need to be made by users.
+    
+``env_settings``
+     env_settings states environment settings of external software (e.g., env_settings = ‘’’module load Gaussian/16.B.01’’’).
+    
+    .. admonition:: How to obtain
+        
+        Same as `commands`, different subtasks require different environments. 
+     
+
+Output
+------------------------------------------------
+A job script will be generated by the “workflow script” using commands implemented in ARMer.  
+
+
+Arguments
+==============================================
+
+.. dropdown:: :fa:`eye,mr-1` Click to see full argument explanations
+    
+    1. For Job Configuration:
+
+    ``commands``
+        refers to the target shell commands for running external software for a specific enzyme modeling sub-task
+
+    ``cluster``
+        refers to an HPC class object that contains miscellaneous details about user’s local HPC
+        
+    ``env_settings``
+        states environment settings of external software 
+
+    ``res_keywords``
+        configures computing resources for the job (including parameters such as `core_type`, `nodes`,`nodes_core`,etc), which can be referenced from `Input/Output <#input-output>`_ section.
+    
+    ``jobs``
+        a list of ClusterJob object to be execute
+
+    ``period``
+        the time cycle for detect job state (Unit: second)
+        
+    
+    2. For Job Submission:
+
+    ``sub_dir`` 
+        dir for submission. commands in the sub script usually run under this dir.
+                
+    ``script_path`` 
+        path for submission script generation.
+        (default: sub_dir/submit.cmd; will be sub_dir/submit_#.cmd if the file exists. # is a growing index)
+                
+    
+    3. For Job Monitoring:
+    
+    There are two functions: "wait_to_end" (single submission) and "wait_to_array_end" (array submission)
+        
+    ``period``
+        the time cycle for update job state change (Unit: s)
+    
+    The following arguments are array submission only:
+
+    ``jobs``
+        a list of ClusterJob object to be execute
+        
+    ``array_size``
+        
+        how many jobs are allowed to submit simultaneously. 
+
+        (e.g. 5 for 100 jobs means run 20 groups. All groups will be submitted and 
+        in each group, submit the next job only after the previous one finishes.)
+        
+    ``sub_dir``
+        (default: self.sub_dir)
+
+        submission directory for all jobs in the array. 
+        
+        Overwrite existing self.sub_dir in the job obj
+        
+        * you can set the self value during config_job to make each job different
+    
+    ``sub_scirpt_path`` 
+        (default: self.sub_script_path)
+        
+        path of the submission script. Overwrite existing self.sub_script_path in the job obj
+        
+        * you can set the self value during config_job to make each job different
+        
+
+Example Code
+==============================================
+
+1. Code to generate job submission script (single and array submission)
+---------------------------------------------------------
+
+.. admonition:: How input is prepared
+    (See `Details <#input-output>`_)
+    
+.. code:: python
+
+    from armer import ClusterJob
     import clusters
-    from armer import *
 
-Execute API
+    cluster = clusters.accre.Accre()
 
-Arguments and Examples (Vanderbilt Accre)
-==============================================
+    # For a single submission
+    job = clusterJob.config job(
+        commands = "g16 < xxx.gjf > xxx.out",
+        cluster = cluster,
+        env_settings = cluster.G16_ENV['CPU'],
 
-``env_settings_list``
-    Environment settings in the submission script as a list of strings for commands in each line.
+        res_keywords = {'core_type' : 'cpu',
+                        'nodes' : '1',
+                        'nodes_core' : '8',
+                        'job_name' : 'TEST',
+                        'partition' : 'production',
+                        'mem_per_core' : '3G',
+                        'walltime': '24:00:00', 
+                        'account' : 'xxx'
+                        }
+        )
+    job.submit(sub_dir="./")
+    job.wait_to_end(period=10)
 
-    (list[str])
+    # For array submission, 10 submissions in this case 
+    jobs = []
 
-    Example:
-    .. code:: python    
-    >>> env_settings_list = [
-    ...     'module load GCC/6.4.0-2.28 OpenMPI/2.1.1',
-    ...     'module load Amber/17-Python-2.7.14',
-    ...     'module unload Python/2.7.14 numpy/1.13.1-Python-2.7.14'
-    ... ]
+    for i in range(10):
+        jobs.append(ClusterJob.config_job(
+            commands = "g16 < xxx.gjf > xxx.out",
+            cluster = cluster,
+            env_settings = cluster.G16_ENV['CPU'],
+            res_keywords = {'core_type' : 'cpu',
+                            'nodes' : '1',
+                            'nodes_core' : '8',
+                            'job_name' : 'TEST',
+                            'partition' : 'production',
+                            'mem_per_core' : '3G',
+                            'walltime': '24:00:00', 
+                            'account' : 'xxx'
+                            },
+            sub_dir="./")
+        )
+    ClusterJob.wait_to_array_end(jobs, period = 30, array_size = 5)
 
+2. Sample job scripts that performs QM calculations
+---------------------------------------------------------
 
-``res_keywords_dict_gpu``
-    Resource settings as a dictionary indicating each keyword for GPU resources.
+For ACCRE users, the SBATCH submission scripts will be generated first with the inputs provided above. Then the env_setting and commands will be tailored to specific tasks, in this case, the QM calculation using Gaussian16.
+The job script is generated by the "workflow script" inplemented in ARMer.
 
-    (dict[str, str])
+.. code:: bash
 
-    Example:
-    .. code:: python    
-    >>> res_keywords_dict_gpu = {
-    ...     'core_type': 'gpu',
-    ...     'nodes': '1',
-    ...     'node_cores': '1',
-    ...     'job_name': 'job_name',
-    ...     'partition': 'maxwell',
-    ...     'mem_per_core': '32G',
-    ...     'walltime': '24:00:00',
-    ...     'account': 'xxx'
-    ... }
+    #!/bin/bash
+    #SBATCH--nodes-1
+    #SBATCH --cpus-per-task=8
 
-The res_keywords_dict_gpu is a dictionary that represents the resource settings for requesting GPU resources on a cluster. The keys in this dictionary are the resource keywords, and their corresponding values are the desired settings for those keywords.
-Here's what each key-value pair means:
+    #SBATCH--job-name=EHTP OMcluster
+    #SBATCH--partition=production
+    #SBATOH--mem-per-cpu-36
+    #SBATCH--time 24:80;80
+    #SBATCH --account=xxx
 
-'core_type': 'gpu': This specifies that the job should be run on GPU cores. It can also be set as CPU.
-'nodes': '1': This requests one node for the job.
-'node_cores': '1': This requests one core per node. Since we're using GPUs, we typically request only one core per node.
-'job_name': 'job_name': This sets the name of the job to "job_name". You can change this to a more descriptive name for your job.
-'partition': 'maxwell': This specifies that the job should be submitted to the "maxwell" partition, which is likely a partition dedicated to GPU resources.
-'mem_per_core': '32G': This requests 32 GB of memory per core.
-'walltime': '24:00:00': This sets the maximum walltime (execution time) for the job to 24 hours.
-'account': 'xxx': This specifies the account to be charged for the job's resource usage. You would need to replace "xxx" with your actual account name.
+    module load Gaussian/16.8.61 # env_setting
+    mkdir $TMPDIR/SLURM_JOB_ID
+    export GAUSS_SCRDIR=$TMPDIR/$SLURM_J0B_ID
 
-This dictionary can be used as the res_keywords argument when configuring a job with the ARMer module, specifically when requesting GPU resources. By passing this dictionary, the job submission script will be generated with the appropriate resource settings for running the job on GPUs.
+    g16 < ./QM_cluster/qm_cluster_1.gjf> ./QM cluster/qm_cluster_1.out # commands
+    rm -rf $TMPDIR/$SLURM_J0B_ID
+    
 
-``env_settings_str``
-    Environment settings in the submission script as a string.
-
-    (str)
-
-    Example:
-    .. code:: python    
-    >>> env_settings_str = '''module load GCC/6.4.0-2.28 OpenMPI/2.1.1
-    ... module load Amber/17-Python-2.7.14
-    ... module unload Python/2.7.14 numpy/1.13.1-Python-2.7.14'''
-
-``res_keywords_str``
-    The res_keywords_str is a string that encapsulates the resource settings for a job submission script, typically used with a job scheduler such as SLURM. 
-
-    (str)
-
-    Example:
-    .. code:: python    
-    >>> res_keywords_str = '''#!/bin/bash
-    ... #SBATCH --nodes=1
-    ... #SBATCH --tasks-per-node=24
-    ... #SBATCH --job-name=job_name
-    ... #SBATCH --partition=production
-    ... #SBATCH --mem-per-cpu=4G
-    ... #SBATCH --time=24:00:00
-    ... #SBATCH --account=xxx
-    ... '''
+Reference: 
+Shao, Q., Jiang, Y., & Yang, Z. J. (2023). ENZYHTP computational directed evolution with Adaptive Resource Allocation. Journal of Chemical Information and Modeling, 63(17), 5650–5659. https://doi.org/10.1021/acs.jcim.3c00618 
 
 
-Nodes: Specifies the number of compute nodes that the job should use. Here, the job is configured to use one node.
-Tasks Per Node: Indicates the number of tasks to run on each node. In this context, it usually correlates with the number of processor cores to be used per node. Here, 24 tasks (or cores) per node are requested.
-Job Name: Sets a name for the job, which can be useful for identifying the job within the queue or in reports generated by the scheduler. 'job_name' can be replaced with any descriptive name you prefer.
-Partition: Assigns the job to a specific group of nodes or a partition. 'production' likely refers to a partition intended for regular, production-level computations.
-Memory Per CPU: Allocates memory for each CPU used by the job. Here, each CPU is assigned 4 gigabytes.
-Walltime: Sets the maximum duration for which the job is allowed to run. In this example, the job is allowed to run for up to 24 hours. If the job does not complete within this time, the scheduler will terminate it.
-Account: Specifies the account code to be charged for the resources consumed by the job. This is important for systems where computing resources are allocated based on a project or departmental account. 'xxx' should be replaced with the actual account identifier.
-
-Each of these directives begins with #SBATCH, which is specific to the SLURM scheduler. This prefix is used by SLURM to differentiate script comments from SLURM directives. These settings are crucial for correctly configuring the computational resources required by the job, ensuring it runs efficiently within the constraints of the HPC environment.
-
-
-Support your own HPC
-==============================================
-ARMer is designed to be highly adaptable, not only supporting the Vanderbilt ACCRE cluster but also capable of being customized for use with other high-performance computing (HPC) systems. By developing new ClusterInterface classes, users can tailor ARMer to meet the specific requirements and configurations of virtually any HPC environment. This flexibility allows ARMer to manage and optimize computational resources across a diverse range of systems, ensuring efficient and effective use of computing power wherever it is deployed. For more details on how to implement ARMer in your own HPC system, you can start by visiting this link.
-
-
-
-
-
-
-
-
-
-
-  
+Author: Jiayue Liu <jacquelineliu0921@gmail.com>; Qianzhen Shao <qianzhen.shao@vanderbilt.edu>
 
