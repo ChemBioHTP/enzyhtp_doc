@@ -1,7 +1,3 @@
-.. warning::
-
-    This page is outdated
-
 ==============================================
  Quick Start: 1. Build Workflow
 ==============================================
@@ -317,6 +313,10 @@ and calculate their properties
                     ],
                 )
 
+        - apply customized ligand parameters by adding files under the ncaa_param_lib_path
+            
+            See `section 2.1 <#configure-the-working-dir>`_ for example
+
         - apply a different constraint by changing the atom key and the constraint value
 
             .. code:: python
@@ -482,7 +482,7 @@ Here is what your working directory should look like before the launching:
         2. Change ``EFdesMD`` in ``line 2`` to a customized name for your workflow
         3. Change the path of conda in ``line 22`` to match your own paths
 
-``ncaa_lab``
+``ncaa_lib``
     This is the folder defined in ``interface.amber.build_md_parameterizer`` above. It is designed to
     reuse parameter files for the same ligand to be reused to save time during the workflow. It also
     **allows user to supply custom parameter files** for ligands. 
