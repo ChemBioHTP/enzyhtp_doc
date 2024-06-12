@@ -5,9 +5,8 @@
 Briefs
 ==============================================
 In this API named ``Adaptive Resource Manager (ARMer)``, the primary objective is to enhance efficiency by ensuring that resources like CPUs (Central Processing Units) and GPUs (Graphics Processing Units) are used optimally, minimizing idle time and unnecessary resource reservation.
-In the context of enzyme modeling using EnzyHTP, ARMer is integrated into the workflow, which includes sub-tasks like mutant generation, molecular dynamics simulations, quantum mechanical calculations, and data analysis. 
 This is in sharp contrast to the fixed resource allocation scheme where maximal computing resources are requested.
-For specific details, please refer to the `original paper <https://doi.org/10.1021/acs.jcim.3c00618>` linked. 
+For specific details, please refer to the `original paper`linked (https://doi.org/10.1021/acs.jcim.3c00618). 
 
 .. dropdown:: :fa:`eye,mr-1` Click to learn more about ARMer's architechture
 
@@ -37,9 +36,10 @@ For specific details, please refer to the `original paper <https://doi.org/10.10
 
 Three Main Functions of ARMer
 ==============================================
-The ARMer tool contains three main functions: config job (i.e.: submission script, etc.), submit, monitor (i.e.: wait_to_end)
+The ARMer tool contains three main functions: config job (i.e.: submission script, etc.), submit, monitor (i.e.: wait_to_end).
 
-1. Config Job (Submission Script Generation)
+1. Job Configuration
+------------------------------------------------
 
     The config_job function serves as the constructor for creating a ClusterJob instance. It's responsible for setting up the submission script, which dictates how the job will be run on the HPC cluster. 
 
@@ -52,6 +52,7 @@ The ARMer tool contains three main functions: config job (i.e.: submission scrip
     * Dynamic Allocation: This approach allows the script to be tailored for specific tasks within the workflow, optimizing resource use.
 
 .. dropdown:: :fa:`eye,mr-1` Click here to learn about the arguments in Job Configuration:
+    
     ``commands``
         refers to the target shell commands for running external software for a specific enzyme modeling sub-task
 
@@ -71,11 +72,10 @@ The ARMer tool contains three main functions: config job (i.e.: submission scrip
         the time cycle for detect job state (Unit: second)
 
 2. Job Submission
+------------------------------------------------
 
     With the job object instantiated, a job script for the required task can be generated and then submitted by the submit() method. 
     
-    Notably, the format of the job script, the submission commands, and other HPC dependent information are obtained from the HPC class object that is instantiated and passed to the `cluster` argument.
-
 .. dropdown:: :fa:`eye,mr-1` Click here to learn about the arguments in Job Submission:
 
     ``sub_dir`` 
@@ -87,14 +87,17 @@ The ARMer tool contains three main functions: config job (i.e.: submission scrip
            
 
 3. Dynamic Monitoring
+------------------------------------------------
     Once the job has been submitted, a job ID is added to the object by the function. By tracing the job ID, the “workflow script” can monitor the status of a job object in the queue, and mediate the status by killing, holding, or releasing the job.
 
 .. dropdown:: :fa:`eye,mr-1` Click to learn more about `Dynamic monitoring`
+    
     The capability of dynamically monitoring the job completion status is vital to high-throughput modeling workflow because the workflow involves multiple different types of simulation subtasks that must be sequentially operated.
     
     Two methods have been implemented to achieve dynamic monitoring, they are: wait_to_end() and wait_to_array_end() methods. The wait_to_end() method checks the status of a job in the job queue within a certain period of time (i.e., every 30 s) and exits upon the detection of messages that indicate job completion, error, or cancellation. The wait_to_array_end() method takes multiple job objects and submits them in one job array. Similarly, this method also monitors the status of all jobs in the array regularly and dynamically appends new jobs to the array up to the maximal capacity (i.e., array size).
 
 .. dropdown:: :fa:`eye,mr-1` Click to learn more about the arguments in Dynamic monitoring
+    
     There are two functions: "wait_to_end" (single submission) and "wait_to_array_end" (array submission)
         
     ``period``
@@ -153,14 +156,14 @@ The first step involves configuring a job using the config_job method. This meth
         
         `account``: This specifies the account to be charged for the job's resource usage. 
 
-These inputs will be parsed and the output will be passed down to submission and monitoring.
-To correctly prepare for the input and output, the user needs to identify the local HPC first. This should refer to the guidelines for each institution's HPC submission syntax. If you need to support your local HPC cluster, please refer to the `Quick Start: 2. Support Your Local Cluster` page from the menu bar on the left.
+
+The correct input for these parameters should refer to the guidelines for each institution's HPC submission syntax. If you need to support your local HPC cluster, please refer to the `Quick Start: 2. Support Your Local Cluster` page from the menu bar on the left.
 
 
 How ARMer is used in EnzyHTP APIs
 ------------------------------------------------
 
-1. Developer Integration with Science APIs
+.. dropdown:: :fa:`eye,mr-1` Developer Integration with Science APIs`
 
     Developers using EnzyHTP can directly leverage ARMer's capabilities through the platform's APIs. 
     
@@ -169,8 +172,8 @@ How ARMer is used in EnzyHTP APIs
 
     Developers can utilize ARMer to tailor the computational resources specifically for the task at hand, whether it involves intensive CPU usage for molecular dynamics simulations or GPU resources for more complex quantum mechanical calculations.
 
+.. dropdown:: :fa:`eye,mr-1` User Interaction via Configured API`
 
-2. User Interaction via Configured API
     For users, the interaction with ARMer is streamlined through configurations exposed by API developers:
 
     Cluster Job Configuration Dictionary: This dictionary (cluster_job_config) shown above is provided by the API developers and exposes various configurable options that users can set according to their specific requirements. It includes parameters such as cluster type, environmental settings, and resource keywords.
@@ -180,13 +183,13 @@ How ARMer is used in EnzyHTP APIs
 
 Input
 ------------------------------------------------
-    In the context of ARMer and EnzyHTP, the cluster is an object that represents a specific HPC cluster configuration. This object is usually an instance of a class that implements the ClusterInterface or a similar interface that ARMer can interact with.
-    In EnzyHTP, the input for ARMer should be all kinds of "clusters", for example, clusters for MD sampling, clusters for QM caluclations, etc.
+    In EnzyHTP, the cluster is an object that represents a specific HPC cluster configuration. This object is usually an instance of a class that implements the ClusterInterface or a similar interface that ARMer can interact with.
+    The input for ARMer should be all kinds of "clusters", for example, clusters for MD sampling, clusters for QM caluclations, etc.
 
-.. dropdown:: :fa:`eye,mr-1` Click here to see examples
+.. dropdown:: :fa:`eye,mr-1` Click here to see example use
 
     .. admonition:: Example: how cluster_job_config is used in MD simulation sampling
-    (See `<#Example-code> for more examples`_)
+    (See Example Code for more examples)
 
     .. code:: python
 
@@ -234,7 +237,7 @@ Calculate single point energy for a QM cluster
 
 In this example, we perform single point energy calculation for a QM region and for each snapshot from an ensemble of substrates of Kemp Eliminase.
 
-Note: This is a snippt of a workflow that illustrate how `cluster_job_config` is used in the QM single point Science API.Please refer to the specific API for more details.
+Note: This is a snippt of a workflow that illustrate how `cluster_job_config` is used in the QM single point Science API. Please refer to the specific API for more details.
 
 .. code:: python
 
@@ -271,7 +274,7 @@ Note: This is a snippt of a workflow that illustrate how `cluster_job_config` is
             "account" : "yang_lab_csb",
     }
 
-    # QM Calculation Function Call: 
+    # QM Calculation Function Call
     qm_results = single_point(
         stru=md_result,
         engine="gaussian",
@@ -285,7 +288,7 @@ Note: This is a snippt of a workflow that illustrate how `cluster_job_config` is
 
 Please note that for QM and MD the `cluster_job_config`` is different.
 
-This example neatly encapsulates the end-to-end process from configuring and running MD simulations to performing targeted QM calculations, all managed via ARMer for efficient resource use in a high-performance computing environment.
+This example encapsulates the end-to-end process from configuring and running MD simulations to performing targeted QM calculations, all managed via ARMer for efficient resource use in a high-performance computing environment.
 
 Reference: 
 Shao, Q., Jiang, Y., & Yang, Z. J. (2023). ENZYHTP computational directed evolution with Adaptive Resource Allocation. Journal of Chemical Information and Modeling, 63(17), 5650–5659. https://doi.org/10.1021/acs.jcim.3c00618 
