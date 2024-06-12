@@ -14,8 +14,9 @@ can be defined by the user or by pulling from the Protein DataBank (PDB) when po
 
 .. note:: 
     
-    **Using this functionality requires the modeller python package to be installed.**
-    For more information on installing the package, see the `Sali Lab website <https://salilab.org/modeller/>`_
+    **Using this functionality requires either the Rosetta software suite or modeller python package to be installed.**
+    For more information on installing Rosetta, see the `RosettaCommons website <https://www.rosettacommons.org/software>`_
+    For more information on installing the modeller package, see the `Sali Lab website <https://salilab.org/modeller/>`_
 
 
 .. note::
@@ -66,7 +67,7 @@ The ``stru``, ``missing_residues``, ``method`` arguments and required inputs
 
         .. admonition:: Current method options
 
-            | At present, only ``modeller`` is supported.
+            | At present, only ``modeller`` and ``rosetta`` are supported.
 
     - ``work_dir``:
         Working directory containing all the files in the calculation process. Optional argument.
@@ -105,7 +106,7 @@ Example Code
         
         print(stru)
         
-        fill_missing_residues(stru, identify_missing_residues("3R3V"))
+        fill_missing_residues(stru, identify_missing_residues("3R3V"), 'rosetta' )
 
         print(stru)
 
