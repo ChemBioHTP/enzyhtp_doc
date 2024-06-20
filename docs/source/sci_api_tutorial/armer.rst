@@ -6,7 +6,7 @@ Briefs
 ==============================================
 In this API named ``Adaptive Resource Manager (ARMer)``, the primary objective is to enhance efficiency by ensuring that resources like CPUs (Central Processing Units) and GPUs (Graphics Processing Units) are used optimally, minimizing idle time and unnecessary resource reservation.
 This is in sharp contrast to the fixed resource allocation scheme where maximal computing resources are requested.
-For specific details, please refer to the `original paper`linked (https://doi.org/10.1021/acs.jcim.3c00618). 
+For specific details, please refer to the `ARMer paper <https://doi.org/10.1021/acs.jcim.3c00618>`_. 
 
 .. dropdown:: :fa:`eye,mr-1` Click to learn more about ARMer's architechture
 
@@ -36,12 +36,12 @@ For specific details, please refer to the `original paper`linked (https://doi.or
 
 Three Main Functions of ARMer
 ==============================================
-The ARMer tool contains three main functions: config job (i.e.: submission script, etc.), submit, monitor (i.e.: wait_to_end).
+The ARMer tool contains three main functions: config job (i.e.: submission script, etc.), submit, monitor (i.e.: ``wait_to_end``).
 
-1. Job Configuration
+1. ``config_job``
 ------------------------------------------------
 
-    The config_job function serves as the constructor for creating a ClusterJob instance. It's responsible for setting up the submission script, which dictates how the job will be run on the HPC cluster. 
+    The ``config_job`` function serves as the constructor for creating a ClusterJob instance. It's responsible for setting up the submission script, which dictates how the job will be run on the HPC cluster. 
 
 .. dropdown:: :fa:`eye,mr-1` Click here to learn what it does:
 
@@ -71,7 +71,7 @@ The ARMer tool contains three main functions: config job (i.e.: submission scrip
     ``period``
         the time cycle for detect job state (Unit: second)
 
-2. Job Submission
+2. ``submit``
 ------------------------------------------------
 
     With the job object instantiated, a job script for the required task can be generated and then submitted by the submit() method. 
@@ -86,7 +86,7 @@ The ARMer tool contains three main functions: config job (i.e.: submission scrip
         (default: sub_dir/submit.cmd; will be sub_dir/submit_#.cmd if the file exists. # is a growing index)
            
 
-3. Dynamic Monitoring
+3. ``get_job_state``
 ------------------------------------------------
     Once the job has been submitted, a job ID is added to the object by the function. By tracing the job ID, the “workflow script” can monitor the status of a job object in the queue, and mediate the status by killing, holding, or releasing the job.
 
@@ -133,35 +133,11 @@ The ARMer tool contains three main functions: config job (i.e.: submission scrip
 
 
 
-For most users, only the `Job configuration` requires specific input from different users.
-The first step involves configuring a job using the config_job method. This method prepares the submission script by specifying the commands to be executed, environmental settings, and resource requirements.
 
-.. admonition:: Here is the `cluster_job_config` dictionary
+cluster_job_config
+==============================================
 
-        These parameters are specified under the argument `res_keywords`.
-
-        `core_type`: This specifies that the job should be run on GPU/CPU cores. 
-
-        `nodes`: How many nodes needed to request for the job.
-
-        `node_cores`: How many cores needed for each node. If GPU is used, usually only one core per node will be requested.
-
-        `job_name`: This sets the name of the job to "job_name". You can change this to a more descriptive name for your job.
-
-        `partition`: This specifies that the job should be submitted to a specific partition, which is likely a partition dedicated to GPU resources.
-        
-        `mem_per_core`: This requests a number of gigabytes of memory per core.
-        
-        `walltime`: This sets the maximum walltime (execution time) for the job. '24:00:00' means 24 hours.
-        
-        `account``: This specifies the account to be charged for the job's resource usage. 
-
-
-The correct input for these parameters should refer to the guidelines for each institution's HPC submission syntax. If you need to support your local HPC cluster, please refer to the `Quick Start: 2. Support Your Local Cluster` page from the menu bar on the left.
-
-
-How ARMer is used in EnzyHTP APIs
-------------------------------------------------
+However, none of the function will be directly access by user in normal EnzyHTP workflows. They are used by developers in APIs of EnzyHTP. But all of the APIs that uses ARMer will expose an input that allow users to config the resource.
 
 .. dropdown:: :fa:`eye,mr-1` Developer Integration with Science APIs`
 
@@ -181,53 +157,36 @@ How ARMer is used in EnzyHTP APIs
     Simplified Job Submission: Users don’t need to manage complex cluster configurations directly. Instead, they provide necessary parameters through a high-level interface, simplifying the computational aspects of enzyme modeling.
 
 
-Input
-------------------------------------------------
-    In EnzyHTP, the cluster is an object that represents a specific HPC cluster configuration. This object is usually an instance of a class that implements the ClusterInterface or a similar interface that ARMer can interact with.
-    The input for ARMer should be all kinds of "clusters", for example, clusters for MD sampling, clusters for QM caluclations, etc.
+Specifically, only the `Job configuration` requires specific input from different users.
 
-.. dropdown:: :fa:`eye,mr-1` Click here to see example use
+The first step involves configuring a job using the config_job method. This method prepares the submission script by specifying the commands to be executed, environmental settings, and resource requirements.
 
-    .. admonition:: Example: how cluster_job_config is used in MD simulation sampling
-    (See Example Code for more examples)
-
-    .. code:: python
-
-        #Building MD Parameterization:
-        param_method = interface.amber.build_md_parameterizer(
-            ncaa_param_lib_path=f"{DATA_DIR}ncaa_lib",
-            force_fields=[
-                "leaprc.protein.ff14SB",
-                "leaprc.gaff",
-                "leaprc.water.tip3p",
-            ],
-        )
-
-         #Preparing Constraints:
-        mut_constraints = []
-        for cons in md_constraints:
-            mut_constraints.append(cons(mutant_stru))
-
-        #Configuring Cluster Job Settings: Sets up the configuration for the job submission to the cluster, specifically tailoring it for GPU-intensive tasks required in MD simulations.
-        md_cluster_job_config = {
-            "cluster" : Accre(),
-            "res_keywords" : {
-                "account" : "csb_gpu_acc",
-                "partition" : "pascal"
-            }
-        }
+.. admonition:: Here is the `cluster_job_config` dictionary
         
-        # Executes the equilibrium molecular dynamics sampling using the specified structure and parameters.
-        md_result = equi_md_sampling(
-            stru = mutant_stru,
-            param_method = param_method,
-            cluster_job_config = md_cluster_job_config, #The job configuration for submitting this task to the cluster.
-            job_check_period=10,
-            prod_constrain=mut_constraints,
-            prod_time=md_length,
-            record_period=md_length*0.1,
-            work_dir=f"{mutant_dir}/MD/"
-        )        
+        These parameters are specified under the argument ``res_keywords``.
+
+        ``core_type``: This specifies that the job should be run on GPU/CPU cores. 
+
+        ``nodes``: How many nodes needed to request for the job.
+
+        ``node_cores``: How many cores needed for each node. If GPU is used, usually only one core per node will be requested.
+
+        ``job_name``: This sets the name of the job to "job_name". You can change this to a more descriptive name for your job.
+
+        ``partition``: This specifies that the job should be submitted to a specific partition, which is likely a partition dedicated to GPU resources.
+        
+        ``mem_per_core``: This requests a number of gigabytes of memory per core.
+        
+        ``walltime``: This sets the maximum walltime (execution time) for the job. '24:00:00' means 24 hours.
+        
+        ``account``: This specifies the account to be charged for the job's resource usage. 
+
+        
+        Besides ``res_keywords``, ``cluster`` is an object that represents a specific HPC cluster configuration. This object is usually an instance of a class that implements the ClusterInterface or a similar interface that ARMer can interact with.
+        For example, the key to ``cluster`` is ``Accre()`` at vanderbilt since the Advanced Computing Center for Research and Education (ACCRE) is the gateway to HPC at Vanderbilt University.
+
+The correct input for these parameters should refer to the guidelines for each institution's HPC submission syntax. If you need to support your local HPC cluster, please refer to the `Quick Start: 2. Support Your Local Cluster` page from the menu bar on the left.
+
 
 Example Code
 ==============================================
@@ -235,16 +194,21 @@ Example Code
 Calculate single point energy for a QM cluster
 ---------------------------------------------------------
 
-In this example, we perform single point energy calculation for a QM region and for each snapshot from an ensemble of substrates of Kemp Eliminase.
+This example illustrates how to effectively prepare and use the ``cluster_job_config`` for computational tasks in a workflow that includes MD and QM. 
+The focus here is on setting up the configuration to efficiently utilize computational resources on a High-Performance Computing (HPC) system. 
+For more comprehensive details on running QM calculations, please refer to the QM cluster tutorial.
 
-Note: This is a snippt of a workflow that illustrate how `cluster_job_config` is used in the QM single point Science API. Please refer to the specific API for more details.
+.. admonition:: How ``qm_cluster_job_config`` is prepared
+
+    ``cluster``
+        speicify which HPC you are using 
+        (See `Details <#cluster_job_config>`_)
+
+    ``res_keywords``
+        defined the parameters that tailor to the HPC you are using 
+        (See `Details <#cluster_job_config>`_)
 
 .. code:: python
-
-    qm_level_of_theory = QMLevelOfTheory(
-        basis_set="3-21G",
-        method="hf",
-    )
 
     # MD sampling results
     md_result = equi_md_sampling(
@@ -263,7 +227,6 @@ Note: This is a snippt of a workflow that illustrate how `cluster_job_config` is
     qm_cluster_job_config = {
         "cluster" : Accre(),
         "res_keywords" : {
-            
             'core_type' : 'cpu',
             'nodes' : '1',
             'nodes_core' : '8',
@@ -274,7 +237,6 @@ Note: This is a snippt of a workflow that illustrate how `cluster_job_config` is
             "account" : "yang_lab_csb",
     }
 
-    # QM Calculation Function Call
     qm_results = single_point(
         stru=md_result,
         engine="gaussian",
