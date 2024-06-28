@@ -40,6 +40,14 @@ The ARMer tool contains three main functions: config job (i.e.: submission scrip
 
 1. ``config_job``
 ------------------------------------------------
+    .. panels::
+
+        :column: col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2 text-left
+
+        .. image:: ../../figures/armer_config.png
+            :width: 100%
+            :alt: single_point_api_io                  
+
 
     The ``config_job`` function serves as the constructor for creating a ClusterJob instance. It's responsible for setting up the submission script, which dictates how the job will be run on the HPC cluster. 
 
@@ -73,6 +81,13 @@ The ARMer tool contains three main functions: config job (i.e.: submission scrip
 
 2. ``submit``
 ------------------------------------------------
+    .. panels::
+
+        :column: col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2 text-left
+
+        .. image:: ../../figures/armer_submit.png
+            :width: 100%
+            :alt: single_point_api_io          
 
     With the job object instantiated, a job script for the required task can be generated and then submitted by the submit() method. 
     
@@ -86,8 +101,17 @@ The ARMer tool contains three main functions: config job (i.e.: submission scrip
         (default: sub_dir/submit.cmd; will be sub_dir/submit_#.cmd if the file exists. # is a growing index)
            
 
-3. ``get_job_state``
+3. ``wait_to_end``
 ------------------------------------------------
+
+    .. panels::
+
+        :column: col-lg-12 col-md-12 col-sm-12 col-xs-12 p-2 text-left
+
+        .. image:: ../../figures/armer_monitor.png
+            :width: 100%
+            :alt: single_point_api_io    
+
     Once the job has been submitted, a job ID is added to the object by the function. By tracing the job ID, the “workflow script” can monitor the status of a job object in the queue, and mediate the status by killing, holding, or releasing the job.
 
 .. dropdown:: :fa:`eye,mr-1` Click to learn more about `Dynamic monitoring`
@@ -130,7 +154,6 @@ The ARMer tool contains three main functions: config job (i.e.: submission scrip
         path of the submission script. Overwrite existing self.sub_script_path in the job obj
         
         * you can set the self value during config_job to make each job different
-
 
 
 
