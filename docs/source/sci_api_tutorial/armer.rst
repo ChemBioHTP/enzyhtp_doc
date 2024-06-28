@@ -118,11 +118,9 @@ The ARMer tool contains three main functions: config job (i.e.: submission scrip
     
     The capability of dynamically monitoring the job completion status is vital to high-throughput modeling workflow because the workflow involves multiple different types of simulation subtasks that must be sequentially operated.
     
-    Two methods have been implemented to achieve dynamic monitoring, they are: wait_to_end() and wait_to_array_end() methods. The wait_to_end() method checks the status of a job in the job queue within a certain period of time (i.e., every 30 s) and exits upon the detection of messages that indicate job completion, error, or cancellation. The wait_to_array_end() method takes multiple job objects and submits them in one job array. Similarly, this method also monitors the status of all jobs in the array regularly and dynamically appends new jobs to the array up to the maximal capacity (i.e., array size).
+    Two methods have been implemented to achieve dynamic monitoring, they are: ``wait_to_end()`` and ``wait_to_array_end()`` methods. The ``wait_to_end()`` method checks the status of a job in the job queue within a certain period of time (i.e., every 30 s) and exits upon the detection of messages that indicate job completion, error, or cancellation. The ``wait_to_array_end()`` method takes multiple job objects and submits them in one job array. Similarly, this method also monitors the status of all jobs in the array regularly and dynamically appends new jobs to the array up to the maximal capacity (i.e., array size).
 
 .. dropdown:: :fa:`eye,mr-1` Click to learn more about the arguments in Dynamic monitoring
-    
-    There are two functions: "wait_to_end" (single submission) and "wait_to_array_end" (array submission)
         
     ``period``
         the time cycle for update job state change (Unit: s)
