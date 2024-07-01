@@ -20,8 +20,7 @@ Input/Output
 
 .. dropdown:: :fa:`eye,mr-1` Click to see *conceptual discussions* 
 
-    Composition
-    ------------------------------------------------
+    - Composition
     
     For the data point of view, the enzyme structure is composed by two parts of data:
     
@@ -42,8 +41,7 @@ Input/Output
     Base on this concept, Structure object holds a list of composing Chain objects which also contain Residue objects and so that Atom objects. In each Atom     object, atom name and coordinate is stored. Every level (chain, residue, atom/coordinate/connectivity) of information can all be pulled out from the Structure     object with getter methods and can be set with setter methods. Also Structure() supports common editing methods such as add/remove children objects.
     
     
-    Application
-    ------------------------------------------------
+    - Application
     
     Application of Structure objects - Binding modules:
     
@@ -59,8 +57,7 @@ Input/Output
     
         Changes of the Structure data are handled by functions in the operation module. These commonly used operations of Structure will than be used in     scientific APIs: Preparation, Mutation, Geom Variation. And structure based descriptors are derived by functions in the Energy Engine module.
     
-    Details
-    ------------------------------------------------
+    - Details
     
         Sturcture() is designed for direct interfacing by users.
     
@@ -70,28 +67,33 @@ Input/Output
     
         Note: regardless of index assigned to residues and atoms, there is an intrinsic indexing system based on the order of _children lists. This intrinsicc index can be compared with pymol's index (not id)
 
-Highlighted Methods ``get``
+Highlighted Methods 
 ==============================================
 
+``get`` Method
+---------------------------------------------------------
 The ``get`` method is designed to retrieve specific components—either a Chain, a Residue, or an Atom—from a biological structure based on a given key. The key must follow a specific format, and the method performs differently based on the level of detail in the key.
 
 Input
----------------------------------------------------------
-``key``: A string that specifies the chain, residue, and atom in a biological structure using the format ``<chain_name>.<residue_index>.<atom_name>``. The levels of detail can vary:
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``key``
+    A string that specifies the chain, residue, and atom in a biological structure using the format ``<chain_name>.<residue_index>.<atom_name>``. The levels of detail can vary:
 
-- Chain Only: Input just the chain name (e.g., A).
 
-- Residue: Input the chain name and residue index (e.g., A.1).
+    .. admonition:: How to obtain
 
-- Atom: Input the chain name, residue index, and atom name (e.g., A.1.CA).
+        - Chain Only: Input just the chain name (e.g., ``A``).
+        
+        - Residue: Input the chain name and residue index (e.g., ``A.1``).
+        
+        - Atom: Input the chain name, residue index, and atom name (e.g., ``A.1.CA``).
 
 Output
----------------------------------------------------------
-
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 The function returns an object of type Chain, Residue, or Atom depending on the input key's specificity. If the input key does not conform to the expected format or if the specified item does not exist within the structure, the function raises a ValueError.
 
 Example Usage
----------------------------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Here's how you might use the get method in your Python code:
 
 .. code:: python
@@ -101,17 +103,14 @@ Here's how you might use the get method in your Python code:
     atom = structure.get("A.1.CA")
 
 Example Code
-==============================================
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-How to use ``Sturcture()``
----------------------------------------------------------
-
-In this example, we load a protein from PDB file and perform Structrure() on this protein. 
+In this example, we load a protein from PDB file and perform ``Structrure()`` on this protein. 
 
 .. admonition:: How input is prepared
 
     ``8k68.pdb``
-        Download example protein from `Protein Data Bank <https://www.rcsb.org/>`_, and load it via `PDBParser <PDBParser.html>`_
+        Download example protein from `Protein Data Bank <https://www.rcsb.org/>`_, and load it via `PDBParser <../sci_api_tutorial/PDBParser.html>`_
 
 .. code:: python
     
@@ -150,7 +149,63 @@ In this example, we load a protein from PDB file and perform Structrure() on thi
     structure.num_residues
     #554
 
+
+``assign_ncaa_chargespin`` Method
+---------------------------------------------------------
+The ``assign_ncaa_chargespin`` method is designed to assign net charges and spin states to non-canonical amino acids (NCAAs) in    ``Structure()``. It specifically targets residues identified as NCAAs, ligands, or modified amino acids, based on their three-letter codes or general categories.
+
+Input
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``net_charge_mapper``
+    A dictionary where keys are the three-letter codes of NCAAs (or categories like "LIGAND" or "MODAA" for all of that kind), and values are tuples containing the net charge and multiplicity (spin state, the 2S+1 number for multiplicity) for these residues. The format is ``{"RES" : (charge, spin), ...}``.
+
+    .. admonition:: How to construct
     
+        - Specific NCAA: Use the three-letter code (e.g., `HEM`) with its charge and spin.
+        
+        - General Category: Use identifiers like `LIGAND` or `MODAA` to apply properties uniformly to all residues within these categories.
+
+Output
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+The function does not return a value but modifies the properties of the residues within the structure directly. If a specified NCAA does not exist or if the residue type is not appropriate for the charge and spin assignment, an error is raised.
+
+Example Usage
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Here's how you might use the assign_ncaa_chargespin method in your Python code:
+
+.. code:: python
+
+    net_charge_mapper = {
+        'MOL': (0, 1),  # Substrate molecule with a charge of 0 and a singlet spin state
+        'LIGAND': (1, 1),  # All ligands with a charge of +1 and a singlet spin state
+        'MODAA': (-1, 2)  # All modified amino acids with a charge of -1 and a doublet spin state
+    }
+    structure.assign_ncaa_chargespin(net_charge_mapper)
+
+Example Code
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In this example, we load a protein from PDB file and perform ``Structrure()`` and ``assign_ncaa_chargespin`` on this protein. 
+
+.. admonition:: How input is prepared
+
+    ``4bf4.pdb``
+        Download example protein from `Protein Data Bank <https://www.rcsb.org/>`_, and load it via `PDBParser <../sci_api_tutorial/PDBParser.html>`_
+
+.. code:: python
+
+    import enzy_htp
+    #Loading a structure from PDB
+    structure : enzy_htp.Structure = enzy_htp.PDBParser().get_structure("./4bf4.pdb")
+    
+    net_charge_mapper = {
+        'HEM': (0, 1),  # Assuming HEM is neutral overall with iron in +2 state, spin state as singlet
+        '17Q': (0, 1),  # Neutral organic compound
+        'SO4': (-2, 1)  # Sulfate ion with a charge of -2 and a singlet state
+    }
+    
+    structure.assign_ncaa_chargespin(net_charge_mapper)
+
 =========================================================================================
 
 Author: Xingyu Ouyang <ouyangxingyu913@gmail.com>
