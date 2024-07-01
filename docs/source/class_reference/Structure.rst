@@ -206,6 +206,6 @@ In this example, we load a protein from PDB file and perform ``Structrure()`` an
     
     structure.assign_ncaa_chargespin(net_charge_mapper)
 
-=========================================================================================
+========================================================================================
 
 Author: Xingyu Ouyang <ouyangxingyu913@gmail.com>
