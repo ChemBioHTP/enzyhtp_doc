@@ -74,6 +74,7 @@ This user guide contains:
    :caption: Documents
 
    api
+   class_reference/Structure
 
 -------------
  Links

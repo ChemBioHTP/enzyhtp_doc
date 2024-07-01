@@ -4,7 +4,7 @@
 
 Structure is the core dataclass in EnzyHTP that represents the
 structure of a biomolecule. (e.g.: an enzyme). Below are APIs that
-produce Structure():
+produce `Structure() <Structure.html>`_:
 
 Using a StructureParser
 ==============================================
