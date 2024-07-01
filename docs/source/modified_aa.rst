@@ -97,6 +97,8 @@ Deal with PDB2PQR
                 ])
             write_lines(f"{res.name}.xml", lines)
 
+NOTE: leave all charge and radii as 0.0 in the .DAT file. See the referenced issue below for details.
+
 5. Merge the XML and DAT files to pdb2pqr/dat/AA.xml and pdb2pqr/dat/PARSE.DAT
 6. Add a new class of the modified AA by copy others and change the name in pdb2pqr/aa.py
 
