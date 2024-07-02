@@ -15,7 +15,7 @@ Deal with PDB2PQR
 --------------------
 
 1. Obtain the protonated pdb file of the modified AA (add H manually or obtain from PDB). If you need to use force field like ff19SB_modAA, make the atom names align with the force field.
-2. Align the structure with the standard backbone in PDB2PQR. Here is a reference PDB file of the backbone
+2. Align the structure with the standard backbone in PDB2PQR. (make sure the Psi Phi angles are also rotated so that all the backbone atoms align with the template and the all the H is in the right place if carry by the rotation of the backbone) Here is a reference PDB file of the backbone
 
     .. code::
 
