@@ -70,7 +70,7 @@ Input/Output
 Highlighted Methods 
 ==============================================
 
-``get`` Method
+Method: ``get``
 ---------------------------------------------------------
 The ``get`` method is designed to retrieve specific components—either a Chain, a Residue, or an Atom—from a biological structure based on a given key. The key must follow a specific format, and the method performs differently based on the level of detail in the key.
 
@@ -150,7 +150,9 @@ In this example, we load a protein from PDB file and perform ``Structrure()`` on
     #554
 
 
-``assign_ncaa_chargespin`` Method
+=========================================================
+
+Method: ``assign_ncaa_chargespin``
 ---------------------------------------------------------
 The ``assign_ncaa_chargespin`` method is designed to assign net charges and spin states to non-canonical amino acids (NCAAs) in    ``Structure()``. It specifically targets residues identified as NCAAs, ligands, or modified amino acids, based on their three-letter codes or general categories.
 
