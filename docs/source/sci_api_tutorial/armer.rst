@@ -153,7 +153,7 @@ The ARMer tool contains three main functions: config job (i.e.: submission scrip
         
         * you can set the self value during config_job to make each job different
 
-
+**Specifically, only the  ``Job configuration`` requires specific input from different users.**
 
 cluster_job_config
 ==============================================
@@ -178,29 +178,32 @@ However, none of the function will be directly access by user in normal EnzyHTP 
     Simplified Job Submission: Users don’t need to manage complex cluster configurations directly. Instead, they provide necessary parameters through a high-level interface, simplifying the computational aspects of enzyme modeling.
 
 
-Specifically, only the `Job configuration` requires specific input from different users.
 
-The first step involves configuring a job using the config_job method. This method prepares the submission script by specifying the commands to be executed, environmental settings, and resource requirements.
+
 
 .. admonition:: Here is the `cluster_job_config` dictionary
         
-        These parameters are specified under the argument ``res_keywords``.
-
-        ``core_type``: This specifies that the job should be run on GPU/CPU cores. 
-
-        ``nodes``: How many nodes needed to request for the job.
-
-        ``node_cores``: How many cores needed for each node. If GPU is used, usually only one core per node will be requested.
-
-        ``job_name``: This sets the name of the job to "job_name". You can change this to a more descriptive name for your job.
-
-        ``partition``: This specifies that the job should be submitted to a specific partition, which is likely a partition dedicated to GPU resources.
+        These parameters are specified under the argument ``res_keywords``.  
         
-        ``mem_per_core``: This requests a number of gigabytes of memory per core.
-        
-        ``walltime``: This sets the maximum walltime (execution time) for the job. '24:00:00' means 24 hours.
-        
-        ``account``: This specifies the account to be charged for the job's resource usage. 
+        **These keywords are build-in keywords in EnzyHTP, which are not the same as the keywords of SLURM or other job scheduling system.**
+
+        ``res_keywords``：
+
+            ``core_type``: This specifies that the job should be run on GPU/CPU cores. 
+
+            ``nodes``: How many nodes needed to request for the job.
+
+            ``node_cores``: How many cores needed for each node. If GPU is used, usually only one core per node will be requested.
+
+            ``job_name``: This sets the name of the job to "job_name". You can change this to a more descriptive name for your job.
+
+            ``partition``: This specifies that the job should be submitted to a specific partition, which is likely a partition dedicated to GPU resources.
+            
+            ``mem_per_core``: This requests a number of gigabytes of memory per core.
+            
+            ``walltime``: This sets the maximum walltime (execution time) for the job. '24:00:00' means 24 hours.
+            
+            ``account``: This specifies the account to be charged for the job's resource usage. 
 
         
         Besides ``res_keywords``, ``cluster`` is an object that represents a specific HPC cluster configuration. This object is usually an instance of a class that implements the ClusterInterface or a similar interface that ARMer can interact with.
@@ -230,6 +233,15 @@ For more comprehensive details on running QM calculations, please refer to the Q
         (See `Details <#cluster_job_config>`_)
 
 .. code:: python
+
+    # Specifies how the MD calculations should be run on the HPC
+    md_cluster_job_config = {
+            "cluster" : Accre(),
+            "res_keywords" : {
+                "account" : "csb_gpu_acc",
+                "partition" : "pascal"
+            }
+        }
 
     # MD sampling results
     md_result = equi_md_sampling(
@@ -269,7 +281,7 @@ For more comprehensive details on running QM calculations, please refer to the Q
         work_dir=f"{mutant_dir}/QM_SPE/",
     )
 
-Please note that for QM and MD the `cluster_job_config`` is different.
+Please note that for QM and MD, the `cluster_job_config` is different.
 
 This example encapsulates the end-to-end process from configuring and running MD simulations to performing targeted QM calculations, all managed via ARMer for efficient resource use in a high-performance computing environment.
 
