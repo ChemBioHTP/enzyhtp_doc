@@ -153,7 +153,10 @@ The ARMer tool contains three main functions: config job (i.e.: submission scrip
         
         * you can set the self value during config_job to make each job different
 
-**Specifically, only the  ``Job configuration`` requires specific input from different users.**
+
+
+**Specifically, only the** ``cluster_job_config`` **that links to the** ``config_job`` **function requires specific input from different users.**
+
 
 cluster_job_config
 ==============================================
@@ -175,7 +178,7 @@ However, none of the function will be directly access by user in normal EnzyHTP 
 
     Cluster Job Configuration Dictionary: This dictionary (cluster_job_config) shown above is provided by the API developers and exposes various configurable options that users can set according to their specific requirements. It includes parameters such as cluster type, environmental settings, and resource keywords.
     
-    Simplified Job Submission: Users don’t need to manage complex cluster configurations directly. Instead, they provide necessary parameters through a high-level interface, simplifying the computational aspects of enzyme modeling.
+    Simplified Job Submission: Users don't need to manage complex cluster configurations directly. Instead, they provide necessary parameters through a high-level interface, simplifying the computational aspects of enzyme modeling.
 
 
 
@@ -187,7 +190,7 @@ However, none of the function will be directly access by user in normal EnzyHTP 
         
         **These keywords are build-in keywords in EnzyHTP, which are not the same as the keywords of SLURM or other job scheduling system.**
 
-        ``res_keywords``：
+        ``res_keywords``:
 
             ``core_type``: This specifies that the job should be run on GPU/CPU cores. 
 
