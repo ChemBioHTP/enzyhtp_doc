@@ -61,11 +61,7 @@ b. Install from source
     .. code:: bash
 
         cd EnzyHTP # this is what you created via clone in the previous step
-        dev-tools/conda-install
-        # install pdb2pqr
-        git clone https://github.com/Electrostatics/pdb2pqr.git
-        cd pdb2pqr
-        pip install .
+        source dev-tools/conda-install
 
 III. Install External Dependencies
 ===================================
