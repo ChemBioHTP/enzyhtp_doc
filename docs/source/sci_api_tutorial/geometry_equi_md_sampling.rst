@@ -68,7 +68,7 @@ Arguments
     (String, optional, default ``cluster_job``)
 
 ``work_dir``
-    The directory that contains all the MD input/intermediate/output files.
+    The directory that saves all the MD input/intermediate/output files.
 
     (String, optional, default ``./MD``)
 
@@ -172,13 +172,16 @@ Use ``geometry.equi_md_sampling`` to implement Equilibrium MD Simulation.
     amber_interface = interface.amber
 
     param_method = amber_interface.build_md_parameterizer()
+    cluster = AccreR9() # This is the interface for operating Vanderbilt University's Advanced Computational Clust
+                        # You can customize a new class in `enzy_htp.core_cluster` folder so as 
+                        # to have it compatible to the computational cluster resources in your own institution(s).
     cluster_job_config = {
-        "cluster" : Accre(),    # This is the interface for operating Vanderbilt University's Advanced Computational Cluster for Research and Education.
-                                # You can customize a new class in `enzy_htp.core_cluster` folder so as 
-                                # to have it compatible to the computational cluster resources in your own institution(s).
+        "cluster" : cluster,
         "res_keywords" : {
             "account" : "csb_gpu_acc",
-            "partition" : "turing"
+            "partition" : "batch_gpu",
+            "nodes": "1",
+            "node_cores" : "nvidia_rtx_a6000:2",
         }
     }
     md_result = equi_md_sampling(
@@ -222,16 +225,19 @@ Let's try executing the API here and check if there's any changes taking place.
         amber_interface = interface.amber
 
         param_method = amber_interface.build_md_parameterizer()
+        cluster = AccreR9()     # This is the interface for operating Vanderbilt University's Advanced Computational Clust
+                                # You can customize a new class in `enzy_htp.core_cluster` folder so as 
+                                # to have it compatible to the computational cluster resources in your own institution(s).
         cluster_job_config = {
-            "cluster" : Accre(),    # This is the interface for operating Vanderbilt University's Advanced Computational Cluster for Research and Education.
-                                    # You can customize a new class in `enzy_htp.core_cluster` folder so as 
-                                    # to have it compatible to the computational cluster resources in your own institution(s).
+            "cluster" : cluster,
             "res_keywords" : {
                 "account" : "csb_gpu_acc",
-                "partition" : "a6000x4"
+                "partition" : "batch_gpu",
+                "nodes": "1",
+                "node_cores" : "nvidia_rtx_a6000:2",
             }
         }
-        md_result = equi_md_sampling(
+        md_result: List[StructureEnsemble] = equi_md_sampling(
             stru = stru,
             param_method=param_method,
             cluster_job_config=cluster_job_config,
@@ -241,6 +247,6 @@ Let's try executing the API here and check if there's any changes taking place.
 
         len(md_result) # 3.
     
-We may notice that the MD simulation has generated 3 snapshots and stored in ``md_result``.
+We may notice that the MD simulation has generated 3 replicas and stored in ``md_result``.
 
 Author: Zhong, Yinjie <yinjie.zhong@vanderbilt.edu>
