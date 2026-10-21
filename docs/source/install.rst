@@ -115,9 +115,11 @@ As an example, here is the command for loading Gaussian16 in our local cluster A
 ---------------------------------
 | EnzyHTP use Rosetta as one of the post-analysis & docking engine.
 | You need to install Rosetta if you want to enable docking & analysis (e.g.: thermostability assessment) functions in EnzyHTP.
-| Rosetta is free and easy to install.
+| Rosetta is free for non-commercial use and easy to install.
 
 | Follow this page for the install:
 | https://new.rosettacommons.org/demos/latest/tutorials/install_build/install_build
+
+| EnzyHTP expects the `$ROSETTA3` environment variable to be set to the main Rosetta installation directory (the directory with source/ and database/).
 
 Author: QZ Shao <shaoqz@icloud.com>

@@ -14,9 +14,8 @@ can be defined by the user or by pulling from the Protein DataBank (PDB) when po
 
 .. note:: 
     
-    **Using this functionality requires the modeller python package to be installed.**
-    For more information on installing the package, see the `Sali Lab website <https://salilab.org/modeller/>`_
-
+    **Using this functionality requires Rosetta to be installed.**
+    See :doc:`/install` for details
 
 .. note::
 
@@ -26,6 +25,7 @@ can be defined by the user or by pulling from the Protein DataBank (PDB) when po
 .. warning::
     
     Some loop refinement methods are known to slightly move sidechain positions. It may be necessary to minimize a ``Structure`` after filling in missing loops.
+    Rosetta will attempt to optimize the inserted residues, but this optimization may not be optimal for your use case.
 
 **You will find a detailed tutorial of how to use this Science API.**
 
@@ -66,7 +66,7 @@ The ``stru``, ``missing_residues``, ``method`` arguments and required inputs
 
         .. admonition:: Current method options
 
-            | At present, only ``modeller`` is supported.
+            | At present, only ``rosetta`` is supported.
 
     - ``work_dir``:
         Working directory containing all the files in the calculation process. Optional argument.
@@ -94,21 +94,23 @@ Example Code
 
     .. code:: python
 
-        from enzy_htp import (
-                PDBParser,
+        from enzy_htp import PDBParser
+        from enzy_htp.preparation import (
                 identify_missing_residues,
-                fill_missing_residues)
+                add_missing_residues)
 
         sp = PDBParser()
 
         stru = sp.get_structure("./3r3v_.pdb")
         
         print(stru)
+
+        missing = identify_missing_residues("3R3V")
+
         
-        fill_missing_residues(stru, identify_missing_residues("3R3V"))
+        fill_missing_residues(stru, missing, method="rosetta")
 
         print(stru)
-
 
     The output from the above code is listed below:
 
@@ -128,6 +130,41 @@ Example Code
             A(polypeptide): residue: -1-304 atom_count: 2408
             B(polypeptide): residue: -1-304 atom_count: 2408
         )
+
+
+    Instead of using ``identify_missing_residues()``, the missing residue list can also be built manually:
+
+    .. code:: python
+
+        from enzy_htp.chemical import SeqRes
+        
+        missing = [
+                SeqRes(model=1, chain='A', idx=-1, name='GLY', missing=True, seq_idx=None),
+                SeqRes(model=1, chain='A', idx=0, name='HIS', missing=True, seq_idx=None),
+                SeqRes(model=1, chain='A', idx=1, name='MET', missing=True, seq_idx=None),
+                SeqRes(model=1, chain='A', idx=2, name='PRO', missing=True, seq_idx=None),
+                SeqRes(model=1, chain='A', idx=3, name='ASP', missing=True, seq_idx=None),
+                SeqRes(model=1, chain='A', idx=255, name='GLN', missing=True, seq_idx=None),
+                SeqRes(model=1, chain='A', idx=301, name='ALA', missing=True, seq_idx=None),
+                SeqRes(model=1, chain='A', idx=302, name='PRO', missing=True, seq_idx=None),
+                SeqRes(model=1, chain='A', idx=303, name='GLY', missing=True, seq_idx=None),
+                SeqRes(model=1, chain='A', idx=304, name='SER', missing=True, seq_idx=None),
+                SeqRes(model=1, chain='B', idx=-1, name='GLY', missing=True, seq_idx=None),
+                SeqRes(model=1, chain='B', idx=0, name='HIS', missing=True, seq_idx=None),
+                SeqRes(model=1, chain='B', idx=1, name='MET', missing=True, seq_idx=None),
+                SeqRes(model=1, chain='B', idx=2, name='PRO', missing=True, seq_idx=None),
+                SeqRes(model=1, chain='B', idx=3, name='ASP', missing=True, seq_idx=None),
+                SeqRes(model=1, chain='B', idx=253, name='ILE', missing=True, seq_idx=None),
+                SeqRes(model=1, chain='B', idx=254, name='ALA', missing=True, seq_idx=None),
+                SeqRes(model=1, chain='B', idx=255, name='GLN', missing=True, seq_idx=None),
+                SeqRes(model=1, chain='B', idx=256, name='SER', missing=True, seq_idx=None),
+                SeqRes(model=1, chain='B', idx=257, name='ALA', missing=True, seq_idx=None),
+                SeqRes(model=1, chain='B', idx=258, name='ALA', missing=True, seq_idx=None),
+                SeqRes(model=1, chain='B', idx=301, name='ALA', missing=True, seq_idx=None),
+                SeqRes(model=1, chain='B', idx=302, name='PRO', missing=True, seq_idx=None),
+                SeqRes(model=1, chain='B', idx=303, name='GLY', missing=True, seq_idx=None),
+                SeqRes(model=1, chain='B', idx=304, name='SER', missing=True, seq_idx=None),
+        ]
 
 
 Author: Chris Jurich <chris.jurich@vanderbilt.edu>
